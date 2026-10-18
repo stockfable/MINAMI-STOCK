@@ -51,7 +51,7 @@
         .generate-go-btn { background: #fff; color: #0a1628; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px; flex-shrink: 0; }
 
         /* Tools */
-        .mtx-tools { width: 100%; margin: 0 0 28px; padding: 18px 14px 14px; background: #0a0a0a; border: 1px solid #1e293b; border-radius: 14px; }
+        .mtx-tools { width: 100%; margin: 0 0 8px; padding: 18px 14px 14px; background: #0a0a0a; border: 1px solid #1e293b; border-radius: 14px; }
         .mtx-title { color: #fff; font-size: 14px; font-weight: 800; margin: 0 0 16px 4px; display: flex; align-items: center; gap: 8px; }
         .mtx-title i { color: #fbbf24; }
         .mtx-grid { display: grid; width: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 8px; }
@@ -69,7 +69,7 @@
         .mtx-word{background:linear-gradient(135deg,#64748b,#334155)}
 
         /* Sections */
-        .home-shop-section { width: 100%; margin: 40px 0 20px; }
+        .home-shop-section { width: 100%; margin: 28px 0 14px; }
         .home-shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
         .home-shop-header h2 { color: #fff; font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
         .home-shop-header h2 i { color: #fbbf24; }
@@ -187,7 +187,7 @@
         }
 
         /* ===== BANNER VIDEO ===== */
-        .mvb { position: relative; width: 100%; margin: 40px 0 0; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 6; min-height: 190px; background: linear-gradient(120deg, #1e1b4b, #7c2d12, #0c4a6e, #1e1b4b); background-size: 300% 300%; animation: mvbBg 14s ease infinite; border: 1px solid rgba(255,255,255,0.08); }
+        .mvb { position: relative; width: 100%; margin: 20px 0 0; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 5; min-height: 170px; background: linear-gradient(120deg, #1e1b4b, #7c2d12, #0c4a6e, #1e1b4b); background-size: 300% 300%; animation: mvbBg 14s ease infinite; border: 1px solid rgba(255,255,255,0.08); }
         @keyframes mvbBg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .mvb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
         .mvb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.65), rgba(0,0,0,.15) 70%); pointer-events: none; }
@@ -196,7 +196,7 @@
         .mvb-text p { font-size: clamp(12px, 1.6vw, 15px); color: #e2e8f0; margin-bottom: 14px; }
         .mvb-btn { display: inline-flex; align-items: center; gap: 8px; background: #fbbf24; color: #0a1628; font-weight: 800; font-size: 13px; padding: 9px 18px; border-radius: 22px; text-decoration: none; }
         .mvb-btn:hover { background: #f59e0b; }
-        @media (max-width: 640px) { .mvb { aspect-ratio: 16 / 9; margin-top: 30px; } }
+        @media (max-width: 640px) { .mvb { aspect-ratio: auto; min-height: 170px; margin-top: 16px; } .mvb-text { max-width: 90%; } }
 
         /* ===== 8K VLOG (সিনেমাটিক ওয়াইড ফ্রেম) ===== */
         .v8k-badge { font-size: 11px; font-weight: 800; color: #0a1628; background: #fbbf24; border-radius: 6px; padding: 2px 8px; letter-spacing: .5px; }
@@ -220,14 +220,15 @@
             border: 0; 
             display: block; 
             background: #000; 
-            object-fit: contain; /* ★ ভিডিও কাটা পড়বে না ★ */
+            object-fit: cover; /* cover = no black bars, fills the whole box */
         }
 
         .v8k-play { position: absolute; inset: 0; width: 100%; border: 0; cursor: pointer; background: #000 center / cover no-repeat; display: grid; place-items: center; }
         .v8k-play span { width: 68px; height: 68px; border-radius: 50%; background: rgba(251,191,36,.95); color: #0a1628; display: grid; place-items: center; font-size: 24px; padding-left: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.5); }
         .v8k-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #94a3b8; font-size: 14px; padding: 20px; background: linear-gradient(135deg, #0f172a, #111827); }
         .v8k-empty i { display: block; font-size: 34px; color: #fbbf24; margin-bottom: 10px; }
-        .v8k-cap { margin-top: 10px; color: #94a3b8; font-size: 13px; }
+        .v8k-cap { margin-top: 8px; color: #94a3b8; font-size: 13px; }
+        .v8k-cap:empty { display: none; }
 
         @media (max-width: 640px) {
             .v8k-box { 
@@ -490,7 +491,8 @@
                 }
 
                 const data = snap.docs[0].data();
-                const videoUrl = data.videoUrl;
+                const videoUrl = data.videoUrl || '';
+                if (!videoUrl) { box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-film"></i>No video link found.</div></div>'; return; }
                 const posterUrl = data.thumb || ""; // ★ ফিক্স করা হয়েছে: thumb ব্যবহার করা হলো ★
                 cap.textContent = data.title || "";
 
@@ -604,7 +606,7 @@
                 if (p.url && (p.url.startsWith('http') || p.url.startsWith('data:') || p.url.startsWith('blob:'))) return;
                 try {
                     const imgId = p.imageId || p.image_id || p.photoId || p.photo_id;
-                    if (!imgId) { p.url = ''; return; }
+                    if (!imgId) { p.url = p.url ? normalizeImageUrl(p.url) : ''; return; }
                     const dd = await getDoc(doc(db, "photoData", imgId));
                     if (!dd.exists()) { p.url = ''; return; }
                     const pd = dd.data();
@@ -652,6 +654,7 @@
         // PRODUCTS
         let homeProductList = [], homeProductShown = 0;
         const HOME_PRODUCT_STEP = 6;
+        const NO_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="100%" height="100%" fill="#1e293b"/><text x="50%" y="50%" fill="#64748b" font-family="Arial" font-size="18" text-anchor="middle" dominant-baseline="middle">No Image</text></svg>');
 
         function productCardHtml(p) {
             let discountBadge = '';
@@ -661,26 +664,26 @@
             }
             return `
                 <div class="home-shop-card">
-                    <a href="${p.link || '#'}" target="_blank" style="text-decoration:none;">
+                    <a href="${escHtml(p.link || '#')}" target="_blank" rel="noopener" style="text-decoration:none;">
                         <div class="img-wrap">
                             ${discountBadge}
                             <span class="hot-badge">Hot Deal</span>
-                            <img src="${normalizeImageUrl(p.imageUrl || p.image || '')}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300/1e293b/64748b?text=No+Image'">
+                            <img src="${escHtml(normalizeImageUrl(p.imageUrl || p.image || ''))}" alt="${escHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src=NO_IMG">
                         </div>
                     </a>
                     <div class="card-body">
                         <div class="brand-tag"><i class="fas fa-tag"></i> Affiliate</div>
-                        <h4>${p.name}</h4>
+                        <h4>${escHtml(p.name)}</h4>
                         <div class="product-rating">⭐ 4.6 <span>(New)</span></div>
                         <div class="price-row">
                             <span class="price">৳${p.price}</span>
                             ${p.oldPrice ? `<span class="old-price">৳${p.oldPrice}</span>` : ''}
                         </div>
                         <div class="desc-preview">
-                            <div class="desc-preview-text">${p.description || 'No description.'}</div>
+                            <div class="desc-preview-text">${escHtml(p.description || 'No description.')}</div>
                             <button type="button" class="desc-toggle">Show more</button>
                         </div>
-                        <a href="${p.link || '#'}" target="_blank" class="buy-btn">
+                        <a href="${escHtml(p.link || '#')}" target="_blank" rel="noopener" class="buy-btn">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </a>
                     </div>
@@ -767,4 +770,4 @@
     <script src="site-footer.js"></script>
     
 </body>
-    </html>
+</html>
