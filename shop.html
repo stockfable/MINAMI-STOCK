@@ -10,11 +10,13 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         html { width: 100%; overflow-x: hidden; }
+        
+        /* মেইন ব্যাকগ্রাউন্ড কালো */
         body {
             width: 100%;
             overflow-x: hidden;
-            background: #ffffff;
-            color: #1a1f2e;
+            background: #000000;
+            color: #e2e8f0;
             line-height: 1.6;
             display: flex;
             flex-direction: column;
@@ -23,40 +25,47 @@
 
         .main-wrapper { flex: 1; display: flex; flex-direction: column; }
 
-        /* ★★★ NAVBAR ★★★ */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 6%;
-            background: #0a1628;
-            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
-            position: sticky; top: 0; z-index: 100;
-            flex-wrap: wrap; gap: 10px;
-        }
-        .nav-logo {
-            display: flex; align-items: center; gap: 10px;
-            font-weight: 800; font-size: 18px; color: #fff;
-            text-decoration: none;
-        }
-        .nav-logo .logo-icon {
-            width: 32px; height: 32px;
+        /* Add Product Button (Top Right Corner) */
+        .add-product-btn {
+            position: fixed;
+            top: 85px; 
+            right: 20px;
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            border-radius: 8px; display: flex; justify-content: center; align-items: center;
-            color: #0a1628; font-size: 16px;
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+            color: #0a1628;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s ease;
         }
-        .nav-links { display: flex; gap: 24px; flex-wrap: wrap; }
-        .nav-links a {
-            text-decoration: none; color: #cbd5e1; font-size: 14px;
-            font-weight: 500; transition: 0.2s; padding: 6px 0;
+        .add-product-btn:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
         }
-        .nav-links a:hover, .nav-links a.active { color: #fbbf24; }
+        .add-product-btn i { font-size: 16px; }
+        
+        @media (max-width: 640px) {
+            .add-product-btn {
+                top: 75px;
+                right: 15px;
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
 
-        /* ★★★ HERO ★★★ */
+        /* HERO */
         .hero-section {
-            padding: 40px 6% 15px; max-width: 1200px; margin: 0 auto; text-align: center;
+            padding: 50px 6% 15px; max-width: 1200px; margin: 0 auto; text-align: center;
         }
         .hero-title {
-            font-size: 32px; font-weight: 800; color: #0a1628;
+            font-size: 32px; font-weight: 800; color: #ffffff;
             line-height: 1.15; margin-bottom: 12px;
         }
         .hero-title .highlight {
@@ -64,37 +73,15 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .hero-subtitle {
-            font-size: 14px; color: #64748b; max-width: 700px; margin: 0 auto;
+            font-size: 14px; color: #94a3b8; max-width: 700px; margin: 0 auto;
         }
 
-        /* ★★★ CATEGORY TABS ★★★ */
-        .category-tabs {
-            display: flex; gap: 10px; padding: 20px 6% 15px;
-            max-width: 1200px; margin: 0 auto;
-            overflow-x: auto; scrollbar-width: none;
-            flex-wrap: wrap; justify-content: center;
-        }
-        .category-tabs::-webkit-scrollbar { display: none; }
-        .cat-tab {
-            flex: 0 0 auto; padding: 10px 20px; border-radius: 22px;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            color: #475569; font-size: 13px; font-weight: 600;
-            cursor: pointer; transition: 0.3s; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .cat-tab:hover { border-color: #fbbf24; color: #f59e0b; }
-        .cat-tab.active {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #0a1628; border-color: transparent;
-        }
-
-        /* ★★★ PRODUCTS SECTION ★★★ */
+        /* PRODUCTS SECTION */
         .products-section {
             max-width: 1200px; margin: 0 auto 30px; padding: 0 6%;
         }
         .products-section-header h2 {
-            font-size: 20px; font-weight: 700; color: #0a1628;
+            font-size: 20px; font-weight: 700; color: #ffffff;
             display: flex; align-items: center; gap: 10px;
             margin-bottom: 20px;
         }
@@ -107,13 +94,14 @@
             align-items: start;
         }
 
+        /* প্রোডাক্ট কার্ড কালো */
         .product-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+            background: #0a0a0a;
+            border: 1px solid #333333;
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.35s ease;
-            box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             position: relative;
@@ -132,10 +120,7 @@
             text-decoration: none;
         }
 
-        .buy-now-btn {
-            position: relative;
-            z-index: 10;
-        }
+        .buy-now-btn { position: relative; z-index: 10; }
 
         .product-image {
             position: relative;
@@ -144,7 +129,7 @@
             width: 100%;
             aspect-ratio: 1/1;
             overflow: hidden;
-            background: #f1f5f9;
+            background: #111111;
         }
         .product-image img {
             width: 100%; height: 100%;
@@ -188,7 +173,7 @@
 
         .product-title {
             font-size: 14px; font-weight: 700;
-            color: #1a1f2e; line-height: 1.35;
+            color: #ffffff; line-height: 1.35;
             margin-bottom: 6px;
             display: -webkit-box;
             -webkit-line-clamp: 2; -webkit-box-orient: vertical;
@@ -205,43 +190,39 @@
             display: flex; align-items: baseline; gap: 10px;
             margin-bottom: 10px; flex-wrap: wrap;
         }
-        .current-price {
-            font-size: 22px; font-weight: 800; color: #f59e0b;
-        }
-        .old-price {
-            font-size: 13px; color: #94a3b8;
-            text-decoration: line-through;
-        }
+        .current-price { font-size: 22px; font-weight: 800; color: #f59e0b; }
+        .old-price { font-size: 13px; color: #64748b; text-decoration: line-through; }
 
         .desc-toggle {
             position: relative; z-index: 10;
             display: flex; align-items: center; justify-content: space-between;
             width: 100%; padding: 9px 12px; margin-bottom: 10px;
-            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
-            color: #334155; font-size: 12.5px; font-weight: 700;
+            background: #111111; border: 1px solid #333333; border-radius: 10px;
+            color: #cbd5e1; font-size: 12.5px; font-weight: 700;
             cursor: pointer; transition: 0.2s;
         }
-        .desc-toggle:hover { border-color: #fbbf24; color: #b45309; }
+        .desc-toggle:hover { border-color: #fbbf24; color: #f59e0b; }
         .desc-toggle i { transition: transform 0.25s; color: #f59e0b; }
         .desc-toggle.open i { transform: rotate(180deg); }
+        
         .desc-panel {
             position: relative; z-index: 10;
             display: none;
-            background: #f8fafc;
+            background: #000000;
             border-left: 3px solid #fbbf24;
             border-radius: 8px;
             padding: 10px 12px;
             margin: -2px 0 10px;
-            font-size: 12.5px; color: #475569; line-height: 1.6;
+            font-size: 12.5px; color: #94a3b8; line-height: 1.6;
             white-space: pre-line; word-break: break-word;
             cursor: default;
         }
         .desc-panel.open { display: block; }
 
-        /* ★★★ IMAGE ZOOM (LIGHTBOX) ★★★ */
+        /* IMAGE ZOOM (LIGHTBOX) */
         .lightbox {
             position: fixed; inset: 0; z-index: 1000;
-            background: rgba(2, 6, 23, 0.92);
+            background: rgba(0, 0, 0, 0.92);
             display: none; align-items: center; justify-content: center;
             overflow: auto; padding: 20px;
         }
@@ -250,7 +231,6 @@
             max-width: 95vw; max-height: 88vh;
             object-fit: contain; border-radius: 10px;
             cursor: zoom-in; transition: transform 0.25s ease;
-            touch-action: pinch-zoom;
         }
         .lightbox img.zoomed { transform: scale(2); cursor: zoom-out; }
         .lightbox-close {
@@ -259,7 +239,6 @@
             border: none; background: #fff; color: #0a1628;
             font-size: 20px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
         }
 
         .buy-now-btn {
@@ -270,13 +249,11 @@
             border-radius: 10px; text-decoration: none;
             font-size: 13.5px; font-weight: 700;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
             margin-top: auto;
         }
         .buy-now-btn:hover {
             background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
         }
 
         .empty-state {
@@ -285,30 +262,14 @@
             padding: 60px 20px;
             color: #64748b;
             font-size: 15px;
-            background: #f8fafc;
+            background: #0a0a0a;
             border-radius: 14px;
-            border: 1px dashed #e2e8f0;
+            border: 1px dashed #333333;
         }
-        .empty-state i {
-            font-size: 40px;
-            color: #cbd5e1;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        /* ★★★ FOOTER ★★★ */
-        .main-footer {
-            text-align: center; padding: 18px;
-            background: #0a1628; color: #94a3b8; font-size: 12px;
-            border-top: 1px solid rgba(251, 191, 36, 0.3);
-            margin-top: auto;
-        }
-        .main-footer strong { color: #fbbf24; }
+        .empty-state i { font-size: 40px; color: #333333; margin-bottom: 15px; display: block; }
 
         @media (max-width: 600px) {
             .hero-title { font-size: 22px; }
-            .navbar { padding: 12px 5%; flex-direction: column; }
-            .nav-links { justify-content: center; gap: 18px; }
             .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
             .hero-section { padding: 30px 5% 10px; }
             .product-info { padding: 10px; }
@@ -318,16 +279,20 @@
             .buy-now-btn { font-size: 12px; padding: 9px; }
         }
     </style>
-    <script src="top-bar.js"></script>
 </head>
 <body>
 
     <div class="main-wrapper">
 
-        <!-- ★ TOP BAR (shared) ★ -->
+        <!-- ★★★ এখানে টপ বার লোড হবে (top-bar.js থেকে) ★★★ -->
         <div id="site-topbar"></div>
 
-        <!-- ★ HERO ★ -->
+        <!-- Add Product Button -->
+        <a href="add-product.html" class="add-product-btn">
+            <i class="fas fa-plus-circle"></i> Add Product
+        </a>
+
+        <!-- HERO -->
         <section class="hero-section">
             <h1 class="hero-title">Trending <span class="highlight">Deals</span></h1>
             <p class="hero-subtitle">
@@ -335,7 +300,7 @@
             </p>
         </section>
 
-        <!-- ★ PRODUCTS SECTION ★ -->
+        <!-- PRODUCTS SECTION -->
         <section class="products-section">
             <div class="products-section-header">
                 <h2><i class="fas fa-star"></i> All Products</h2>
@@ -351,13 +316,16 @@
 
     </div>
 
-    <!-- ★ IMAGE ZOOM ★ -->
+    <!-- IMAGE ZOOM -->
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" id="lightboxClose" aria-label="Close"><i class="fas fa-times"></i></button>
         <img id="lightboxImg" src="" alt="">
     </div>
 
-    <!-- ★★ Firebase Dynamic Product Loader Script ★★ -->
+    <!-- ফুটার লোড হবে -->
+    <div id="ms-footer"></div>
+
+    <!-- ★★★ Firebase Script ★★★ -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -365,7 +333,6 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
             authDomain: "creoverse-stock.firebaseapp.com",
-            databaseURL: "https://creoverse-stock-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "creoverse-stock",
             storageBucket: "creoverse-stock.firebasestorage.app",
             messagingSenderId: "128072247505",
@@ -375,14 +342,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // user-er likha text safe korar jonno
         function esc(v) {
             return String(v ?? '').replace(/[&<>"']/g, c => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             }[c]));
         }
 
-        // post korar somoy (notun product age dekhate)
         function postedTime(p) {
             const v = p.createdAt ?? p.timestamp ?? p.created ?? p.postedAt ?? p.date;
             if (!v) return 0;
@@ -413,7 +378,6 @@
                     return;
                 }
 
-                // notun post kora product shobar age
                 const items = [];
                 querySnapshot.forEach((d) => items.push(d.data()));
                 items.sort((a, b) => postedTime(b) - postedTime(a));
@@ -435,7 +399,7 @@
                             <div class="product-image" data-zoom="${esc(p.imageUrl)}">
                                 ${discountBadge}
                                 <span class="commission-badge">Hot Deal</span>
-                                <img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" onerror="this.src='https://via.placeholder.com/300x300/f1f5f9/94a3b8?text=No+Image'">
+                                <img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" onerror="this.src='https://via.placeholder.com/300x300/111111/333333?text=No+Image'">
                             </div>
                             <div class="product-info">
                                 <div class="brand-tag"><i class="fas fa-tag"></i> Affiliate</div>
@@ -458,8 +422,6 @@
                 });
                 grid.innerHTML = html;
 
-                console.log("✅ Products loaded from Firestore!");
-
             } catch (error) {
                 console.error("❌ Error loading products: ", error);
                 grid.innerHTML = `
@@ -472,7 +434,6 @@
             }
         }
 
-        // Show / Hide Description + Image Zoom (event delegation)
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
 
@@ -516,8 +477,8 @@
         window.addEventListener('load', loadDynamicProducts);
     </script>
 
-    <!-- ★ FOOTER (shared) ★ -->
-    <div id="ms-footer"></div>
+    <!-- ★★★ এই দুটি স্ক্রিপ্ট অবশ্যই থাকতে হবে ★★★ -->
+    <script src="top-bar.js"></script>
     <script src="site-footer.js"></script>
 </body>
 </html>

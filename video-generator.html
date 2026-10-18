@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator - No Watermark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #000; color: #e2e8f0; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .main-wrapper { max-width: 900px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
+        
+        .gen-container {
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 16px;
+            padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .gen-header { text-align: center; margin-bottom: 30px; }
+        .gen-header h1 { font-size: 32px; color: #fff; margin-bottom: 10px; }
+        .gen-header h1 i { color: #fbbf24; }
+        .gen-header p { color: #94a3b8; font-size: 15px; }
+        .badge-hd { 
+            display: inline-block; background: linear-gradient(135deg, #fbbf24, #d97706); 
+            color: #000; padding: 4px 12px; border-radius: 20px; font-size: 12px; 
+            font-weight: 800; margin-bottom: 15px; letter-spacing: 1px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; color: #cbd5e1; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%; background: #000; border: 1px solid #334155; color: #fff;
+            padding: 15px; border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s;
+        }
+        .input-group textarea { height: 100px; resize: vertical; }
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: #fbbf24; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+
+        .generate-btn {
+            width: 100%; background: #fbbf24; color: #000; border: none;
+            padding: 16px; border-radius: 8px; font-size: 18px; font-weight: 800;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.2s;
+        }
+        .generate-btn:hover { background: #f59e0b; transform: translateY(-2px); }
+        .generate-btn:disabled { background: #64748b; cursor: not-allowed; transform: none; }
+
+        /* Video Preview Area */
+        .preview-area {
+            margin-top: 30px; border: 2px dashed #334155; border-radius: 12px;
+            min-height: 300px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: #64748b;
+            position: relative; overflow: hidden; background: #000;
+        }
+        .preview-area video { width: 100%; height: 100%; max-height: 500px; object-fit: contain; display: none; }
+        .preview-area i { font-size: 50px; margin-bottom: 15px; color: #334155; }
+
+        /* Loader */
+        .loader { display: none; flex-direction: column; align-items: center; gap: 15px; }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid #1e293b;
+            border-top: 4px solid #fbbf24; border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-text { font-size: 14px; color: #94a3b8; text-align: center; }
+
+        .note-box { margin-top: 30px; background: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; padding: 15px; border-radius: 8px; font-size: 13.5px; color: #cbd5e1; line-height: 1.6; }
+        .note-box a { color: #fbbf24; text-decoration: none; font-weight: bold; }
+        .note-box a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div id="site-topbar"></div>
+
+    <div class="main-wrapper">
+        <div class="gen-container">
+            <div class="gen-header">
+                <span class="badge-hd">No Watermark</span>
+                <h1><i class="fas fa-video"></i> AI Video Generator</h1>
+                <p>Create short videos for free without any watermarks.</p>
+            </div>
+
+            <div class="input-group">
+                <label>Hugging Face API Token <span style="color:#ef4444">*</span></label>
+                <input type="password" id="hfToken" placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                <small style="color:#94a3b8; font-size:12px; margin-top:5px; display:block;">
+                    Don't have a token? <a href="https://huggingface.co/settings/tokens" target="_blank" style="color:#fbbf24;">Get free token here</a>.
+                </small>
+            </div>
+
+            <div class="input-group">
+                <label>Prompt (Describe your video)</label>
+                <textarea id="videoPrompt" placeholder="Example: A beautiful sunset over a calm ocean, cinematic, 4k..."></textarea>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>AI Model (Watermark-Free)</label>
+                    <select id="modelSelect">
+                        <!-- শুধুমাত্র ওয়াটারমার্ক ছাড়া মডেল -->
+                        <option value="cerspense/zeroscope_v2_576w">Zeroscope V2 (Free & No Watermark)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Resolution</label>
+                    <select id="formatSelect" disabled>
+                        <option value="mp4">576p (HD)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="genBtn" onclick="generateVideo()">
+                <i class="fas fa-wand-magic-sparkles"></i> Generate Video
+            </button>
+
+            <!-- Preview Area -->
+            <div class="preview-area" id="previewArea">
+                <div id="previewPlaceholder">
+                    <i class="fas fa-film"></i>
+                    <p>Your generated video will appear here.</p>
+                </div>
+                <div class="loader" id="loader">
+                    <div class="spinner"></div>
+                    <p id="loaderText" class="status-text">AI is rendering your video... (0s)</p>
+                    <p style="font-size:12px; color:#fbbf24; margin-top:5px;">Free server takes 1-3 minutes.</p>
+                </div>
+                <video id="resultVideo" controls playsinline></video>
+            </div>
+
+            <div class="note-box">
+                <i class="fas fa-info-circle"></i> <b>Note:</b> This free API generates short 3-second videos without a watermark. For full 1080p HD videos, you might need a premium API. 
+                <br><br>
+                <i class="fas fa-external-link-alt"></i> <b>Want HD 1080p?</b> Use <a href="https://lumalabs.ai/dream-machine" target="_blank">Luma Dream Machine</a> or <a href="https://klingai.com/" target="_blank">Kling AI</a> directly (Free account required).
+            </div>
+        </div>
+    </div>
+
+    <div id="ms-footer"></div>
+
+    <script src="top-bar.js"></script>
+    <script src="site-footer.js"></script>
+
+    <script>
+        async function generateVideo() {
+            const token = document.getElementById('hfToken').value.trim();
+            const prompt = document.getElementById('videoPrompt').value.trim();
+            const model = document.getElementById('modelSelect').value;
+            
+            if (!token) {
+                alert("Please enter your Hugging Face API Token first!");
+                return;
+            }
+            if (!prompt) {
+                alert("Please enter a prompt!");
+                return;
+            }
+
+            const btn = document.getElementById('genBtn');
+            const placeholder = document.getElementById('previewPlaceholder');
+            const loader = document.getElementById('loader');
+            const loaderText = document.getElementById('loaderText');
+            const video = document.getElementById('resultVideo');
+
+            // UI Update
+            btn.disabled = true;
+            placeholder.style.display = 'none';
+            video.style.display = 'none';
+            if(video.src) URL.revokeObjectURL(video.src);
+            video.src = ''; 
+            loader.style.display = 'flex';
+            
+            let elapsed = 0;
+            const startTime = Date.now();
+            const timerInterval = setInterval(() => {
+                elapsed = Math.floor((Date.now() - startTime) / 1000);
+                loaderText.textContent = `AI is rendering your video... (${elapsed}s)`;
+            }, 1000);
+
+            try {
+                const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ inputs: prompt }),
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) throw new Error("Invalid API Token.");
+                    if (response.status === 503) throw new Error("Model is loading. Please wait 20 seconds and try again.");
+                    if (response.status === 429) throw new Error("Too many requests. Please wait.");
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const blob = await response.blob();
+                const videoUrl = URL.createObjectURL(blob);
+
+                clearInterval(timerInterval);
+                loader.style.display = 'none';
+                video.style.display = 'block';
+                
+                video.src = videoUrl;
+                video.load();
+                video.play().catch(e => console.log("Auto-play blocked:", e));
+
+            } catch (error) {
+                clearInterval(timerInterval);
+                console.error("Error:", error);
+                alert(error.message || "Failed to generate video.");
+                loader.style.display = 'none';
+                placeholder.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

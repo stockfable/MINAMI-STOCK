@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Blog - MINAMI STOCK</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: #000; color: #f8fafc; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    /* ==================== MAIN PAGE STYLES ==================== */
+    .top-action-row { display: flex; justify-content: center; margin: 30px auto 20px; width: 100%; max-width: 800px; padding: 0 20px; }
+    .search-wrapper { display: flex; align-items: center; background: #0f172a; border: 1px solid #1e293b; border-radius: 30px; padding: 5px 5px 5px 20px; flex: 1; height: 52px; }
+    .search-wrapper i { color: #fbbf24; font-size: 16px; }
+    .search-wrapper input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; padding: 10px 15px; min-width: 50px; }
+    .search-wrapper input::placeholder { color: #64748b; }
+    .search-wrapper button { background: #fbbf24; color: #0a1628; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 700; cursor: pointer; height: 100%; transition: 0.2s; }
+    .search-wrapper button:hover { background: #f59e0b; }
+
+    .hero { padding: 20px 20px 40px; text-align: center; }
+    .hero h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-bottom: 12px; }
+    .hero h1 .highlight { background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 15px; color: #94a3b8; }
+
+    .video-container { max-width: 1400px; margin: 0 auto; padding: 0 20px 60px; flex: 1; width: 100%; }
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; width: 100%; }
+    .video-card { background: #0a0a0a; border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: 0.3s; cursor: pointer; }
+    .video-card:hover { border-color: rgba(251, 191, 36, 0.4); transform: translateY(-5px); }
+    .video-thumb-wrap { position: relative; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+    .video-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s; opacity: 0.8; }
+    .video-card:hover .video-thumb-wrap img { transform: scale(1.05); opacity: 0.6; }
+    .play-overlay { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+    .play-overlay i { font-size: 48px; color: #fbbf24; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8)); }
+    .video-card-body { padding: 16px; }
+    .video-card-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .video-card-meta { font-size: 13px; color: #64748b; display: flex; align-items: center; gap: 6px; }
+
+    /* ==================== FULL PAGE DETAIL VIEW ==================== */
+    #videoDetailView { position: fixed; inset: 0; background: #ffffff; color: #333; z-index: 9999; display: none; flex-direction: column; overflow-y: auto; }
+    #videoDetailView.show { display: flex; }
+
+    .dv-topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #e5e7eb; background: #fff; position: sticky; top: 0; z-index: 10; }
+    .dv-counter { font-size: 14px; font-weight: 600; color: #666; }
+    .dv-nav-btns { display: flex; gap: 10px; align-items: center; }
+    .dv-btn { background: #fff; border: 1px solid #d1d5db; color: #4b5563; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .dv-btn:hover { background: #f3f4f6; border-color: #9ca3af; }
+    .dv-btn.close-btn { border-radius: 8px; width: auto; padding: 0 16px; font-weight: 600; font-size: 14px; gap: 8px; }
+
+    .dv-main-content { max-width: 1200px; margin: 0 auto; width: 100%; padding: 20px; }
+    
+    /* Video Player & Watermark Wrapper */
+    .dv-video-wrapper { position: relative; width: 100%; background: #000; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    .dv-video-wrapper video { width: 100%; max-height: 70vh; outline: none; display: block; }
+    
+    /* ★★★ CSS WATERMARK (ভিউয়ারতে দেখানোর জন্য) ★★★ */
+    .dv-watermark {
+        position: absolute; inset: 0; pointer-events: none; 
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><text x='150' y='150' fill='rgba(255,255,255,0.3)' font-size='24' font-weight='900' font-family='sans-serif' transform='rotate(-30 150 150)' text-anchor='middle' letter-spacing='2'>MINAMI STOCK</text></svg>");
+        background-repeat: repeat; background-size: 250px 250px; z-index: 5;
+    }
+
+    /* Action Buttons */
+    .dv-action-bar { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px; }
+    .dv-action-left { display: flex; gap: 10px; flex-wrap: wrap; }
+    .dv-action-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #d1d5db; color: #374151; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .dv-action-btn:hover { background: #f9fafb; border-color: #9ca3af; }
+    .dv-file-info { background: #f3f4f6; padding: 6px 12px; border-radius: 6px; font-size: 12px; color: #6b7280; }
+
+    /* Title & Author */
+    .dv-title { font-size: 28px; font-weight: 800; color: #111827; margin-bottom: 5px; }
+    .dv-author { font-size: 14px; color: #6b7280; display: flex; align-items: center; gap: 8px; margin-bottom: 25px; }
+    .dv-author span { background: #e5e7eb; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #374151; }
+
+    /* Metadata Grid */
+    .dv-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px 0; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; margin-bottom: 25px; }
+    .dv-meta-item label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .dv-meta-item span { font-size: 15px; font-weight: 600; color: #111827; }
+
+    /* License Selection */
+    .dv-license-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; transition: 0.2s; position: relative; }
+    .dv-license-box:hover { border-color: #3b82f6; background: #f8fafc; }
+    .dv-license-box.selected { border-color: #3b82f6; background: #eff6ff; }
+    .dv-license-box input[type="radio"] { margin-top: 4px; width: 18px; height: 18px; accent-color: #3b82f6; cursor: pointer; }
+    .dv-license-content h4 { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+    .dv-license-content p { font-size: 13px; color: #6b7280; }
+    .dv-price-tag { margin-left: auto; font-weight: 700; color: #3b82f6; font-size: 15px; }
+    .dv-price-tag.free { color: #10b981; }
+
+    /* Download Button */
+    .dv-download-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #2563eb; color: #fff; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; width: 100%; max-width: 250px; transition: 0.2s; margin-bottom: 30px; }
+    .dv-download-btn:hover { background: #1d4ed8; }
+
+    .dv-section-title { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; }
+    .dv-series-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 30px; scrollbar-width: thin; }
+    .dv-series-item { width: 180px; flex-shrink: 0; border-radius: 8px; overflow: hidden; cursor: pointer; aspect-ratio: 16/9; border: 2px solid transparent; }
+    .dv-series-item img { width: 100%; height: 100%; object-fit: cover; }
+    .dv-series-item:hover { border-color: #3b82f6; }
+
+    .dv-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+    .dv-tag { background: #f3f4f6; color: #4b5563; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
+    .dv-tag:hover { background: #e5e7eb; }
+
+    .dv-similar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 50px; }
+    .dv-similar-item { border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; cursor: pointer; }
+    .dv-similar-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .dv-similar-item:hover img { transform: scale(1.05); }
+
+    @media (max-width: 768px) {
+        .dv-meta-grid { grid-template-columns: repeat(2, 1fr); }
+        .dv-title { font-size: 22px; }
+        .dv-download-btn { max-width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div id="site-topbar"></div>
+
+    <!-- MAIN PAGE (GRID VIEW) -->
+    <div id="mainPageView">
+        <div class="top-action-row">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearchInput" placeholder="Search stock videos by keyword...">
+                <button type="button" onclick="performSearch()">Search</button>
+            </div>
+        </div>
+
+        <section class="hero">
+            <h1>MINAMI <span class="highlight">Video Blog</span></h1>
+            <p>Explore high-quality stock videos for your next project.</p>
+        </section>
+
+        <div class="video-container">
+            <div id="loadingState" style="text-align: center; padding: 50px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: #fbbf24; margin-bottom: 15px;"></i>
+                <p style="color: #94a3b8;">Loading videos...</p>
+            </div>
+            <div class="video-grid" id="videoGrid"></div>
+        </div>
+    </div>
+
+    <!-- ==================== FULL DETAIL VIEW ==================== -->
+    <div id="videoDetailView">
+        <div class="dv-topbar">
+            <div class="dv-counter" id="dvCounter">1 / 10</div>
+            <div class="dv-nav-btns">
+                <button class="dv-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="dv-btn"><i class="fas fa-chevron-right"></i></button>
+                <button class="dv-btn close-btn" onclick="closeDetailView()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+
+        <div class="dv-main-content">
+            
+            <!-- Video Player with CSS Watermark Overlay -->
+            <div class="dv-video-wrapper">
+                <video id="dvVideo" controls playsinline></video>
+                <div class="dv-watermark"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="dv-action-bar">
+                <div class="dv-action-left">
+                    <button class="dv-action-btn"><i class="far fa-heart"></i> Save</button>
+                    <button class="dv-action-btn" onclick="copyVideoLink()"><i class="fas fa-link"></i> Copy link</button>
+                </div>
+                <div class="dv-file-info" id="dvFileInfo">FILE #: Video_MP4_1234</div>
+            </div>
+
+            <!-- Title & Author -->
+            <h1 class="dv-title" id="dvTitle">Untitled Video</h1>
+            <div class="dv-author">By <b id="dvAuthor">MINAMI Creator</b> <span>PRO</span></div>
+
+            <!-- Meta Data Grid -->
+            <div class="dv-meta-grid">
+                <div class="dv-meta-item"><label>DIMENSIONS</label><span>1920 × 1080 px</span></div>
+                <div class="dv-meta-item"><label>FILE TYPE</label><span>MP4 Video</span></div>
+                <div class="dv-meta-item"><label>CATEGORY</label><span id="dvCategory">Vlog</span></div>
+                <div class="dv-meta-item"><label>LICENSE TYPE</label><span>Standard or Extended</span></div>
+            </div>
+
+            <!-- License Selection -->
+            <div class="dv-license-box selected" id="licenseStandard" onclick="selectLicense('standard')">
+                <input type="radio" name="license" value="standard" checked>
+                <div class="dv-license-content">
+                    <h4>Standard license</h4>
+                    <p>Websites, social media, print & ads</p>
+                </div>
+                <div class="dv-price-tag free">Free</div>
+            </div>
+
+            <div class="dv-license-box" id="licenseExtended" onclick="selectLicense('extended')">
+                <input type="radio" name="license" value="extended">
+                <div class="dv-license-content">
+                    <h4>Extended license</h4>
+                    <p>Resale products, unlimited print</p>
+                </div>
+                <div class="dv-price-tag">$99.00</div>
+            </div>
+
+            <!-- Download Button -->
+            <button class="dv-download-btn" onclick="downloadVideo()">
+                <i class="fas fa-download"></i> Download
+            </button>
+
+            <!-- More from this series -->
+            <div class="dv-section-title">MORE FROM THIS SERIES</div>
+            <div class="dv-series-scroll" id="dvSeriesScroll"></div>
+
+            <!-- Similar Keywords -->
+            <div class="dv-section-title">SIMILAR KEYWORDS</div>
+            <div class="dv-tags">
+                <span class="dv-tag">vlog</span>
+                <span class="dv-tag">stock video</span>
+                <span class="dv-tag">minami</span>
+                <span class="dv-tag">hd</span>
+                <span class="dv-tag">high quality</span>
+                <span class="dv-tag">cinematic</span>
+            </div>
+
+            <!-- Similar Videos -->
+            <div class="dv-section-title">SIMILAR VIDEOS</div>
+            <div class="dv-similar-grid" id="dvSimilarGrid"></div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="ms-footer"></div>
+
+    <!-- SHARED SCRIPTS -->
+    <script src="top-bar.js"></script>
+    <script src="site-footer.js"></script>
+
+    <!-- FIREBASE LOGIC -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
+            authDomain: "creoverse-stock.firebaseapp.com",
+            projectId: "creoverse-stock",
+            storageBucket: "creoverse-stock.firebasestorage.app",
+            messagingSenderId: "128072247505",
+            appId: "1:128072247505:web:47e58c3a140f4e858bbdf0"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.firestore();
+
+        let allVideos = []; 
+        let currentVideoUrl = "";
+
+        // ১. ভিডিও লোড করা
+        async function loadVideos() {
+            const grid = document.getElementById('videoGrid');
+            const loadingState = document.getElementById('loadingState');
+
+            try {
+                const snapshot = await db.collection("vlogs").orderBy("createdAt", "desc").get();
+                loadingState.style.display = 'none';
+
+                if (snapshot.empty) {
+                    grid.innerHTML = '<p style="color:#fff;">No videos found.</p>';
+                    return;
+                }
+
+                allVideos = [];
+                snapshot.forEach(doc => {
+                    allVideos.push({ id: doc.id, ...doc.data() });
+                });
+
+                grid.innerHTML = '';
+                allVideos.forEach((video, index) => {
+                    const title = video.title || "Untitled Video";
+                    const thumbUrl = video.thumb || "https://via.placeholder.com/640x360/000000/ffffff?text=Video";
+
+                    const card = document.createElement('div');
+                    card.className = 'video-card';
+                    card.onclick = () => openDetailView(index);
+                    
+                    card.innerHTML = `
+                        <div class="video-thumb-wrap">
+                            <img src="${thumbUrl}" alt="${title}">
+                            <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+                        </div>
+                        <div class="video-card-body">
+                            <h3 class="video-card-title">${title}</h3>
+                            <div class="video-card-meta"><i class="fas fa-check-circle" style="color: #10b981;"></i> Published</div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Error loading videos:", error);
+            }
+        }
+
+        // ২. ডিটেইল ভিউ ওপেন করা
+        function openDetailView(index) {
+            const video = allVideos[index];
+            if (!video) return;
+
+            currentVideoUrl = video.videoUrl; 
+
+            document.getElementById('dvVideo').src = video.videoUrl;
+            document.getElementById('dvTitle').textContent = video.title || "Untitled Video";
+            document.getElementById('dvAuthor').textContent = video.author || "MINAMI Creator";
+            document.getElementById('dvCounter').textContent = `${index + 1} / ${allVideos.length}`;
+            document.getElementById('dvFileInfo').textContent = `FILE #: ${video.id.substring(0,8).toUpperCase()}`;
+
+            const similarGrid = document.getElementById('dvSimilarGrid');
+            similarGrid.innerHTML = '';
+            allVideos.slice(0, 4).forEach(v => {
+                const thumb = v.thumb || "https://via.placeholder.com/640x360";
+                similarGrid.innerHTML += `<div class="dv-similar-item"><img src="${thumb}"></div>`;
+            });
+
+            document.getElementById('mainPageView').style.display = 'none';
+            document.getElementById('videoDetailView').classList.add('show');
+            window.scrollTo(0, 0);
+        }
+
+        // ৩. ডিটেইল ভিউ ক্লোজ করা
+        function closeDetailView() {
+            const video = document.getElementById('dvVideo');
+            video.pause();
+            video.src = "";
+            
+            document.getElementById('videoDetailView').classList.remove('show');
+            document.getElementById('mainPageView').style.display = 'block';
+        }
+
+        // ৪. লাইসেন্স সিলেক্ট করার ফাংশন
+        function selectLicense(type) {
+            const stdBox = document.getElementById('licenseStandard');
+            const extBox = document.getElementById('licenseExtended');
+            const stdRadio = stdBox.querySelector('input');
+            const extRadio = extBox.querySelector('input');
+
+            if (type === 'standard') {
+                stdBox.classList.add('selected');
+                extBox.classList.remove('selected');
+                stdRadio.checked = true;
+                extRadio.checked = false;
+            } else {
+                extBox.classList.add('selected');
+                stdBox.classList.remove('selected');
+                extRadio.checked = true;
+                stdRadio.checked = false;
+            }
+        }
+
+        function copyVideoLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied to clipboard!");
+        }
+
+        // ★★★ ৫. লাইসেন্স অনুযায়ী ডাউনলোড লজিক ★★★
+        function downloadVideo() {
+            if (!currentVideoUrl) {
+                alert("ভিডিও লিংক পাওয়া যায়নি!");
+                return;
+            }
+
+            // ইউজার কোন রেডিও বাটন সিলেক্ট করেছে তা চেক করা
+            const selectedRadio = document.querySelector('input[name="license"]:checked');
+            const isStandard = selectedRadio ? selectedRadio.value === 'standard' : true;
+
+            if (isStandard) {
+                // === Standard License (Free) - ওয়াটারমার্ক সহ ===
+                if (currentVideoUrl.includes('cloudinary.com')) {
+                    // ক্লাউডিনারি লিংক হলে অটোমেটিক ওয়াটারমার্ক বসবে
+                    let watermarkedUrl = currentVideoUrl.replace(
+                        '/upload/', 
+                        '/upload/l_text:Arial_60:MINAMI%20STOCK,co_rgb:FFFFFF,o_60,w_500,g_center/fl_attachment:MINAMI_STOCK_Video/'
+                    );
+                    window.open(watermarkedUrl, '_blank');
+                } else {
+                    // ফায়ারবেস লিংক হলে (সরাসরি ব্রাউজারে ওয়াটারমার্ক বসানো সম্ভব নয়)
+                    alert("ভাই, আপনার ভিডিওটি ফায়ারবেসে (Firebase) আছে। ব্রাউজার থেকে ফায়ারবেসের ভিডিওতে সরাসরি ওয়াটারমার্ক বসানো সম্ভব না। ক্লাউডিনারি ব্যবহার করলে এটি অটোমেটিক হতো। আপাতত ভিডিওটি ডাউনলোড হচ্ছে।");
+                    window.open(currentVideoUrl, '_blank');
+                }
+            } else {
+                // === Extended License (Paid) - ওয়াটারমার্ক ছাড়া ===
+                alert("Extended License (Paid) - ওয়াটারমার্ক ছাড়া অরিজিনাল ভিডিও ডাউনলোড হচ্ছে।");
+                window.open(currentVideoUrl, '_blank');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+
+</body>
+</html>

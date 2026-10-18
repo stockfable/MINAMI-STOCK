@@ -81,10 +81,11 @@
     ["age-calculator.html", "fa-cake-candles", "Age Calculator"]
   ];
 
-  /* LINE 2 - sub bar (also used in the DOT menu) */
+  /* ★★★ LINE 2 - sub bar (Vlog যুক্ত করা হয়েছে Dashboard-এর নিচে) ★★★ */
   const subLinks = [
     ["portfolio.html", "fa-briefcase", "Portfolio"],
     ["dashboard.html", "fa-gauge", "Dashboard"],
+    ["vlog-video.html", "fa-video", "Vlog"],
     ["upload.html", "fa-cloud-arrow-up", "Upload"],
     ["tools.html", "fa-screwdriver-wrench", "All Tools"],
     ["stock-photo.html", "fa-image", "Stock Photos"],
@@ -127,7 +128,6 @@
 
   appsLinks.push(...imgTools, ...textTools);
 
-  /* mk(arr, withActive) — withActive=false stops keyword bar from lighting up all links */
   const mk = (arr, withActive) =>
     arr.map((l) =>
       '<a href="' + esc(l[0]) + '"' + (withActive === false ? "" : act(l[0])) +
@@ -141,41 +141,21 @@
   const kwRows = splitRows(keywordLinks);
 
   /* MENU 1 (3-dot): pages up to Stock Photos */
-  const pagesLinks = subLinks.slice(0, 5);
-  const pick = (hrefs) => hrefs.map((h) => subLinks.concat(appsLinks).filter((l) => l[0] === h)[0]).filter(Boolean);
-  /* MENU 2 (4-dot): the other pages */
-  const morePages = pick(["image-generator.html", "index.html", "shop.html", "account.html", "about.html", "privacy.html"]);
-  /* MENU 3 (4-dot): tools */
-  const toolLinks = imgTools.concat(textTools);
+  const pagesLinks = subLinks.slice(0, 5); 
 
   /* ---------- HTML ---------- */
+  /* ★ এখান থেকে sidebarMenu এবং toolsMenu ব্লক দুটি রিমুভ করা হয়েছে ★ */
   const html = `
 <header class="top-nav">
   <div class="in">
 
-    <!-- ===== NEW: DOT MENU (left of logo) ===== -->
+    <!-- ===== DOT MENU (left of logo) ===== -->
     <div class="dot-menu" id="dotMenu">
       <button class="dot-trigger" id="dotBtn" type="button"
               aria-label="Pages" aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-ellipsis-vertical"></i>
       </button>
       <div class="dot-dropdown" id="dotDrop">${mk(pagesLinks)}</div>
-    </div>
-
-    <div class="sidebar-bottom-menu" id="sidebarMenu">
-      <button class="sidebar-trigger" id="appsBtn" type="button"
-              aria-label="More pages" aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-table-cells-large"></i>
-      </button>
-      <div class="sidebar-dropdown" id="appsDrop">${mk(morePages)}</div>
-    </div>
-
-    <div class="sidebar-bottom-menu" id="toolsMenu">
-      <button class="sidebar-trigger" id="toolsBtn" type="button"
-              aria-label="Tools" aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-table-cells-large"></i>
-      </button>
-      <div class="sidebar-dropdown" id="toolsDrop">${mk(toolLinks)}</div>
     </div>
 
     <a class="logo-container" href="index.html">
@@ -206,6 +186,7 @@
           <div class="account-divider"></div>
           <a class="account-menu-item" href="account.html"><i class="fa-solid fa-user"></i>My Account</a>
           <a class="account-menu-item" href="dashboard.html"><i class="fa-solid fa-gauge"></i>Dashboard</a>
+          <a class="account-menu-item" href="vlog-video.html"><i class="fa-solid fa-video"></i>Vlog</a>
           <a class="account-menu-item" href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i>Upload</a>
           <div class="account-divider"></div>
           <button class="account-menu-item" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i>Sign out</button>
@@ -243,10 +224,8 @@
   height:var(--nav-h);padding:0 16px;
 }
 
-/* ===== SHARED BUTTONS (sidebar trigger + dot trigger) ===== */
-.sidebar-bottom-menu,
+/* ===== SHARED BUTTONS (dot trigger) ===== */
 .dot-menu{position:relative;flex:none}
-.sidebar-trigger,
 .dot-trigger{
   width:38px;height:38px;border-radius:10px;
   display:grid;place-items:center;cursor:pointer;
@@ -254,52 +233,32 @@
   border:1px solid rgba(255,255,255,0.12);
   color:#60a5fa;font-size:16px;transition:.2s;
 }
-.sidebar-trigger:hover,
 .dot-trigger:hover{border-color:#fbbf24;color:#fbbf24}
 
-/* ===== DROPDOWNS (apps + dot) ===== */
-.sidebar-dropdown,
+/* ===== DROPDOWNS (dot) ===== */
 .dot-dropdown{
   display:none;position:absolute;left:0;top:46px;
   max-height:80vh;overflow-y:auto;
   background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);
   border-radius:12px;padding:6px;
   box-shadow:0 14px 34px rgba(0,0,0,.8);z-index:9999;
+  width:220px;
 }
-.sidebar-dropdown{width:240px}
-.dot-dropdown{width:220px}
-.sidebar-dropdown.mega,
-.dot-dropdown.mega{width:min(340px,calc(100vw - 24px));max-height:78vh;overflow-y:auto}
-.mega-title{padding:10px 12px 6px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#fbbf24}
-.mega-kw{display:flex;flex-wrap:wrap;gap:6px;padding:2px 8px 10px}
-.sidebar-dropdown .mega-kw a,
-.dot-dropdown .mega-kw a{padding:6px 11px;gap:6px;border-radius:16px;font-size:12.5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
-.sidebar-dropdown .mega-kw a i,
-.dot-dropdown .mega-kw a i{width:auto;font-size:11px}
-.sidebar-dropdown .mega-kw a:hover,
-.dot-dropdown .mega-kw a:hover{border-color:rgba(251,191,36,0.4)}
-.sidebar-dropdown.show,
 .dot-dropdown.show{display:block}
 
-.sidebar-dropdown a,
 .dot-dropdown a{
   display:flex;align-items:center;gap:12px;
   padding:11px 12px;border-radius:8px;
   font-size:14px;font-weight:600;
   color:#cbd5e1;text-decoration:none;
 }
-.sidebar-dropdown a:hover,
 .dot-dropdown a:hover{background:rgba(251,191,36,0.1);color:#fbbf24}
-.sidebar-dropdown a.active,
 .dot-dropdown a.active{
   background:rgba(251,191,36,0.12);
   box-shadow:inset 3px 0 #fbbf24;
   color:#fbbf24;
 }
-.sidebar-dropdown i,
 .dot-dropdown i{width:18px;text-align:center;color:#64748b;font-size:14px}
-.sidebar-dropdown a:hover i,
-.sidebar-dropdown a.active i,
 .dot-dropdown a:hover i,
 .dot-dropdown a.active i{color:#fbbf24}
 
@@ -434,7 +393,6 @@
   .site-logo{width:28px;height:28px}
   .btn-signin{display:none}
   .btn-signup{padding:7px 12px;font-size:13px}
-  .sidebar-trigger,
   .dot-trigger{width:36px;height:36px}
   .sub-bar-in{padding:7px 10px}
   .sub-bar a{padding:6px 12px;font-size:12.5px}
@@ -482,12 +440,6 @@
   }
 
   function wireEvents() {
-    const appsBtn  = document.getElementById("appsBtn");
-    const appsDrop = document.getElementById("appsDrop");
-
-    const toolsBtn  = document.getElementById("toolsBtn");
-    const toolsDrop = document.getElementById("toolsDrop");
-
     const dotBtn  = document.getElementById("dotBtn");
     const dotDrop = document.getElementById("dotDrop");
 
@@ -495,14 +447,6 @@
     const acctDrop  = document.getElementById("acctDrop");
 
     function closeAll(except) {
-      if (appsDrop && appsDrop !== except) {
-        appsDrop.classList.remove("show");
-        if (appsBtn) appsBtn.setAttribute("aria-expanded", "false");
-      }
-      if (toolsDrop && toolsDrop !== except) {
-        toolsDrop.classList.remove("show");
-        if (toolsBtn) toolsBtn.setAttribute("aria-expanded", "false");
-      }
       if (dotDrop && dotDrop !== except) {
         dotDrop.classList.remove("show");
         if (dotBtn) dotBtn.setAttribute("aria-expanded", "false");
@@ -530,13 +474,10 @@
       });
     }
 
-    bind(appsBtn, appsDrop);
-    bind(toolsBtn, toolsDrop);
     bind(dotBtn, dotDrop);
     bind(avatarBtn, acctDrop);
 
     document.addEventListener("click", (e) => {
-      if (e.target.closest(".sidebar-bottom-menu")) return;
       if (e.target.closest(".dot-menu")) return;
       if (e.target.closest("#userBox")) return;
       closeAll();
@@ -559,43 +500,6 @@
         }
       });
     }
-  }
-
-  /* Load real keywords/categories from Firestore "stockphoto" */
-  function loadKeywords() {
-    try {
-      if (!window.firebase || !firebase.firestore || !firebase.apps || !firebase.apps.length) return;
-      firebase.firestore().collection("stockphoto").limit(100).get().then((snap) => {
-        const cats = {}, keys = {};
-        const add = (map, v) => {
-          String(v || "").split(",").forEach((x) => {
-            x = x.trim();
-            if (x && x.length < 24) map[x] = (map[x] || 0) + 1;
-          });
-        };
-        snap.forEach((doc) => {
-          const d = doc.data() || {};
-          add(cats, d.category || d.cat);
-          [].concat(d.keywords || d.tags || []).forEach((k) => add(keys, k));
-        });
-        const top = (m, n) => Object.keys(m).sort((a, b) => m[b] - m[a]).slice(0, n);
-        const have = {};
-        keywordLinks.forEach((l) => { have[l[2].toLowerCase()] = 1; });
-        const items = keywordLinks.slice();
-        top(cats, 60).forEach((c) => {
-          if (have[c.toLowerCase()]) return;
-          have[c.toLowerCase()] = 1;
-          items.push(["stock-photo.html?cat=" + encodeURIComponent(c), "fa-tag", c]);
-        });
-        top(keys, 16).forEach((k) => {
-          if (have[k.toLowerCase()]) return;
-          have[k.toLowerCase()] = 1;
-          items.push(["stock-photo.html?q=" + encodeURIComponent(k), "fa-hashtag", k]);
-        });
-        const box = document.getElementById("keywordList");
-        if (box) box.innerHTML = mk(items, false);
-      }).catch(() => {});
-    } catch (e) {}
   }
 
   function loadFirebaseAuth() {

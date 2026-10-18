@@ -12,15 +12,22 @@
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif; color: #e2e8f0; }
+        
+        /* ★ মেইন ব্যাকগ্রাউন্ড কালো ★ */
+        html, body { 
+            background-color: #000000 !important; 
+            background: #000000 !important;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif; 
+            color: #e2e8f0; 
+        }
 
-        /* ★ ৩-ডট মেনুর পাশের ওই দুটি ৪-ডট মেনু হাইড করার কোড ★ */
+        /* ★ ৩-ডট মেনুর পাশের ওই দুটি ৪-ডট মেনু হাইড ★ */
         #sidebarMenu, #toolsMenu {
             display: none !important;
         }
 
-        .main-wrapper{max-width:1400px;margin:0 auto;padding:0 20px}
-        main.center-content{padding:0 0 40px}
+        .main-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 20px; background-color: transparent !important; }
+        main.center-content { padding: 0 0 40px; background-color: transparent !important; }
 
         /* Search Bar */
         .search-section { margin: 25px 0 15px; display: flex; justify-content: center; }
@@ -69,23 +76,9 @@
         .home-shop-header .view-all-link { color: #fbbf24; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
         .home-shop-header .view-all-link:hover { text-decoration: underline; }
 
-        /* =========================================
-           Stock Photos Grid (FIXED: 2x2 Layout)
-           ========================================= */
-        .home-photo-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* ২টি কলাম */
-            gap: 16px; 
-        }
-        .home-photo-card { 
-            position: relative; 
-            display: block; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            background: #1e293b; 
-            aspect-ratio: 16 / 10; /* ছবির সাইজ বড় দেখাবে */
-            text-decoration: none; 
-        }
+        /* Stock Photos Grid */
+        .home-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .home-photo-card { position: relative; display: block; border-radius: 12px; overflow: hidden; background: #1e293b; aspect-ratio: 16 / 10; text-decoration: none; }
         .home-photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
         .home-photo-card:hover img { transform: scale(1.06); }
         .home-photo-card .hp-info { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,0.75)); color: #fff; opacity: 0; transition: opacity 0.25s; }
@@ -193,7 +186,7 @@
             .nav-row-sub .sub-link{ scroll-snap-align: start; }
         }
 
-        /* ===== BANNER VIDEO (above Stock Photos) ===== */
+        /* ===== BANNER VIDEO ===== */
         .mvb { position: relative; width: 100%; margin: 40px 0 0; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 6; min-height: 190px; background: linear-gradient(120deg, #1e1b4b, #7c2d12, #0c4a6e, #1e1b4b); background-size: 300% 300%; animation: mvbBg 14s ease infinite; border: 1px solid rgba(255,255,255,0.08); }
         @keyframes mvbBg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .mvb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -204,6 +197,44 @@
         .mvb-btn { display: inline-flex; align-items: center; gap: 8px; background: #fbbf24; color: #0a1628; font-weight: 800; font-size: 13px; padding: 9px 18px; border-radius: 22px; text-decoration: none; }
         .mvb-btn:hover { background: #f59e0b; }
         @media (max-width: 640px) { .mvb { aspect-ratio: 16 / 9; margin-top: 30px; } }
+
+        /* ===== 8K VLOG (সিনেমাটিক ওয়াইড ফ্রেম) ===== */
+        .v8k-badge { font-size: 11px; font-weight: 800; color: #0a1628; background: #fbbf24; border-radius: 6px; padding: 2px 8px; letter-spacing: .5px; }
+        
+        .v8k-box { 
+            position: relative; 
+            width: 100%; 
+            aspect-ratio: 21 / 9; /* ★ ছবির মতো ওয়াইড স্ক্রিন ★ */
+            max-height: 550px; /* ★ ডেস্কটপে বেশি লম্বা হবে না ★ */
+            border-radius: 14px; 
+            overflow: hidden; 
+            background: #000; 
+            border: 1px solid rgba(255,255,255,0.08); 
+        }
+
+        .v8k-box video, .v8k-box iframe { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            border: 0; 
+            display: block; 
+            background: #000; 
+            object-fit: contain; /* ★ ভিডিও কাটা পড়বে না ★ */
+        }
+
+        .v8k-play { position: absolute; inset: 0; width: 100%; border: 0; cursor: pointer; background: #000 center / cover no-repeat; display: grid; place-items: center; }
+        .v8k-play span { width: 68px; height: 68px; border-radius: 50%; background: rgba(251,191,36,.95); color: #0a1628; display: grid; place-items: center; font-size: 24px; padding-left: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.5); }
+        .v8k-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #94a3b8; font-size: 14px; padding: 20px; background: linear-gradient(135deg, #0f172a, #111827); }
+        .v8k-empty i { display: block; font-size: 34px; color: #fbbf24; margin-bottom: 10px; }
+        .v8k-cap { margin-top: 10px; color: #94a3b8; font-size: 13px; }
+
+        @media (max-width: 640px) {
+            .v8k-box { 
+                aspect-ratio: 16 / 9; /* মোবাইলে ১৬:৯ */
+                max-height: none; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -254,12 +285,26 @@
 
             <!-- Banner Video -->
             <section class="mvb" id="mvb">
-                <video id="mvbVideo" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+                <video id="mvbVideo" muted loop playsinline preload="auto" aria-hidden="true"></video>
                 <div class="mvb-text">
                     <h2>Millions of stock assets.<br>Create. Edit. Inspire.</h2>
                     <p>Free photos, mockups and creative tools in one place.</p>
                     <a class="mvb-btn" href="stock-photo.html"><i class="fas fa-images"></i> Explore Stock Photos</a>
                 </div>
+            </section>
+
+            <!-- ★ 8K Vlog ★ -->
+            <section class="home-shop-section" id="v8k" style="margin-top:28px">
+                <div class="home-shop-header">
+                    <h2><i class="fas fa-film"></i> Vlog <span class="v8k-badge">8K</span></h2>
+                    <a href="vlog-video.html" class="view-all-link" style="font-size:12px; background:rgba(251,191,36,0.1); padding:4px 10px; border-radius:20px; border:1px solid rgba(251,191,36,0.3);">
+                        <i class="fas fa-cloud-upload-alt"></i> Publish Video
+                    </a>
+                </div>
+                <div class="v8k-box" id="v8kBox">
+                    <div class="v8k-empty"><div><i class="fas fa-spinner fa-spin"></i> Loading vlog...</div></div>
+                </div>
+                <p class="v8k-cap" id="v8kCap"></p>
             </section>
 
             <!-- Stock Photos -->
@@ -344,6 +389,7 @@
                         <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
                         <a href="tools.html"><i class="fas fa-th-large"></i> Tools</a>
                         <a href="shop.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                        <a href="vlog-video.html"><i class="fas fa-video"></i> Publish Vlog</a>
                         <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                         <a href="register.html"><i class="fas fa-user-plus"></i> Register</a>
                         <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy</a>
@@ -397,7 +443,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, limit, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
@@ -426,6 +472,58 @@
             else if (s.startsWith('R0lGO')) mime = 'image/gif';
             else if (s.startsWith('Qk0')) mime = 'image/bmp';
             return 'data:' + mime + ';base64,' + s;
+        }
+
+        // VLOG LOADER (Auto-play added here)
+        async function loadLatestVlog() {
+            const box = document.getElementById('v8kBox');
+            const cap = document.getElementById('v8kCap');
+            if (!box) return;
+
+            try {
+                const q = query(collection(db, "vlogs"), orderBy("createdAt", "desc"), limit(1));
+                const snap = await getDocs(q);
+                
+                if (snap.empty) {
+                    box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-film"></i>No Vlogs Yet. <a href="vlog-video.html" style="color:#fbbf24; text-decoration:underline;">Publish one!</a></div></div>';
+                    return;
+                }
+
+                const data = snap.docs[0].data();
+                const videoUrl = data.videoUrl;
+                const posterUrl = data.thumb || ""; // ★ ফিক্স করা হয়েছে: thumb ব্যবহার করা হলো ★
+                cap.textContent = data.title || "";
+
+                box.innerHTML = ''; // Clear loader
+
+                const yt = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+                if (yt) {
+                    // ★ YouTube Auto-play (Direct iframe injection without click) ★
+                    box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + yt[1] + '?autoplay=1&mute=1&loop=1&playlist=' + yt[1] + '&rel=0&vq=hd2160" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vlog" style="width:100%; height:100%; border:0;"></iframe>';
+                } else {
+                    // ★ Direct Video (Cloudinary MP4) Auto-play & Auto-click ★
+                    const v = document.createElement("video");
+                    v.controls = true; 
+                    v.preload = "auto"; // দ্রুত লোড হওয়ার জন্য
+                    v.playsInline = true;
+                    v.autoplay = true; 
+                    v.muted = true; 
+                    v.loop = true;
+                    if (posterUrl) v.poster = posterUrl;
+                    v.src = videoUrl;
+                    v.onerror = function () { box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-triangle-exclamation"></i>Video could not be loaded</div></div>'; };
+                    box.appendChild(v);
+
+                    // অটো প্লে জোরপূর্বক চালু করার জন্য (Auto-click simulation)
+                    setTimeout(() => {
+                        v.play().catch(e => console.log("Autoplay blocked by browser:", e));
+                    }, 100);
+                }
+
+            } catch (e) {
+                console.error("Vlog Load Error:", e);
+                box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-triangle-exclamation"></i>Failed to load video.</div></div>';
+            }
         }
 
         // COLLECTIONS
@@ -487,9 +585,7 @@
             }
         }
 
-        // =========================================
-        // STOCK PHOTOS (FIXED: Strictly 4 Photos)
-        // =========================================
+        // STOCK PHOTOS
         let homePhotoList = [], homePhotoShown = 0;
         const HOME_PHOTO_STEP = 4; 
 
@@ -634,6 +730,7 @@
         });
 
         window.addEventListener('load', () => {
+            loadLatestVlog(); 
             loadHomePhotos();
             loadHomeShop();
             loadCollections();
@@ -641,24 +738,31 @@
         });
     </script>
 
-    <!-- ★★ এখানে আপনার JS ফাইলগুলো ঠিকমতো যুক্ত করা হয়েছে ★★ -->
     <script>
-    /* Banner video: file ba full link ekhane likhun (example: "banner.mp4"). Na paile rongin background dekhabe. */
+    /* Banner video - Auto Start on Page Load */
     (function () {
         var BANNER_VIDEO = "banner.mp4";
         var BANNER_POSTER = "";
         var v = document.getElementById("mvbVideo");
+        
         if (!v) return;
+        
         if (BANNER_POSTER) v.poster = BANNER_POSTER;
-        v.addEventListener("error", function () { v.style.display = "none"; }, true);
+        v.muted = true; // অটো প্লের জন্য অবশ্যই মিউট থাকতে হবে
+        v.autoplay = true;
+        v.loop = true;
         v.src = BANNER_VIDEO;
+        
+        v.addEventListener("error", function () { v.style.display = "none"; }, true);
         v.addEventListener("loadeddata", function () { v.style.display = "block"; });
-        var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-        if ("IntersectionObserver" in window) {
-            new IntersectionObserver(function (e) { e[0].isIntersecting ? play() : v.pause(); }, { threshold: 0.25 }).observe(v);
-        } else { play(); }
+        
+        // পেজ লোড হওয়া মাত্রই প্লে করার চেষ্টা করবে
+        v.play().catch(function (error) {
+            console.log("Banner autoplay blocked:", error);
+        });
     })();
     </script>
+    
     <script src="top-bar.js"></script>
     <script src="site-footer.js"></script>
     
