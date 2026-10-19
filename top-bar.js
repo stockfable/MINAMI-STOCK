@@ -60,7 +60,7 @@
     ["tools.html", "fa-screwdriver-wrench", "All Tools"],
     ["image-generator.html", "fa-wand-magic-sparkles", "AI Generator"],
     ["upload.html", "fa-cloud-arrow-up", "Upload"],
-    ["dashboard.html", "fa-gauge", "Dashboard"],
+    ["contributor.html", "fa-chart-pie", "Contributor"], // ★ Dashboard এর জায়গায় Contributor ★
     ["account.html", "fa-user", "Account"],
     ["about.html", "fa-circle-info", "About"],
     ["privacy.html", "fa-shield-halved", "Privacy"]
@@ -81,10 +81,10 @@
     ["age-calculator.html", "fa-cake-candles", "Age Calculator"]
   ];
 
-  /* ★★★ LINE 2 - sub bar (Vlog যুক্ত করা হয়েছে Dashboard-এর নিচে) ★★★ */
+  /* ★★★ LINE 2 - sub bar (Dashboard এর জায়গায় Contributor) ★★★ */
   const subLinks = [
     ["portfolio.html", "fa-briefcase", "Portfolio"],
-    ["dashboard.html", "fa-gauge", "Dashboard"],
+    ["contributor.html", "fa-chart-pie", "Contributor"], // ★ পরিবর্তন করা হলো ★
     ["vlog-video.html", "fa-video", "Vlog"],
     ["upload.html", "fa-cloud-arrow-up", "Upload"],
     ["tools.html", "fa-screwdriver-wrench", "All Tools"],
@@ -144,7 +144,6 @@
   const pagesLinks = subLinks.slice(0, 5); 
 
   /* ---------- HTML ---------- */
-  /* ★ এখান থেকে sidebarMenu এবং toolsMenu ব্লক দুটি রিমুভ করা হয়েছে ★ */
   const html = `
 <header class="top-nav">
   <div class="in">
@@ -185,7 +184,7 @@
           </div>
           <div class="account-divider"></div>
           <a class="account-menu-item" href="account.html"><i class="fa-solid fa-user"></i>My Account</a>
-          <a class="account-menu-item" href="dashboard.html"><i class="fa-solid fa-gauge"></i>Dashboard</a>
+          <a class="account-menu-item" href="contributor.html"><i class="fa-solid fa-chart-pie"></i>Contributor</a> <!-- ★ Dashboard এর জায়গায় Contributor ★ -->
           <a class="account-menu-item" href="vlog-video.html"><i class="fa-solid fa-video"></i>Vlog</a>
           <a class="account-menu-item" href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i>Upload</a>
           <div class="account-divider"></div>

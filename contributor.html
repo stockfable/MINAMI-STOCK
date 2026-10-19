@@ -19,8 +19,10 @@ input,select,textarea{font:inherit;color:inherit}
 .hub-tab{padding:15px 14px 12px;font-size:14px;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;white-space:nowrap}
 .hub-tab.on{color:var(--ink);border-color:var(--blue)}
 .hub-bar .sp{flex:1}
-.pill{border:1px solid var(--ink);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;white-space:nowrap}
+.pill{border:1px solid var(--ink);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .pill.fill{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill.payout{border-color:var(--green);color:var(--green);}
+.pill.payout:hover{background:var(--green);color:#fff;}
 .view{display:none}.view.on{display:block}
 .msg{padding:60px 20px;text-align:center;color:var(--mute)}
 .msg a{color:var(--blue);font-weight:600}
@@ -107,6 +109,10 @@ input,select,textarea{font:inherit;color:inherit}
   <button class="hub-tab on" data-v="overview">Overview</button>
   <button class="hub-tab" data-v="upload">Add files <small id="cDraft"></small></button>
   <span class="sp"></span>
+  
+  <!-- ★★★ এখানে Payout বাটন যুক্ত করা হয়েছে ★★★ -->
+  <a href="payout.html" class="pill payout"><i class="fas fa-wallet"></i> Payout</a>
+  
   <button class="pill fill" id="goUpload">Upload</button>
 </nav>
 

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payout Request - MINAMI STOCK</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+:root { --line:#333; --gold:#fbbf24; --green:#10b981; --bg:#000; --card:#0a0a0a; --text:#94a3b8; }
+* { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",system-ui,sans-serif; }
+body { background:var(--bg); color:#fff; min-height:100vh; display:flex; flex-direction:column; }
+button, input, select { font:inherit; color:inherit; outline:none; }
+a { text-decoration:none; color:inherit; }
+
+.container { max-width:800px; margin:40px auto; padding:0 20px; width:100%; flex:1; }
+
+.page-header { margin-bottom:30px; text-align:center; }
+.page-header h1 { font-size:28px; font-weight:800; color:#fff; margin-bottom:10px; }
+.page-header p { color:var(--text); font-size:15px; }
+
+.balance-card {
+    background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(0,0,0,0));
+    border: 1px solid var(--gold); border-radius: 16px;
+    padding: 30px; text-align: center; margin-bottom: 30px;
+}
+.balance-card h3 { font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.balance-card .amount { font-size: 48px; font-weight: 800; color: #fff; }
+.balance-card .amount span { font-size: 24px; color: var(--gold); }
+
+.form-box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px; }
+.form-box h2 { font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.form-box h2 i { color: var(--gold); }
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px; }
+.input-wrap { position: relative; }
+.input-wrap i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text); }
+.input-wrap input, .input-wrap select {
+    width: 100%; background: #111; border: 1px solid var(--line);
+    padding: 14px 16px 14px 45px; border-radius: 8px; font-size: 15px; color: #fff;
+}
+.input-wrap input:focus, .input-wrap select:focus { border-color: var(--gold); }
+.help-text { font-size: 12px; color: var(--text); margin-top: 6px; display: block; }
+
+.btn-submit {
+    width: 100%; background: var(--gold); color: #000; border: none;
+    padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 800;
+    cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-submit:hover { background: #f59e0b; }
+.btn-submit:disabled { background: #64748b; cursor: not-allowed; }
+
+/* History Table */
+.history-box { margin-top: 40px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.history-box h2 { font-size: 18px; padding: 20px; border-bottom: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th { padding: 15px 20px; font-size: 12px; color: var(--text); text-transform: uppercase; background: #050505; }
+td { padding: 15px 20px; font-size: 14px; border-bottom: 1px solid var(--line); }
+.status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.status.pending { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.status.paid { background: rgba(16,185,129,0.15); color: #10b981; }
+.status.rejected { background: rgba(239,68,68,0.15); color: #ef4444; }
+</style>
+</head>
+<body>
+
+<div id="site-topbar"></div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Withdraw Earnings</h1>
+        <p>Request a payout to your Payoneer or Skrill account.</p>
+    </div>
+
+    <div class="balance-card">
+        <h3>Available Balance</h3>
+        <div class="amount" id="currentBalance">$<span>0.00</span></div>
+    </div>
+
+    <div class="form-box">
+        <h2><i class="fas fa-money-bill-transfer"></i> Payout Request</h2>
+        <form id="payoutForm">
+            
+            <div class="form-group">
+                <label>Amount (USD)</label>
+                <div class="input-wrap">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="number" id="amount" placeholder="Enter amount" min="50" step="0.01" required>
+                </div>
+                <span class="help-text">Minimum withdrawal amount is $50.00</span>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="input-wrap">
+                    <i class="fas fa-credit-card"></i>
+                    <select id="method" required>
+                        <option value="" disabled selected>Select Payment Method</option>
+                        <option value="Payoneer">Payoneer</option>
+                        <option value="Skrill">Skrill</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Account Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="accountEmail" placeholder="Enter your Payoneer/Skrill email" required>
+                </div>
+                <span class="help-text">Make sure this email is correct. Payouts are non-refundable if the email is wrong.</span>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnSubmit">
+                <i class="fas fa-paper-plane"></i> Submit Request
+            </button>
+        </form>
+    </div>
+
+    <div class="history-box">
+        <h2>Your Payout History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="historyTable">
+                <tr><td colspan="4" style="text-align:center; color:#64748b;">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="ms-footer"></div>
+
+<script src="top-bar.js"></script>
+<script src="site-footer.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
+        authDomain: "creoverse-stock.firebaseapp.com",
+        projectId: "creoverse-stock",
+        storageBucket: "creoverse-stock.firebasestorage.app",
+        messagingSenderId: "128072247505",
+        appId: "1:128072247505:web:47e58c3a140f4e858bbdf0"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let currentUserBalance = 0;
+
+    // ১. ইউজার লগইন এবং ব্যালেন্স লোড
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            const userRef = db.collection("users").doc(user.uid);
+            const doc = await userRef.get();
+            if (doc.exists) {
+                currentUserBalance = doc.data().balance || 0;
+                document.getElementById('currentBalance').innerHTML = `$<span>${currentUserBalance.toFixed(2)}</span>`;
+            }
+            loadHistory(user.uid);
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // ২. ফর্ম সাবমিট (Transaction ব্যবহার করে সেফলি টাকা কাটা)
+    document.getElementById('payoutForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const amount = parseFloat(document.getElementById('amount').value);
+        const method = document.getElementById('method').value;
+        const accountEmail = document.getElementById('accountEmail').value.trim();
+        const btn = document.getElementById('btnSubmit');
+
+        if (amount < 50) return alert("Minimum withdrawal is $50.");
+        if (amount > currentUserBalance) return alert("Insufficient balance.");
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        const userRef = db.collection("users").doc(user.uid);
+        const payoutRef = db.collection("withdrawals").doc(); // নতুন ডকুমেন্ট আইডি
+
+        try {
+            // Firestore Transaction: ব্যালেন্স চেক ও কাটা এবং রিকোয়েস্ট সেভ করা একসাথে হবে
+            await db.runTransaction(async (transaction) => {
+                const userDoc = await transaction.get(userRef);
+                if (!userDoc.exists) throw "User does not exist!";
+                
+                const newBalance = userDoc.data().balance - amount;
+                if (newBalance < 0) throw "Insufficient funds!";
+
+                // ১. ইউজারের ব্যালেন্স কমানো
+                transaction.update(userRef, { balance: newBalance });
+
+                // ২. withdrawals কালেকশনে ডেটা পাঠানো (অ্যাডমিন এখান থেকে দেখবে)
+                transaction.set(payoutRef, {
+                    sellerId: user.uid,
+                    sellerEmail: user.email,
+                    amount: amount,
+                    method: method,
+                    accountEmail: accountEmail,
+                    status: "pending",
+                    requestedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            });
+
+            alert("Payout request submitted successfully! Admin will review it shortly.");
+            document.getElementById('payoutForm').reset();
+            
+            // UI আপডেট
+            currentUserBalance -= amount;
+            document.getElementById('currentBalance').innerHTML = `$<span>${currentUserBalance.toFixed(2)}</span>`;
+            loadHistory(user.uid);
+
+        } catch (error) {
+            console.error(error);
+            alert("Error: " + error);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+        }
+    });
+
+    // ৩. উইথড্র হিস্ট্রি লোড
+    async function loadHistory(uid) {
+        const tbody = document.getElementById('historyTable');
+        try {
+            const snapshot = await db.collection("withdrawals")
+                .where("sellerId", "==", uid)
+                .orderBy("requestedAt", "desc")
+                .get();
+
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#64748b;">No payout requests yet.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const date = data.requestedAt ? data.requestedAt.toDate().toLocaleDateString() : 'Just now';
+                
+                let statusClass = data.status === 'pending' ? 'pending' : data.status === 'paid' ? 'paid' : 'rejected';
+                
+                html += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${data.method}</td>
+                        <td style="font-weight:700;">$${data.amount.toFixed(2)}</td>
+                        <td><span class="status ${statusClass}">${data.status.toUpperCase()}</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        } catch (e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ef4444;">Failed to load history.</td></tr>';
+        }
+    }
+</script>
+</body>
+</html>
