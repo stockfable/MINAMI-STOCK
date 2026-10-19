@@ -1,742 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Upload Vlog - MINAMI STOCK</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
+<title>Upload - MINAMI STOCK</title>
 <style>
-:root { 
-    --line-dark:#333; 
-    --line-light:#e5e7eb;
-    --gold:#fbbf24; 
-    --green:#2d9d78; 
-    --green-d:#268e6c; 
-    --bad:#d7373f; 
-    --bg-main: #000000;
-    --bg-card-dark: #0a0a0a;
-    --text-muted-dark: #94a3b8;
-    --text-dark: #111827;
-    --text-light: #6b7280;
-    --blue-accent: #2563eb;
-    --red-accent: #ef4444;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", system-ui, sans-serif; }
-body { background: var(--bg-main); color: #e2e8f0; min-height: 100vh; display: flex; flex-direction: column; }
-button, input, select, textarea { font: inherit; color: inherit; }
-button { cursor: pointer; border: none; background: none; }
-
-/* ==================== WHITE DASHBOARD WRAPPER ==================== */
-.white-dashboard-wrapper {
-    background-color: #ffffff;
-    color: var(--text-dark);
-    width: 100%;
-    padding-bottom: 40px;
-}
-
-.dashboard-container { max-width: 1400px; margin: 0 auto; width: 100%; padding: 0 20px; }
-
-/* 1. Top Stats Bar */
-.top-stats-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 0; border-bottom: 1px solid var(--line-light);
-    flex-wrap: wrap; gap: 20px;
-}
-.stat-item { display: flex; flex-direction: column; gap: 5px; }
-.stat-label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.stat-value { font-size: 24px; font-weight: 700; color: var(--text-dark); }
-.stat-value.earnings { color: var(--text-dark); }
-
-/* Custom Dropdown */
-.time-dropdown {
-    background: #fff; border: 1px solid var(--line-light); color: var(--text-dark);
-    padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none;
-}
-
-/* 2. Info Banner */
-.info-banner {
-    background: #2563eb; border: 1px solid #1d4ed8;
-    color: #ffffff; padding: 12px 20px; border-radius: 6px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 14px; margin: 20px 0;
-}
-.info-banner .close-btn { color: #ffffff; font-size: 16px; cursor: pointer; }
-.info-banner .close-btn:hover { color: #e5e7eb; }
-
-/* 3. Graph Section */
-.graph-section {
-    background: #ffffff; border: 1px solid var(--line-light);
-    border-radius: 10px; padding: 24px; margin-bottom: 25px;
-    position: relative;
-}
-.graph-header { text-align: center; margin-bottom: 30px; }
-.graph-header h3 { font-size: 16px; color: var(--text-dark); margin-bottom: 10px; font-weight: 600; }
-.graph-legend { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-light); }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; }
-.dot.blue { background: var(--blue-accent); }
-.dot.red { background: var(--red-accent); }
-
-/* Chart Area */
-.chart-area {
-    position: relative; height: 200px; border-bottom: 1px solid var(--line-light);
-    border-left: 1px solid var(--line-light); margin-left: 40px; margin-right: 40px;
-    display: flex; align-items: flex-end; justify-content: space-around; padding-bottom: 0;
-    background: linear-gradient(to bottom, transparent 24%, #f3f4f6 25%, transparent 26%, transparent 49%, #f3f4f6 50%, transparent 51%, transparent 74%, #f3f4f6 75%, transparent 76%);
-}
-.y-axis-left, .y-axis-right {
-    position: absolute; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-between;
-    font-size: 11px; color: var(--text-light);
-}
-.y-axis-left { left: -40px; text-align: right; }
-.y-axis-right { right: -40px; text-align: left; }
-.bar {
-    width: 25px; background: var(--blue-accent); border-radius: 2px 2px 0 0;
-    transition: 0.3s; position: relative; opacity: 0.9;
-}
-.bar:hover { opacity: 1; }
-.chart-line-svg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; overflow: visible;
-}
-.x-axis {
-    display: flex; justify-content: space-around; margin-left: 40px; margin-right: 40px;
-    font-size: 11px; color: var(--text-light); margin-top: 10px;
-}
-
-/* 4. Portfolio Tabs & Filters */
-.portfolio-section { margin-top: 40px; }
-.portfolio-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--line-light); margin-bottom: 15px; padding-bottom: 10px; }
-.portfolio-header h2 { font-size: 18px; font-weight: 600; color: var(--text-dark); }
-.p-tabs { display: flex; gap: 20px; overflow-x: auto; }
-.p-tab { font-size: 14px; font-weight: 600; color: var(--text-light); padding-bottom: 10px; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; }
-.p-tab.active { color: var(--blue-accent); border-color: var(--blue-accent); }
-
-.filter-row { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-.search-box { position: relative; flex: 1; min-width: 200px; max-width: 300px; }
-.search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light); }
-.search-box input { width: 100%; background: #fff; border: 1px solid var(--line-light); padding: 10px 10px 10px 35px; border-radius: 6px; font-size: 14px; outline: none; color: var(--text-dark); }
-.filter-btn { background: #fff; border: 1px solid var(--line-light); padding: 10px 16px; border-radius: 6px; font-size: 14px; color: var(--text-dark); display: flex; align-items: center; gap: 8px; cursor: pointer; }
-.filter-btn:hover { border-color: var(--text-light); }
-
-/* 5. Portfolio Grid */
-.portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 50px; }
-.p-card { background: #fff; border: 1px solid var(--line-light); border-radius: 8px; overflow: hidden; transition: 0.3s; position: relative; }
-.p-card:hover { border-color: #9ca3af; transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-.p-card img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; }
-.p-card input[type="checkbox"] { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; accent-color: var(--blue-accent); cursor: pointer; z-index: 2; }
-.p-card-info { padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-.p-downloads { font-size: 12px; color: var(--text-light); text-transform: uppercase; font-weight: 600; }
-.p-downloads span { display: block; font-size: 16px; color: var(--text-dark); font-weight: 700; margin-top: 2px; }
-.badge-free { background: #f3f4f6; color: var(--text-dark); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #d1d5db; }
-
-.empty-portfolio { text-align: center; padding: 40px; color: var(--text-light); grid-column: 1 / -1; background: #f9fafb; border-radius: 8px; border: 1px dashed #d1d5db; }
-
-/* ==================== DARK UPLOAD SECTION ==================== */
-.dark-upload-wrapper {
-    background-color: var(--bg-main);
-    color: #e2e8f0;
-    padding-top: 40px;
-}
-
-.upload-divider { border-top: 2px dashed #333; margin: 0 0 40px 0; position: relative; }
-.upload-divider span { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #000; padding: 0 15px; color: var(--text-muted-dark); font-weight: 600; font-size: 14px; }
-
-.tabs { display: flex; gap: 20px; padding: 0 24px; border-bottom: 1px solid var(--line-dark); overflow-x: auto; background: #000; align-items: center; height: 60px; }
-.tab { padding: 16px 0 13px; font-size: 14px; font-weight: 600; color: #6e6e6e; border-bottom: 3px solid transparent; white-space: nowrap; }
-.tab.on { color: #fff; border-color: var(--gold); }
-.tab small { margin-left: 6px; font-size: 11px; border: 1px solid #444; border-radius: 4px; padding: 1px 6px; color: #fff; }
-.tabs .sp { flex: 1; }
-.btn-submit { background: var(--green); color: #fff; font-weight: 700; font-size: 14px; padding: 9px 20px; border-radius: 5px; white-space: nowrap; }
-.btn-submit:hover { background: var(--green-d); }
-
-.layout { flex: 1; display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - 250px); }
-.left { padding: 24px; border-right: 1px solid var(--line-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.right { padding: 24px; background: #0a0a0a; overflow-y: auto; }
-
-.upload-area {
-    width: 100%; max-width: 400px; aspect-ratio: 16/10; border: 2px dashed #333; 
-    border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: #050505; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
-}
-.upload-area:hover { border-color: var(--gold); }
-.upload-area i { font-size: 40px; color: var(--gold); margin-bottom: 10px; }
-.upload-area p { color: #64748b; font-size: 14px; }
-.upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-#videoPreview { display: none; width: 100%; height: 100%; object-fit: contain; background: #000; border-radius: 6px; }
-.file-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: var(--gold); display: flex; align-items: center; gap: 5px; z-index: 10; }
-
-.f { margin-bottom: 18px; }
-.f > label, .f .lab { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-muted-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.f select, .f input[type="text"], .f textarea {
-    width: 100%; background: #111; border: 1px solid var(--line-dark); border-radius: 6px;
-    padding: 12px; font-size: 14px; outline: none; transition: 0.2s;
-}
-.f select:focus, .f input:focus, .f textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(251,191,36,0.1); }
-.f textarea { resize: vertical; min-height: 80px; }
-
-.chk-row { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 15px; cursor: pointer; color: #cbd5e1; }
-.chk-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; }
-.chk-highlight { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); padding: 10px; border-radius: 6px; color: var(--gold); font-weight: 700; }
-
-.seg { display: inline-flex; border: 1px solid var(--line-dark); border-radius: 6px; overflow: hidden; width: 100%; }
-.seg button { flex: 1; padding: 10px; font-size: 13px; font-weight: 600; color: #94a3b8; background: #111; }
-.seg button.on { background: var(--gold); color: #000; }
-
-.kw-list { margin-bottom: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-.kw { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.kw .n { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); font-size: 12px; display: grid; place-items: center; flex: none; font-weight: bold; }
-.kw input { flex: 1; background: #111; border: 1px solid var(--line-dark); border-radius: 6px; padding: 8px 10px; font-size: 14px; color: #fff; outline: none; }
-.kw input:focus { border-color: var(--gold); }
-.kw button { color: #64748b; font-size: 14px; padding: 5px; }
-.kw button:hover { color: var(--bad); }
-
-.bulk-kw { width: 100%; border: 1px dashed var(--gold); border-radius: 6px; padding: 10px; font-size: 13px; background: rgba(251,191,36,0.05); resize: vertical; min-height: 60px; color: #fff; outline: none; margin-top: 5px; }
-.bulk-hint { font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-.bulk-add-btn { padding: 6px 14px; background: var(--gold); color: #000; border-radius: 4px; font-weight: 700; font-size: 12px; }
-
-.actions { display: flex; gap: 10px; margin-top: 25px; }
-.actions button { flex: 1; padding: 12px; border-radius: 6px; font-weight: 700; font-size: 14px; border: 1px solid var(--line-dark); background: #111; color: #fff; }
-.actions button:hover { background: #222; }
-.actions .primary { background: var(--green); border-color: var(--green); color: #fff; }
-.actions .primary:hover { background: var(--green-d); }
-
-.progress-container { width: 100%; background: #222; border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; height: 8px; }
-.progress-bar { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s; }
-.status-msg { text-align: center; margin-top: 15px; font-weight: 700; font-size: 14px; display: none; padding: 10px; border-radius: 6px; }
-
-@media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-    .left { border-right: none; border-bottom: 1px solid var(--line-dark); padding: 20px; }
-    .right { padding: 20px; }
-    .top-stats-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#2c2c2c;font-family:Arial,Helvetica,sans-serif;font-size:14px}
+#authMsg{display:none;margin:12px;padding:12px 16px;background:#fff3cd;color:#664d03;font-size:13px;border-radius:3px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid #e1e1e1}
+.bar h1{margin:0;font-size:18px;font-weight:700}
+.bar .cnt{font-size:12px;color:#6e6e6e}
+.btn{border:1px solid #1473e6;color:#1473e6;background:#fff;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:bold;cursor:pointer}
+.btn.fill{background:#1473e6;color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.main{display:flex;min-height:60vh}
+.left{flex:1;min-width:0;padding:14px;background:#f7f7f7}
+.right{width:340px;flex:none;border-left:1px solid #e1e1e1;padding:16px;background:#fff}
+.drop{border:2px dashed #b9b9b9;border-radius:6px;padding:26px 10px;text-align:center;color:#6e6e6e;cursor:pointer;background:#fff;margin-bottom:14px}
+.drop.on{border-color:#1473e6;background:#eef5ff}
+.drop b{color:#1473e6}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.tile{position:relative;aspect-ratio:1/1;background:#ddd;cursor:pointer;overflow:hidden;border:3px solid transparent}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile.sel{border-color:#1473e6}
+.tile .tick{position:absolute;top:5px;left:5px;width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid #888;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
+.tile.sel .tick{background:#1473e6;border-color:#1473e6}
+.tile .st{position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:3px 5px;background:rgba(0,0,0,.65);color:#fff}
+.tile .st.ok{background:rgba(0,133,88,.9)}.tile .st.bad{background:rgba(215,55,63,.9)}
+.tile .rm{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;text-align:center;line-height:19px;font-size:13px}
+.right h3{margin:0 0 4px;font-size:15px}
+.right .sub{font-size:12px;color:#6e6e6e;margin-bottom:14px}
+label.f{display:block;font-size:12px;font-weight:bold;margin:12px 0 5px}
+input[type=text],select,textarea{width:100%;padding:8px 10px;border:1px solid #cfcfcf;border-radius:2px;font-size:13px;font-family:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#1473e6}
+.hint{font-size:11px;color:#8a8a8a;margin-top:3px;display:flex;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.chip{background:#eef0f3;border-radius:12px;padding:3px 9px;font-size:12px;display:flex;gap:6px;align-items:center}
+.chip i{font-style:normal;cursor:pointer;color:#777}
+.chk{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:13px}
+.chk input{margin-top:2px}
+.prog{height:6px;background:#e5e5e5;border-radius:3px;margin-top:10px;overflow:hidden;display:none}
+.prog div{height:100%;width:0;background:#1473e6;transition:.2s}
+.tile .vb{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px}
+.tile .rm+.vb{right:30px}
+.empty{color:#888;text-align:center;padding:30px 0;font-size:13px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:4px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:90%}
+#toast.show{opacity:1}
+@media(max-width:800px){.main{flex-direction:column}.right{width:100%;border-left:0;border-top:1px solid #e1e1e1}}
 </style>
 </head>
 <body>
 
-<!-- ডার্ক টপ বার -->
-<div id="site-topbar"></div>
+<script src="site-layout.js"></script>
 
-<!-- ★★★ সাদা ড্যাশবোর্ড সেকশন ★★★ -->
-<div class="white-dashboard-wrapper">
-    <div class="dashboard-container">
-        
-        <!-- Top Stats -->
-        <div class="top-stats-bar">
-            <div class="stat-item">
-                <span class="stat-label">Time Frame</span>
-                <select class="time-dropdown">
-                    <option>This year</option>
-                    <option>This month</option>
-                    <option>Last 30 days</option>
-                </select>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Downloads</span>
-                <div class="stat-value" id="statDownloads">0</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Earnings</span>
-                <div class="stat-value earnings" id="statEarnings">$0.00</div>
-            </div>
-            <div class="stat-item" style="margin-left: auto;">
-                <span class="stat-label">Available Earnings</span>
-                <div class="stat-value" id="statAvail">$0.00 <i class="fas fa-arrow-right" style="font-size:14px; margin-left:5px;"></i></div>
-            </div>
-        </div>
+<div id="authMsg"></div>
 
-        <div class="info-banner">
-            <span>Learn more about how to quality for our MINAMI STOCK Redemption Code Program</span>
-            <i class="fas fa-times close-btn" onclick="this.parentElement.style.display='none'"></i>
-        </div>
-
-        <div class="graph-section">
-            <div class="graph-header">
-                <h3>12-Week Trend</h3>
-                <div class="graph-legend">
-                    <div class="legend-item"><div class="dot blue"></div> Earnings: $11.57</div>
-                    <div class="legend-item"><div class="dot red"></div> Downloads: 1</div>
-                </div>
-            </div>
-            <div class="chart-area">
-                <div class="y-axis-left">
-                    <span>$12.00</span><span>$9.00</span><span>$6.00</span><span>$3.00</span><span>$0.00</span>
-                </div>
-                <div class="y-axis-right">
-                    <span>1</span><span>0.75</span><span>0.5</span><span>0.25</span><span>0</span>
-                </div>
-                <svg class="chart-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <polyline fill="none" stroke="#ef4444" stroke-width="1.5" points="5,10 15,95 25,95 35,95 45,95 55,95 65,95 75,95 85,95 95,95" />
-                    <circle cx="5" cy="10" r="1.5" fill="#ef4444"/>
-                    <circle cx="15" cy="95" r="1.5" fill="#ef4444"/>
-                    <circle cx="95" cy="95" r="1.5" fill="#ef4444"/>
-                </svg>
-                <div class="bar" style="height: 10%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-                <div class="bar" style="height: 5%;"></div>
-                <div class="bar" style="height: 40%;"></div>
-                <div class="bar" style="height: 2%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-                <div class="bar" style="height: 0%;"></div>
-            </div>
-            <div class="x-axis">
-                <span>Jul 27</span><span>Aug 3</span><span>Aug 10</span><span>Aug 17</span><span>Aug 24</span>
-                <span>Aug 31</span><span>Sep 7</span><span>Sep 14</span><span>Sep 21</span><span>Sep 28</span>
-            </div>
-        </div>
-
-        <!-- Portfolio Section -->
-        <div class="portfolio-section">
-            <div class="portfolio-header">
-                <h2>My Portfolio</h2>
-            </div>
-            
-            <div class="p-tabs">
-                <div class="p-tab active">All Videos</div>
-                <div class="p-tab">Photos</div>
-                <div class="p-tab">Vectors</div>
-            </div>
-
-            <div class="filter-row">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search my assets">
-                </div>
-                <button class="filter-btn">Filter by Price Tier <i class="fas fa-chevron-down"></i></button>
-                <button class="filter-btn">Sort by Downloads <i class="fas fa-chevron-down"></i></button>
-            </div>
-
-            <!-- ফায়ারবেস ডেটা এখানে লোড হবে -->
-            <div class="portfolio-grid" id="portfolioGrid">
-                <div class="empty-portfolio" id="portfolioLoading">
-                    <i class="fas fa-spinner fa-spin" style="font-size:30px; margin-bottom:10px; color:var(--blue-accent);"></i>
-                    <p>Loading your portfolio...</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<div class="bar">
+  <div><h1>Upload images &amp; videos</h1><div class="cnt" id="cnt">No files selected</div></div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" id="clearBtn">Clear all</button>
+    <button class="btn fill" id="submitBtn" disabled>Submit</button>
+  </div>
 </div>
 
-<!-- ★★★ কালো আপলোড সেকশন ★★★ -->
-<div class="dark-upload-wrapper">
-    <div class="upload-divider">
-        <span>Upload New Asset</span>
-    </div>
+<div class="main">
+  <div class="left">
+    <div class="drop" id="drop"><b>Choose files</b> or drag and drop images and videos here<div style="font-size:12px;margin-top:4px">Images: JPG, PNG, WEBP &nbsp;|&nbsp; Videos: MP4, MOV, WEBM (max 300 MB)</div></div>
+    <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty">Your uploaded files will appear here.</div>
+  </div>
 
-    <div class="tabs">
-      <button class="tab on">Drafts <small>1</small></button>
-      <button class="tab">Awaiting Review</button>
-      <span class="sp"></span>
-      <button class="btn-submit" onclick="publishVideo()">Publish Asset</button>
-    </div>
+  <div class="right">
+    <h3>File details</h3>
+    <div class="sub" id="selInfo">Select one or more files to edit their details.</div>
 
-    <div class="layout">
-      <div class="left">
-        <div class="upload-area" id="dropZone">
-            <i class="fas fa-video"></i>
-            <p>Click to browse or drag & drop video</p>
-            <input type="file" id="videoFile" accept="video/mp4,video/x-m4v,video/*">
-            <video id="videoPreview" controls></video>
-            <div class="file-badge" id="fileBadge" style="display:none;"><i class="fas fa-video"></i> Video</div>
-        </div>
-      </div>
+    <label class="f">Title</label>
+    <input type="text" id="title" maxlength="200" placeholder="Describe your file">
+    <div class="hint"><span>Describe what is in the image</span><span id="tcount">0/200</span></div>
 
-      <div class="right">
-        <div class="f">
-            <label>Media Type</label>
-            <select><option>Video</option></select>
-        </div>
+    <label class="f">Keywords</label>
+    <input type="text" id="kwInput" placeholder="Type or paste keywords separated by commas">
+    <button type="button" class="btn" id="kwAdd" style="margin-top:6px;padding:5px 14px;font-size:12px">Add keywords</button>
+    <div class="hint"><span>Minimum 5, maximum 50. Paste all at once with commas</span><span id="kcount">0/50</span></div>
+    <div class="chips" id="chips"></div>
 
-        <label class="chk-row chk-highlight">
-            <input type="checkbox" id="isVlog" checked> Publish to 8K Vlog Section
-        </label>
+    <label class="f">Category</label>
+    <select id="category">
+      <option value="">Select a category</option>
+      <option>Animals</option><option>Buildings and Architecture</option><option>Business</option><option>Drinks</option>
+      <option>The Environment</option><option>States of Mind</option><option>Food</option><option>Graphic Resources</option>
+      <option>Hobbies and Leisure</option><option>Industry</option><option>Landscapes</option><option>Lifestyle</option>
+      <option>People</option><option>Plants and Flowers</option><option>Culture and Religion</option><option>Science</option>
+      <option>Social Issues</option><option>Sports</option><option>Technology</option><option>Transport</option><option>Travel</option>
+    </select>
 
-        <div class="f">
-            <label>Collection *</label>
-            <select id="videoCategory">
-                <option value="Travel">Travel</option>
-                <option value="Nature">Nature</option>
-                <option value="Business">Business</option>
-                <option value="Technology">Technology</option>
-                <option value="People">People</option>
-                <option value="Food">Food</option>
-                <option value="AI Generated">AI Generated</option>
-            </select>
-        </div>
+    <label class="f">File type</label>
+    <select id="ftype"><option>Photo</option><option>Illustration</option><option>Vector</option><option>Video</option></select>
 
-        <label class="chk-row"><input type="checkbox"> For editorial use only</label>
-        <label class="chk-row"><input type="checkbox" checked> AI-generated content</label>
+    <label class="chk"><input type="checkbox" id="ai"> <span>Created using generative AI tools</span></label>
+    <label class="chk"><input type="checkbox" id="people"> <span>This file contains recognizable people</span></label>
+    <label class="chk"><input type="checkbox" id="modelRel"> <span>I have a model release</span></label>
+    <label class="chk"><input type="checkbox" id="propRel"> <span>I have a property release</span></label>
+    <label class="chk"><input type="checkbox" id="mature"> <span>Mature content</span></label>
+    <label class="chk"><input type="checkbox" id="owner"> <span>I own all rights to this content</span></label>
 
-        <div class="f">
-            <span class="lab">Contains identifiable people/property?</span>
-            <div class="seg">
-                <button type="button">Yes</button>
-                <button type="button" class="on">No</button>
-            </div>
-        </div>
-
-        <div class="f">
-            <label>Asset Title * <span id="tCnt">0/200</span></label>
-            <textarea id="videoTitle" maxlength="200" placeholder="Enter video title..." required></textarea>
-        </div>
-
-        <div class="f">
-            <label>About this asset</label>
-            <textarea id="videoDesc" placeholder="Description..."></textarea>
-        </div>
-
-        <div class="f">
-            <span class="lab"><span>Tags / Keywords (5-50)</span><span id="kCnt">0</span></span>
-            <div class="kw-list" id="kwList"></div>
-            <textarea id="bulkKw" class="bulk-kw" placeholder="💡 Paste many keywords here (comma separated) and press Enter..."></textarea>
-            <div class="bulk-hint">
-                <span>Separate by comma or press Enter</span>
-                <button type="button" class="bulk-add-btn" onclick="bulkAddKeywords()">+ Add all</button>
-            </div>
-        </div>
-
-        <div class="progress-container" id="progressContainer">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="status-msg" id="statusMsg"></div>
-
-        <div class="actions">
-            <button onclick="clearForm()">Clear</button>
-            <button onclick="publishVideo()" class="primary" id="btnPublish">Publish</button>
-        </div>
-      </div>
-    </div>
+    <div class="prog" id="prog"><div id="bar"></div></div>
+  </div>
 </div>
 
-<div id="ms-footer"></div>
+<div id="toast"></div>
 
-<script src="top-bar.js"></script>
-<script src="site-footer.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script>
-    // Firebase Config
-    const firebaseConfig = {
-        apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
-        authDomain: "creoverse-stock.firebaseapp.com",
-        projectId: "creoverse-stock",
-        storageBucket: "creoverse-stock.firebasestorage.app",
-        messagingSenderId: "128072247505",
-        appId: "1:128072247505:web:47e58c3a140f4e858bbdf0"
+/* ====== FIREBASE CONFIG: login.html er config ekhane hubohu paste koro ====== */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "creoverse-stock.firebaseapp.com",
+  projectId: "creoverse-stock",
+  storageBucket: "creoverse-stock.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+let storage = null;
+try { storage = firebase.storage(); } catch (e) { console.error(e); }
+
+const $ = id => document.getElementById(id);
+let user = null;
+let files = [];          // {id, thumb, full, title, kw[], category, ftype, ai, people, modelRel, propRel, mature, owner, state}
+let selected = new Set();
+let uploading = false;
+
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+function showAuthMsg(h){const m=$("authMsg");m.innerHTML=h;m.style.display="block"}
+
+if (firebaseConfig.apiKey === "YOUR_API_KEY")
+  showAuthMsg("<b>Firebase config baki ache.</b> File er upore <code>apiKey</code>, <code>messagingSenderId</code>, <code>appId</code> login.html er config theke copy kore boshao.");
+
+auth.onAuthStateChanged(u => {
+  user = u;
+  if (!u) { if (firebaseConfig.apiKey !== "YOUR_API_KEY") showAuthMsg('Upload korte login korte hobe. <a href="login.html">Login korun</a>'); }
+  else $("authMsg").style.display = "none";
+  refresh();
+});
+
+/* ---------- image helpers ---------- */
+function loadImg(file){
+  return new Promise((res, rej)=>{
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); res(img); };
+    img.onerror = rej;
+    img.src = url;
+  });
+}
+function toJpeg(img, max, q){
+  const s = Math.min(1, max / Math.max(img.width, img.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", q);
+}
+function fitFull(img){            // Firestore doc limit ~1MB, keep under ~850KB
+  let max = 1800, q = 0.82, out = toJpeg(img, max, q);
+  while (out.length > 850000 && q > 0.4) { q -= 0.08; out = toJpeg(img, max, q); }
+  while (out.length > 850000 && max > 600) { max -= 200; out = toJpeg(img, max, 0.6); }
+  return out;
+}
+
+/* ---------- video helpers ---------- */
+function fmt(t){ t=Math.round(t||0); return Math.floor(t/60)+":"+String(t%60).padStart(2,"0"); }
+function placeholderThumb(){
+  const c=document.createElement("canvas"); c.width=320; c.height=320;
+  const x=c.getContext("2d"); x.fillStyle="#2b2b2b"; x.fillRect(0,0,320,320);
+  x.fillStyle="#fff"; x.font="bold 28px Arial"; x.textAlign="center"; x.fillText("VIDEO",160,170);
+  return c.toDataURL("image/jpeg",0.7);
+}
+function videoMeta(file){
+  return new Promise(res=>{
+    const url=URL.createObjectURL(file);
+    const v=document.createElement("video");
+    v.preload="metadata"; v.muted=true; v.playsInline=true;
+    let done=false;
+    const fin=o=>{ if(done) return; done=true; URL.revokeObjectURL(url); res(o); };
+    const fallback=()=>fin({thumb:placeholderThumb(),duration:v.duration||0,width:v.videoWidth||0,height:v.videoHeight||0});
+    v.onloadedmetadata=()=>{ try{ v.currentTime=Math.min(1,(v.duration||2)/2); }catch(e){ fallback(); } };
+    v.onseeked=()=>{
+      try{
+        const s=Math.min(1,640/Math.max(v.videoWidth,v.videoHeight));
+        const c=document.createElement("canvas");
+        c.width=Math.round(v.videoWidth*s); c.height=Math.round(v.videoHeight*s);
+        c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+        fin({thumb:c.toDataURL("image/jpeg",0.75),duration:v.duration,width:v.videoWidth,height:v.videoHeight});
+      }catch(e){ fallback(); }
     };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-    const CLOUD_NAME = "yt1jzpnb";
-    const UPLOAD_PRESET = "minami_unsigned";
+    v.onerror=fallback;
+    setTimeout(fallback,8000);
+    v.src=url;
+  });
+}
+const MAX_VIDEO = 300*1024*1024;
 
-    // Elements
-    const fileInput = document.getElementById('videoFile');
-    const videoPreview = document.getElementById('videoPreview');
-    const dropZone = document.getElementById('dropZone');
-    const fileBadge = document.getElementById('fileBadge');
-    const kwList = document.getElementById('kwList');
-    const kCnt = document.getElementById('kCnt');
-    const bulkKwInput = document.getElementById('bulkKw');
-    
-    let keywordsArray = [];
+/* ---------- add files ---------- */
+async function addFiles(list){
+  const arr = Array.from(list).filter(f => f.type.startsWith("image/") || f.type.startsWith("video/"));
+  if (!arr.length) return toast("Please choose image or video files");
+  for (const f of arr) {
+    const id = "f" + Date.now() + Math.random().toString(36).slice(2,7);
+    const base = f.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
+    const common = { id, title: base, kw: [], category: "", ai: false, people: false, modelRel: false, propRel: false, mature: false, owner: false, state: "" };
+    try {
+      if (f.type.startsWith("video/")) {
+        if (f.size > MAX_VIDEO) { toast(f.name + " is bigger than 300 MB"); continue; }
+        const m = await videoMeta(f);
+        files.push(Object.assign(common, { kind: "video", file: f, thumb: m.thumb, full: m.thumb, duration: m.duration, width: m.width, height: m.height, ftype: "Video" }));
+      } else {
+        const img = await loadImg(f);
+        files.push(Object.assign(common, { kind: "image", thumb: toJpeg(img, 320, 0.7), full: fitFull(img), ftype: "Photo" }));
+      }
+    } catch (e) { console.error(e); toast("Could not read " + f.name); }
+  }
+  if (!selected.size && files.length) selected.add(files[0].id);
+  refresh();
+}
+$("drop").onclick = () => $("fileInput").click();
+$("fileInput").onchange = e => { addFiles(e.target.files); e.target.value = ""; };
+["dragover","dragenter"].forEach(ev => $("drop").addEventListener(ev, e => { e.preventDefault(); $("drop").classList.add("on"); }));
+["dragleave","drop"].forEach(ev => $("drop").addEventListener(ev, e => { e.preventDefault(); $("drop").classList.remove("on"); }));
+$("drop").addEventListener("drop", e => addFiles(e.dataTransfer.files));
 
-    // ১. ড্যাশবোর্ড এবং পোর্টফোলিও লোড
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            try {
-                const userDoc = await db.collection("users").doc(user.uid).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    const bal = userData.balance || 0;
-                    document.getElementById('statAvail').innerHTML = `$${bal.toFixed(2)} <i class="fas fa-arrow-right" style="font-size:14px; margin-left:5px;"></i>`;
-                }
-            } catch (e) { console.log("Error getting balance:", e); }
+/* ---------- render ---------- */
+function refresh(){
+  const g = $("grid"); g.innerHTML = "";
+  files.forEach(f => {
+    const d = document.createElement("div");
+    d.className = "tile" + (selected.has(f.id) ? " sel" : "");
+    d.innerHTML = '<img src="'+f.thumb+'" alt=""><div class="tick">'+(selected.has(f.id)?"&#10003;":"")+'</div>'
+      + (uploading ? '' : '<div class="rm" data-rm="'+f.id+'">&times;</div>')
+      + (f.kind === "video" ? '<div class="vb">&#9654; '+fmt(f.duration)+'</div>' : '')
+      + (f.state ? '<div class="st '+(f.state==="Uploaded"?"ok":(f.state.startsWith("Failed")?"bad":""))+'">'+f.state+'</div>' : '');
+    d.onclick = e => {
+      if (e.target.dataset.rm) { files = files.filter(x => x.id !== f.id); selected.delete(f.id); refresh(); return; }
+      selected.has(f.id) ? selected.delete(f.id) : selected.add(f.id);
+      refresh();
+    };
+    g.appendChild(d);
+  });
+  $("empty").style.display = files.length ? "none" : "block";
+  $("cnt").textContent = files.length ? files.length + " file(s), " + selected.size + " selected" : "No files selected";
+  $("submitBtn").disabled = !files.length || uploading || !user;
+  fillPanel();
+}
 
-            loadPortfolioAndStats(user.uid);
-        } else {
-            document.getElementById('portfolioGrid').innerHTML = '<div class="empty-portfolio">Please log in to see your portfolio.</div>';
-        }
-    });
+function selFiles(){ return files.filter(f => selected.has(f.id)); }
+function fillPanel(){
+  const s = selFiles(), f = s[s.length-1];
+  $("selInfo").textContent = s.length ? "Editing " + s.length + " file(s). Changes apply to all selected." : "Select one or more files to edit their details.";
+  $("title").value = f ? f.title : "";
+  $("tcount").textContent = ($("title").value.length) + "/200";
+  $("category").value = f ? f.category : "";
+  $("ftype").value = f ? f.ftype : "Photo";
+  ["ai","people","modelRel","propRel","mature","owner"].forEach(k => $(k).checked = f ? !!f[k] : false);
+  renderChips(f ? f.kw : []);
+}
+function renderChips(kw){
+  const c = $("chips"); c.innerHTML = "";
+  kw.forEach(k => {
+    const s = document.createElement("span"); s.className = "chip";
+    s.innerHTML = k + ' <i>&times;</i>';
+    s.querySelector("i").onclick = () => { selFiles().forEach(f => f.kw = f.kw.filter(x => x !== k)); fillPanel(); };
+    c.appendChild(s);
+  });
+  $("kcount").textContent = kw.length + "/50";
+}
 
-    async function loadPortfolioAndStats(uid) {
-        const grid = document.getElementById('portfolioGrid');
-        const loading = document.getElementById('portfolioLoading');
+/* ---------- panel edits apply to selected ---------- */
+$("title").oninput = e => {
+  $("tcount").textContent = e.target.value.length + "/200";
+  if (!selFiles().length) return toast("Age ekta file select koro");
+  selFiles().forEach(f => f.title = e.target.value);
+};
+$("category").onchange = e => selFiles().forEach(f => f.category = e.target.value);
+$("ftype").onchange = e => { selFiles().forEach(f => { if (f.kind === "video" || e.target.value === "Video") return; f.ftype = e.target.value; }); fillPanel(); };
+["ai","people","modelRel","propRel","mature","owner"].forEach(k => $(k).onchange = e => selFiles().forEach(f => f[k] = e.target.checked));
+function addKw(){
+  const raw = $("kwInput").value;
+  const parts = raw.split(/[,;\n]+/).map(x => x.replace(/^#/, "").trim().toLowerCase()).filter(Boolean);
+  if (!parts.length) { $("kwInput").value = ""; return; }
+  const sel = selFiles();
+  if (!sel.length) return toast("Age ekta file select koro, tarpor keyword dao");
+  let over = false;
+  sel.forEach(f => parts.forEach(p => {
+    if (f.kw.includes(p)) return;
+    if (f.kw.length >= 50) { over = true; return; }
+    f.kw.push(p);
+  }));
+  $("kwInput").value = ""; fillPanel();
+  if (over) toast("Maximum 50 keywords");
+}
+/* works on phone keyboards too: split as soon as a comma/newline appears (also on paste) */
+$("kwInput").addEventListener("input", e => {
+  const v = e.target.value;
+  if (/[,;\n]/.test(v)) {
+    const i = Math.max(v.lastIndexOf(","), v.lastIndexOf(";"), v.lastIndexOf("\n"));
+    e.target.value = v.slice(0, i);
+    addKw();
+    e.target.value = v.slice(i + 1);
+  }
+});
+$("kwInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addKw(); } });
+$("kwInput").addEventListener("blur", addKw);
+$("kwAdd").onclick = addKw;
 
-        try {
-            const q = db.collection("vlogs").where("sellerId", "==", uid);
-            const snapshot = await q.get();
+$("clearBtn").onclick = () => { if (uploading) return; files = []; selected.clear(); refresh(); };
 
-            loading.style.display = 'none';
-
-            if (snapshot.empty) {
-                grid.innerHTML = '<div class="empty-portfolio"><i class="fas fa-folder-open" style="font-size:30px; margin-bottom:10px; color:#9ca3af;"></i><br>You have not uploaded any assets yet.</div>';
-                return;
-            }
-
-            let totalDownloads = 0;
-            let totalEarnings = 0;
-            let html = '';
-
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const dloads = data.downloads || 0;
-                totalDownloads += dloads;
-                totalEarnings += (dloads * 2.50);
-
-                const thumb = data.thumb || "https://via.placeholder.com/400x225/f3f4f6/9ca3af?text=No+Thumbnail";
-                const title = data.title || "Untitled";
-                const price = data.price === 0 ? '<span class="badge-free">FREE</span>' : '';
-
-                html += `
-                    <div class="p-card">
-                        <input type="checkbox">
-                        <img src="${thumb}" alt="${title}" title="${title}">
-                        <div class="p-card-info">
-                            <div class="p-downloads">Downloads <span>${dloads}</span></div>
-                            ${price}
-                        </div>
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
-            document.getElementById('statDownloads').innerText = totalDownloads;
-            document.getElementById('statEarnings').innerText = `$${totalEarnings.toFixed(2)}`;
-
-        } catch (error) {
-            console.error("Error loading portfolio:", error);
-            loading.style.display = 'none';
-            grid.innerHTML = '<div class="empty-portfolio" style="color:var(--bad);">Failed to load data.</div>';
-        }
-    }
-
-
-    // ==================== আপলোড ফাংশন ====================
-
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            videoPreview.src = url;
-            videoPreview.style.display = 'block';
-            dropZone.querySelector('i').style.display = 'none';
-            dropZone.querySelector('p').style.display = 'none';
-            dropZone.style.border = 'none';
-            fileBadge.style.display = 'flex';
-            fileBadge.innerHTML = `<i class="fas fa-video"></i> ${file.name}`;
-        }
-    });
-
-    document.getElementById('videoTitle').addEventListener('input', function(e) {
-        document.getElementById('tCnt').textContent = e.target.value.length + "/200";
-    });
-
-    function renderKeywords() {
-        kwList.innerHTML = '';
-        keywordsArray.forEach((kw, index) => {
-            const row = document.createElement('div');
-            row.className = 'kw';
-            row.innerHTML = `
-                <span class="n">${index + 1}</span>
-                <input type="text" value="${kw}" onchange="updateKeyword(${index}, this.value)">
-                <button onclick="removeKeyword(${index})"><i class="fas fa-times"></i></button>
-            `;
-            kwList.appendChild(row);
-        });
-
-        const newRow = document.createElement('div');
-        newRow.className = 'kw';
-        newRow.innerHTML = `
-            <span class="n">${keywordsArray.length + 1}</span>
-            <input type="text" id="kwNew" placeholder="Type keyword(s), press Enter or click away" onkeydown="handleKeywordKey(event)" onblur="processKeywordInput(this)">
-        `;
-        kwList.appendChild(newRow);
-        kCnt.textContent = keywordsArray.length;
-    }
-
-    function handleKeywordKey(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            processKeywordInput(e.target);
-        }
-    }
-
-    function processKeywordInput(input) {
-        const val = input.value.trim();
-        if (!val) return;
-
-        const items = val.split(',').map(s => s.trim().toLowerCase()).filter(s => s);
-        
-        let added = false;
-        items.forEach(kw => {
-            if (!keywordsArray.includes(kw) && keywordsArray.length < 50) {
-                keywordsArray.push(kw);
-                added = true;
-            }
-        });
-
-        if (added || val !== input.value) {
-            renderKeywords();
-            const newInput = document.getElementById('kwNew');
-            if(newInput) newInput.focus();
-        }
-    }
-
-    function updateKeyword(index, val) {
-        keywordsArray[index] = val.toLowerCase();
-    }
-
-    function removeKeyword(index) {
-        keywordsArray.splice(index, 1);
-        renderKeywords();
-    }
-
-    function bulkAddKeywords() {
-        const raw = bulkKwInput.value.trim();
-        if (!raw) return;
-        
-        const newKws = raw.split(/[,\n;]+/).map(k => k.trim().toLowerCase()).filter(k => k);
-        
-        newKws.forEach(kw => {
-            if (!keywordsArray.includes(kw) && keywordsArray.length < 50) {
-                keywordsArray.push(kw);
-            }
-        });
-        
-        bulkKwInput.value = '';
-        renderKeywords();
-    }
-
-    bulkKwInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            bulkAddKeywords();
-        }
-    });
-
-    renderKeywords();
-
-    function clearForm() {
-        if(confirm("Are you sure you want to clear everything?")) {
-            fileInput.value = '';
-            videoPreview.src = '';
-            videoPreview.style.display = 'none';
-            dropZone.querySelector('i').style.display = 'block';
-            dropZone.querySelector('p').style.display = 'block';
-            dropZone.style.border = '2px dashed #333';
-            fileBadge.style.display = 'none';
-            document.getElementById('videoTitle').value = '';
-            document.getElementById('videoDesc').value = '';
-            document.getElementById('tCnt').textContent = '0/200';
-            keywordsArray = [];
-            renderKeywords();
-        }
-    }
-
-    async function publishVideo() {
-        const kwNewInput = document.getElementById('kwNew');
-        if (kwNewInput && kwNewInput.value.trim()) {
-            processKeywordInput(kwNewInput);
-        }
-        const bulkInput = document.getElementById('bulkKw');
-        if (bulkInput && bulkInput.value.trim()) {
-            bulkAddKeywords();
-        }
-
-        const title = document.getElementById('videoTitle').value.trim();
-        const desc = document.getElementById('videoDesc').value.trim();
-        const category = document.getElementById('videoCategory').value;
-        const file = fileInput.files[0];
-
-        if (!title) { alert("Please enter an Asset Title!"); return; }
-        if (!file) { alert("Please select a Video File first!"); return; }
-        if (keywordsArray.length < 1) { alert("Please add at least 1 keyword!"); return; }
-
-        const btnPublish = document.getElementById('btnPublish');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const statusMsg = document.getElementById('statusMsg');
-
-        btnPublish.disabled = true;
-        btnPublish.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-        progressContainer.style.display = 'block';
-        statusMsg.style.display = 'none';
-        progressBar.style.width = '0%';
-
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, true);
-
-            xhr.upload.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    const percent = Math.round((e.loaded / e.total) * 100);
-                    progressBar.style.width = percent + '%';
-                }
-            };
-
-            xhr.onload = async function() {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    const videoUrl = response.secure_url;
-                    const thumbUrl = videoUrl.replace('/upload/', '/upload/so_1,w_400,q_auto,f_auto/').replace(/\.[^.]+$/, '.jpg');
-
-                    statusMsg.style.display = 'block';
-                    statusMsg.style.color = '#fbbf24';
-                    statusMsg.innerText = "Saving to Database...";
-
-                    const user = firebase.auth().currentUser;
-                    const sellerId = user ? user.uid : "unknown";
-
-                    await db.collection("vlogs").add({
-                        title: title,
-                        description: desc,
-                        category: category,
-                        keywords: keywordsArray,
-                        videoUrl: videoUrl,
-                        thumb: thumbUrl,
-                        sellerId: sellerId,
-                        status: "pending",
-                        downloads: 0,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    statusMsg.style.color = '#10b981';
-                    statusMsg.innerText = "✅ Published successfully!";
-                    
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-
-                } else {
-                    throw new Error("Cloudinary upload failed.");
-                }
-            };
-
-            xhr.onerror = function() { throw new Error("Network error."); };
-            xhr.send(formData);
-
-        } catch (error) {
-            console.error(error);
-            statusMsg.style.display = 'block';
-            statusMsg.style.color = '#d7373f';
-            statusMsg.innerText = "❌ Error: " + error.message;
-            btnPublish.disabled = false;
-            btnPublish.innerHTML = 'Publish';
-        }
-    }
+/* ---------- submit ---------- */
+$("submitBtn").onclick = async () => {
+  if (!user) return toast("Please login first");
+  // validate
+  for (const f of files) {
+    if (f.state === "Uploaded") continue;
+    if (!f.title.trim())      return toast("Every file needs a title");
+    if (f.kw.length < 5)      return toast("Add at least 5 keywords to \"" + f.title.slice(0,25) + "\"");
+    if (!f.category)          return toast("Choose a category for \"" + f.title.slice(0,25) + "\"");
+    if (!f.owner)             return toast("Confirm you own the rights for \"" + f.title.slice(0,25) + "\"");
+    if (f.people && !f.modelRel) return toast("Recognizable people need a model release");
+  }
+  uploading = true; refresh();
+  $("prog").style.display = "block";
+  const todo = files.filter(f => f.state !== "Uploaded");
+  let done = 0, failed = 0;
+  const author = user.displayName || (user.email || "").split("@")[0];
+  for (const f of todo) {
+    f.state = "Uploading..."; refresh();
+    try {
+      const ref = db.collection("stockphoto").doc();
+      let videoUrl = "", path = "";
+      if (f.kind === "video") {
+        if (!storage) throw new Error("Firebase Storage not available");
+        const ext = (f.file.name.split(".").pop() || "mp4").toLowerCase();
+        path = "videos/" + user.uid + "/" + ref.id + "." + ext;
+        const task = storage.ref(path).put(f.file, { contentType: f.file.type || "video/mp4" });
+        let last = -1;
+        await new Promise((ok, no) => task.on("state_changed", sn => {
+          const pc = Math.round(sn.bytesTransferred / sn.totalBytes * 100);
+          if (pc !== last) { last = pc; f.state = "Uploading " + pc + "%"; refresh(); }
+        }, no, ok));
+        videoUrl = await task.snapshot.ref.getDownloadURL();
+      }
+      // heavy image code (or video poster) goes in a separate collection
+      await db.collection("photoData").doc(ref.id).set({ data: f.full, uid: user.uid });
+      const doc = {
+        title: f.title.trim(),
+        keywords: f.kw,
+        category: f.category,
+        type: f.ftype,
+        aiGenerated: f.ai,
+        hasPeople: f.people,
+        modelRelease: f.modelRel,
+        propertyRelease: f.propRel,
+        mature: f.mature,
+        uid: user.uid,
+        author: author,
+        dataId: ref.id,
+        status: "pending",
+        license: "Standard",
+        createdAt: Date.now()
+      };
+      if (f.kind === "video") {
+        Object.assign(doc, { isVideo: true, videoUrl: videoUrl, storagePath: path, duration: Math.round(f.duration || 0), width: f.width, height: f.height, size: f.file.size });
+      }
+      await ref.set(doc);
+      f.state = "Uploaded";
+    } catch (e) { console.error(e); f.state = "Failed"; failed++; }
+    done++;
+    $("bar").style.width = Math.round(done / todo.length * 100) + "%";
+    refresh();
+  }
+  uploading = false; refresh();
+  toast(failed ? failed + " file(s) failed. Try again." : "All files submitted for review");
+  setTimeout(() => { $("prog").style.display = "none"; $("bar").style.width = "0"; }, 1500);
+};
 </script>
+<script src="site-footer.js"></script>
 </body>
 </html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Account - MINAMI STOCK</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f4f4;color:#2c2c2c;font-family:Arial,Helvetica,sans-serif;font-size:14px}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 12px 40px;display:flex;gap:28px;align-items:flex-start}
+.side{position:sticky;top:12px;min-width:150px;display:flex;flex-direction:column;gap:14px;padding-top:14px}
+.side a{color:#6e6e6e;font-size:12px;text-transform:uppercase;text-decoration:none;letter-spacing:.3px}
+.side a:hover{color:#1473e6}
+main{flex:1;min-width:0}
+.card{background:#fff;padding:22px 24px;margin-bottom:22px;box-shadow:0 1px 2px rgba(0,0,0,.05);scroll-margin-top:12px}
+.card h2{margin:0 0 18px;font-size:14px;font-weight:400;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.card h2 a{font-size:12px;text-transform:none;color:#1473e6;text-decoration:none}
+.row{display:flex;align-items:center;margin-bottom:14px;gap:14px}
+.row>label{width:130px;flex:none;font-size:11px;color:#6e6e6e}
+.row .val{flex:1;min-width:0}
+input[type=text],input[type=tel],input[type=date],select{width:100%;padding:8px 10px;border:1px solid #d0d0d0;border-radius:2px;font-size:13px;background:#fff;color:#2c2c2c}
+input:focus,select:focus{outline:none;border-color:#1473e6}
+input[readonly]{background:#f8f8f8;color:#777}
+.note{font-size:12px;color:#6e6e6e;margin-top:4px}
+.note a{color:#1473e6}
+.btn{border:1px solid #1473e6;color:#1473e6;background:#fff;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:bold;cursor:pointer}
+.btn.fill{background:#1473e6;color:#fff}
+.btn.red{border-color:#d7373f;color:#d7373f}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.badge{display:inline-block;padding:3px 9px;border-radius:2px;font-size:11px;font-weight:bold;color:#fff;background:#8a8a8a}
+.badge.ok{background:#008558}.badge.wait{background:#c79200}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2d9d78;margin-right:6px}
+.dot.off{background:#aaa}
+.cover{width:70px;height:46px;object-fit:cover;border:1px solid #ddd;border-radius:2px;vertical-align:middle;margin-right:8px;background:#eee}
+.idpair{display:flex;gap:12px;flex-wrap:wrap}
+.idbox{flex:1;min-width:140px}
+.idbox .ph{height:110px;border:1px dashed #bbb;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;overflow:hidden;background:#fafafa;cursor:pointer}
+.idbox .ph img{width:100%;height:100%;object-fit:cover}
+.idbox small{display:block;margin-bottom:5px;color:#6e6e6e;font-size:11px}
+.chk{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:4px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}
+#toast.show{opacity:1}
+@media(max-width:700px){
+ .wrap{flex-direction:column;gap:0}
+ .side{position:static;flex-direction:row;overflow-x:auto;gap:18px;padding:6px 0 14px;width:100%;white-space:nowrap}
+ .row{flex-direction:column;align-items:stretch;gap:4px}
+ .row>label{width:auto}
+ .card{padding:18px 16px}
+}
+</style>
+</head>
+<body>
+
+<script src="site-layout.js"></script>
+
+<div id="authMsg" style="display:none;max-width:1000px;margin:14px auto 0;padding:12px 16px;background:#fff3cd;color:#664d03;font-size:13px;border-radius:3px"></div>
+
+<div class="wrap">
+  <nav class="side">
+    <a href="#profile">My Profile</a>
+    <a href="#payout">Payout Information</a>
+    <a href="#nid">NID Card</a>
+    <a href="#email">Email Preferences</a>
+    <a href="#member">Member ID</a>
+  </nav>
+
+  <main>
+    <!-- ACCOUNT -->
+    <section class="card" id="profile">
+      <h2>Account <a href="portfolio.html" id="publicLink">See my public profile</a></h2>
+      <div class="row"><label>First Name</label><div class="val"><input type="text" id="firstName"></div></div>
+      <div class="row"><label>Last Name</label><div class="val"><input type="text" id="lastName"></div></div>
+      <div class="row"><label>Display Name</label><div class="val"><input type="text" id="displayName"></div></div>
+      <div class="row"><label>Email</label><div class="val"><input type="text" id="email" readonly></div></div>
+      <div class="row"><label>Country / Region</label><div class="val">
+        <select id="country">
+          <option>Bangladesh</option><option>India</option><option>Pakistan</option><option>Nepal</option><option>Sri Lanka</option>
+          <option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option>
+          <option>United Arab Emirates</option><option>Saudi Arabia</option><option>Malaysia</option><option>Singapore</option><option>Other</option>
+        </select>
+        <div class="note">Your email is managed by your MINAMI STOCK login.</div></div></div>
+      <div class="row"><label>Public Profile Cover</label><div class="val">
+        <img class="cover" id="coverImg" alt="" style="display:none">
+        <span id="coverName" class="note">No cover selected</span>
+        <a href="#" id="coverPick" style="color:#1473e6;font-size:12px;margin-left:8px">Choose another image</a>
+        <input type="file" id="coverFile" accept="image/*" hidden></div></div>
+      <div class="btns"><button class="btn fill" id="saveProfile">Save</button></div>
+    </section>
+
+    <!-- PAYOUT -->
+    <section class="card" id="payout">
+      <h2>Payout Information</h2>
+      <div class="row"><label>Payout method</label><div class="val">
+        <select id="payMethod">
+          <option>Payoneer</option><option>PayPal</option><option>Bank Transfer</option><option>bKash</option><option>Nagad</option><option>Rocket</option>
+        </select></div></div>
+      <div class="row"><label>Account / Email / Number</label><div class="val"><input type="text" id="payAccount" placeholder="e.g. payoneer email or mobile number"></div></div>
+      <div class="row"><label>Status</label><div class="val"><span class="dot off" id="payDot"></span><span id="payStatus">Not connected</span></div></div>
+      <div class="btns"><button class="btn fill" id="savePay">Save payout</button></div>
+    </section>
+
+    <!-- NID -->
+    <section class="card" id="nid">
+      <h2>NID Card Information</h2>
+      <div class="row"><label>ID type</label><div class="val">
+        <select id="nidType"><option>National ID (NID)</option><option>Smart Card</option></select></div></div>
+      <div class="row"><label>Name on card</label><div class="val"><input type="text" id="nidName"></div></div>
+      <div class="row"><label>NID number</label><div class="val"><input type="tel" id="nidNumber" inputmode="numeric" placeholder="10, 13 or 17 digits"></div></div>
+      <div class="row"><label>Date of birth</label><div class="val"><input type="date" id="nidDob"></div></div>
+      <div class="row"><label>Card photos</label><div class="val">
+        <div class="idpair">
+          <div class="idbox"><small>Front side</small><div class="ph" id="frontPh">Tap to add</div><input type="file" id="frontFile" accept="image/*" hidden></div>
+          <div class="idbox"><small>Back side</small><div class="ph" id="backPh">Tap to add</div><input type="file" id="backFile" accept="image/*" hidden></div>
+        </div></div></div>
+      <div class="row"><label>Status</label><div class="val"><span class="badge" id="nidBadge">Not submitted</span></div></div>
+      <div class="row"><label>Valid until</label><div class="val" id="nidSub" style="font-size:13px">-</div></div>
+      <div class="btns">
+        <button class="btn fill" id="saveNid">Submit / Update</button>
+        <button class="btn red" id="delNid">Remove</button>
+      </div>
+      <div class="note" style="margin-top:10px">Your NID details are private and only linked to your own account.</div>
+    </section>
+
+    <!-- EMAIL -->
+    <section class="card" id="email">
+      <h2>Email Preferences</h2>
+      <label class="chk"><input type="checkbox" id="prefMod" checked> Daily moderation updates</label>
+      <label class="chk"><input type="checkbox" id="prefEarn" checked> Daily earnings summary</label>
+      <div class="btns"><button class="btn fill" id="savePrefs">Save preferences</button></div>
+    </section>
+
+    <!-- MEMBER -->
+    <section class="card" id="member">
+      <h2>Member ID</h2>
+      <div id="memberId" style="font-size:13px">-</div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ====== FIREBASE CONFIG: login.html e ja config ache sheta ekhane paste koro ====== */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "creoverse-stock.firebaseapp.com",
+  projectId: "creoverse-stock",
+  storageBucket: "creoverse-stock.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const $ = id => document.getElementById(id);
+let user = null, cover = "", front = "", back = "";
+
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+
+function compress(file, max, q){
+  return new Promise((res, rej)=>{
+    const r = new FileReader();
+    r.onerror = rej;
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = rej;
+      img.onload = () => {
+        const s = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        res(c.toDataURL("image/jpeg", q));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+function showCover(){ if(cover){$("coverImg").src=cover;$("coverImg").style.display="inline-block";$("coverName").textContent="Cover selected";} }
+function showId(){
+  $("frontPh").innerHTML = front ? '<img src="'+front+'">' : "Tap to add";
+  $("backPh").innerHTML  = back  ? '<img src="'+back+'">'  : "Tap to add";
+}
+function setPayStatus(on){ $("payDot").className = "dot" + (on ? "" : " off"); $("payStatus").textContent = on ? "Connected" : "Not connected"; }
+function setNidStatus(s){
+  const b = $("nidBadge");
+  if (s === "pending"){ b.textContent = "Pending review"; b.className = "badge wait"; }
+  else if (s === "verified"){ b.textContent = "Validated"; b.className = "badge ok"; }
+  else { b.textContent = "Not submitted"; b.className = "badge"; }
+}
+
+function showAuthMsg(html){ const m=$("authMsg"); m.innerHTML=html; m.style.display="block"; }
+if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+  showAuthMsg("<b>Firebase config baki ache.</b> File er upore <code>apiKey</code>, <code>messagingSenderId</code>, <code>appId</code> login.html er config theke copy kore boshao.");
+}
+auth.onAuthStateChanged(async u => {
+  if (!u) {
+    if (firebaseConfig.apiKey !== "YOUR_API_KEY")
+      showAuthMsg('Tumi login koro nai. <a href="login.html">Login korun</a>');
+    return;
+  }
+  $("authMsg").style.display = "none";
+  user = u;
+  $("email").value = u.email || "";
+  $("publicLink").href = "portfolio.html?uid=" + u.uid;
+  try {
+    const ref = db.collection("users").doc(u.uid);
+    const snap = await ref.get();
+    const d = snap.exists ? snap.data() : {};
+    const nameParts = (u.displayName || d.name || "").split(" ");
+    $("firstName").value = d.firstName || nameParts[0] || "";
+    $("lastName").value = d.lastName || nameParts.slice(1).join(" ") || "";
+    $("displayName").value = d.displayName || u.displayName || "";
+    if (d.country) $("country").value = d.country;
+    cover = d.cover || ""; showCover();
+    $("payMethod").value = d.payMethod || "Payoneer";
+    $("payAccount").value = d.payAccount || "";
+    setPayStatus(!!d.payAccount);
+    $("prefMod").checked = d.prefMod !== false;
+    $("prefEarn").checked = d.prefEarn !== false;
+    let mid = d.memberId;
+    if (!mid) { mid = String(Math.floor(100000000 + Math.random()*900000000)); await ref.set({memberId: mid, email: u.email || ""}, {merge:true}); }
+    $("memberId").textContent = mid;
+
+    const n = await ref.collection("private").doc("nid").get();
+    if (n.exists) {
+      const x = n.data();
+      $("nidType").value = x.type || "National ID (NID)";
+      $("nidName").value = x.name || "";
+      $("nidNumber").value = x.number || "";
+      $("nidDob").value = x.dob || "";
+      front = x.front || ""; back = x.back || ""; showId();
+      setNidStatus(x.status);
+      $("nidSub").textContent = x.submittedAt ? "Submitted " + new Date(x.submittedAt).toLocaleDateString() : "-";
+    }
+  } catch (e) { console.error(e); toast("Could not load data"); }
+});
+
+/* cover */
+$("coverPick").onclick = e => { e.preventDefault(); $("coverFile").click(); };
+$("coverFile").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  cover = await compress(f, 900, 0.7); showCover();
+};
+/* id photos */
+$("frontPh").onclick = () => $("frontFile").click();
+$("backPh").onclick = () => $("backFile").click();
+$("frontFile").onchange = async e => { const f=e.target.files[0]; if(f){front = await compress(f, 900, 0.7); showId();} };
+$("backFile").onchange = async e => { const f=e.target.files[0]; if(f){back = await compress(f, 900, 0.7); showId();} };
+
+/* save profile */
+$("saveProfile").onclick = async () => {
+  if (!user) return;
+  const dn = $("displayName").value.trim();
+  if (!$("firstName").value.trim() || !dn) return toast("First name and display name are required");
+  try {
+    await db.collection("users").doc(user.uid).set({
+      firstName: $("firstName").value.trim(),
+      lastName: $("lastName").value.trim(),
+      displayName: dn,
+      country: $("country").value,
+      cover: cover,
+      email: user.email || "",
+      updatedAt: Date.now()
+    }, {merge:true});
+    await user.updateProfile({displayName: dn});
+    toast("Profile saved");
+  } catch (e) { console.error(e); toast("Save failed"); }
+};
+
+/* save payout */
+$("savePay").onclick = async () => {
+  if (!user) return;
+  const acc = $("payAccount").value.trim();
+  try {
+    await db.collection("users").doc(user.uid).set({payMethod: $("payMethod").value, payAccount: acc}, {merge:true});
+    setPayStatus(!!acc); toast("Payout saved");
+  } catch (e) { console.error(e); toast("Save failed"); }
+};
+
+/* save NID */
+$("saveNid").onclick = async () => {
+  if (!user) return;
+  const num = $("nidNumber").value.replace(/\s/g, "");
+  if (!$("nidName").value.trim()) return toast("Enter the name on your card");
+  if (!/^\d+$/.test(num) || ![10,13,17].includes(num.length)) return toast("NID number must be 10, 13 or 17 digits");
+  if (!$("nidDob").value) return toast("Enter your date of birth");
+  if (!front || !back) return toast("Add both front and back photos");
+  try {
+    const now = Date.now();
+    await db.collection("users").doc(user.uid).collection("private").doc("nid").set({
+      type: $("nidType").value,
+      name: $("nidName").value.trim(),
+      number: num,
+      dob: $("nidDob").value,
+      front: front, back: back,
+      status: "pending",
+      submittedAt: now
+    });
+    await db.collection("users").doc(user.uid).set({nidStatus: "pending"}, {merge:true});
+    setNidStatus("pending");
+    $("nidSub").textContent = "Submitted " + new Date(now).toLocaleDateString();
+    toast("NID submitted for review");
+  } catch (e) { console.error(e); toast("Save failed (photo too large?)"); }
+};
+
+/* remove NID */
+$("delNid").onclick = async () => {
+  if (!user || !confirm("Remove your NID information?")) return;
+  try {
+    await db.collection("users").doc(user.uid).collection("private").doc("nid").delete();
+    await db.collection("users").doc(user.uid).set({nidStatus: "none"}, {merge:true});
+    front = back = "";
+    ["nidName","nidNumber","nidDob"].forEach(i => $(i).value = "");
+    showId(); setNidStatus("none"); $("nidSub").textContent = "-";
+    toast("NID removed");
+  } catch (e) { console.error(e); toast("Remove failed"); }
+};
+
+/* email prefs */
+$("savePrefs").onclick = async () => {
+  if (!user) return;
+  try {
+    await db.collection("users").doc(user.uid).set({prefMod: $("prefMod").checked, prefEarn: $("prefEarn").checked}, {merge:true});
+    toast("Preferences saved");
+  } catch (e) { console.error(e); toast("Save failed"); }
+};
+</script>
+<script src="site-footer.js"></script>
+</body>
+</html>

@@ -1,230 +1,114 @@
-/* ================================================================
-   site-footer.js — MINAMI STOCK Clean Footer
-   ================================================================ */
-(function () {
-  if (window.__msFooterLoaded) return;
-  window.__msFooterLoaded = true;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upload Conditions - MINAMI STOCK</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#2c2c2c;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65}
+.page{max-width:860px;margin:0 auto;padding:28px 16px 50px}
+h1{font-size:28px;margin:0 0 8px}
+.lead{color:#555;margin:0 0 24px}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:30px}
+.key div{border:1px solid #e1e1e1;border-left:4px solid #1473e6;padding:12px 14px;background:#fafafa}
+.key b{display:block;font-size:20px;color:#1473e6}
+.key span{font-size:12px;color:#666}
+h2{font-size:18px;margin:28px 0 8px;padding-bottom:6px;border-bottom:1px solid #e8e8e8}
+ul{margin:8px 0 0;padding-left:22px}
+li{margin-bottom:6px}
+.bad li::marker{color:#d7373f}
+.ok li::marker{color:#008558}
+.note{background:#fff8e1;border:1px solid #f0d98a;padding:12px 14px;border-radius:4px;font-size:14px;margin-top:14px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.btn{display:inline-block;border:1px solid #1473e6;color:#1473e6;background:#fff;border-radius:20px;padding:9px 22px;font-size:14px;font-weight:bold;text-decoration:none}
+.btn.fill{background:#1473e6;color:#fff}
+.upd{font-size:12px;color:#888;margin-top:26px}
+</style>
+</head>
+<body>
 
-  function ready(fn) {
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
-    else fn();
-  }
+<script src="site-layout.js"></script>
 
-  ready(function () {
-    /* Font Awesome লোড */
-    if (!document.querySelector('link[href*="font-awesome"]')) {
-      var fa = document.createElement("link");
-      fa.rel = "stylesheet";
-      fa.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
-      document.head.appendChild(fa);
-    }
+<div class="page">
+  <h1>Upload Conditions</h1>
+  <p class="lead">Please read these conditions before you upload images or videos to MINAMI STOCK. Every file you submit must follow them.</p>
 
-    /* ---------- CSS ---------- */
-    var css = [
-      ".msf{font-family:'Inter','Segoe UI',system-ui,sans-serif;width:100%;background:#0a0a0a;color:#94a3b8;line-height:1.6;text-align:left;border-top:1px solid #222;margin-top:40px;position:relative;z-index:5;}",
-      ".msf *{box-sizing:border-box}",
-      
-      /* Grid - 5 Columns */
-      ".msf-cols{max-width:1400px;margin:0 auto;padding:50px 24px 40px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:32px}",
-      
-      /* Typography */
-      ".msf h4{font-size:15px;font-weight:700;color:#fff;margin:0 0 16px}",
-      ".msf-desc{font-size:13.5px;color:#94a3b8;margin:0 0 20px;max-width:280px;line-height:1.7}",
-      
-      /* Links */
-      ".msf-cols a{display:block;font-size:13.5px;color:#94a3b8;padding:6px 0;text-decoration:none;transition:.2s;}",
-      ".msf-cols a:hover{color:#fbbf24;}",
-      
-      /* Social Icons */
-      ".msf-social{display:flex;gap:12px;flex-wrap:wrap}",
-      ".msf-social a{width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;padding:0;color:#94a3b8;}",
-      ".msf-social a:hover{background:#fbbf24;color:#000;border-color:#fbbf24;}",
+  <div class="key">
+    <div><b>2 MB</b><span>Minimum size for every file</span></div>
+    <div><b>2000 px</b><span>Minimum for the longer side of an image</span></div>
+    <div><b>300 MB</b><span>Maximum size for a video</span></div>
+    <div><b>5 - 50</b><span>Keywords per file</span></div>
+  </div>
 
-      /* Bottom Bar */
-      ".msf-bottom{max-width:1400px;margin:0 auto;padding:20px 24px;border-top:1px solid #222;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-size:13px;}",
-      ".msf-btns{display:flex;gap:12px;flex-wrap:wrap;}",
-      ".msf-btn{background:#111;border:1px solid #333;border-radius:20px;padding:8px 16px;color:#cbd5e1;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.2s;}",
-      ".msf-btn:hover{border-color:#fbbf24;color:#fbbf24;}",
+  <h2>1. File requirements</h2>
+  <ul class="ok">
+    <li><b>Images:</b> JPG, PNG or WEBP.</li>
+    <li><b>Videos:</b> MP4, MOV or WEBM, up to 300 MB each.</li>
+    <li><b>Minimum file size:</b> every file must be at least 2 MB. Files smaller than 2 MB cannot be uploaded.</li>
+    <li><b>Minimum resolution:</b> an image must be at least 2000 pixels on its longer side (width or height). Smaller images are rejected.</li>
+    <li>Files must open correctly and must not be corrupted.</li>
+  </ul>
 
-      /* Popups */
-      ".msf-pop{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}",
-      ".msf-pop.open{display:flex}",
-      ".msf-box{background:#111;border:1px solid #333;color:#fff;border-radius:12px;max-width:420px;width:100%;padding:24px;max-height:90vh;overflow:auto;}",
-      ".msf-box h3{font-size:18px;margin:0 0 12px;color:#fbbf24;}",
-      ".msf-box p{font-size:13.5px;line-height:1.6;color:#94a3b8;margin:0 0 12px}",
-      ".msf-box select{width:100%;padding:11px;border:1px solid #333;border-radius:8px;font:inherit;margin-bottom:16px;background:#000;color:#fff;outline:none;}",
-      ".msf-box .row{display:flex;gap:10px}",
-      ".msf-box button{border:1px solid #333;background:#222;color:#fff;padding:10px 20px;border-radius:20px;font-weight:600;font-size:14px;cursor:pointer}",
-      ".msf-box button.fill{background:#fbbf24;border-color:#fbbf24;color:#000}",
-      
-      "#msf-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#fff;color:#000;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s;z-index:100000}",
-      "#msf-toast.show{opacity:1}",
+  <h2>2. Ownership and rights</h2>
+  <ul>
+    <li>Upload only content that you created and that you fully own.</li>
+    <li>Do not upload files copied, downloaded or taken from other websites, photographers or artists.</li>
+    <li>Do not include logos, brand names, trademarks, copyrighted characters, artworks or watermarks that belong to someone else.</li>
+    <li>You confirm that you own all rights to each file when you submit it.</li>
+  </ul>
 
-      /* Responsive */
-      "@media(max-width:1100px){.msf-cols{grid-template-columns:1fr 1fr 1fr;gap:24px}}",
-      "@media(max-width:900px){.msf-cols{grid-template-columns:1fr 1fr}.msf-brand{grid-column:1/-1}}",
-      "@media(max-width:600px){.msf-cols{grid-template-columns:1fr}.msf-bottom{flex-direction:column;text-align:center}}"
-    ].join("\n");
-    
-    var st = document.createElement("style");
-    st.textContent = css;
-    document.head.appendChild(st);
+  <h2>3. People and property</h2>
+  <ul>
+    <li>If a file shows a recognizable person, you must have a signed model release.</li>
+    <li>If a file shows private property that needs permission, you must have a property release.</li>
+    <li>Tick the correct release options on the upload page.</li>
+  </ul>
 
-    /* ---------- HTML MARKUP ---------- */
-    var html =
-      '<div class="msf-cols">' +
+  <h2>4. AI-generated content</h2>
+  <ul>
+    <li>If a file was made with generative AI tools, you must tick the AI option.</li>
+    <li>Do not present AI-generated files as real photographs or real events.</li>
+  </ul>
 
-        /* Column 1: Brand */
-        '<div class="msf-brand">' +
-          '<h4 style="font-size:18px;letter-spacing:0.5px;">MINAMI STOCK</h4>' +
-          '<p class="msf-desc">Free and premium stock photos, illustrations, videos and creative tools. Copyright-free content for your projects.</p>' +
-          '<div class="msf-social">' +
-            '<a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>' +
-            '<a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>' +
-            '<a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>' +
-            '<a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>' +
-            '<a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>' +
-          '</div>' +
-        '</div>' +
+  <h2>5. Title, keywords and category</h2>
+  <ul>
+    <li><b>Title:</b> required, clear and accurate, up to 200 characters.</li>
+    <li><b>Keywords:</b> at least 5 and at most 50, separated by commas, and relevant to the file.</li>
+    <li><b>Category:</b> choose the category that fits the file best.</li>
+    <li>Do not use misleading, repeated or spam keywords, and do not use other people's names or brands.</li>
+  </ul>
 
-        /* Column 2: Explore */
-        '<div>' +
-          '<h4>Explore</h4>' +
-          '<a href="index.html">Home</a>' +
-          '<a href="stock-photo.html">Stock Photos</a>' +
-          '<a href="portfolio.html">Portfolio</a>' +
-          '<a href="tools.html">Tools</a>' +
-          '<a href="shop.html">Shop</a>' +
-          '<a href="about.html">About Us</a>' +
-        '</div>' +
+  <h2>6. Quality</h2>
+  <ul class="ok">
+    <li>Images must be sharp, well exposed and free of heavy noise.</li>
+    <li>No borders, frames, text overlays or watermarks.</li>
+    <li>Videos must be steady, clear and properly lit.</li>
+  </ul>
 
-        /* Column 3: Tools */
-        '<div>' +
-          '<h4>Tools</h4>' +
-          '<a href="image-resizer.html">Image Resizer</a>' +
-          '<a href="image-cropper.html">Image Cropper</a>' +
-          '<a href="image-compressor.html">Image Compressor</a>' +
-          '<a href="bg-remove.html">BG Remover</a>' +
-          '<a href="image-enhancer.html">Image Enhancer</a>' +
-          '<a href="upscaler.html">Image Upscaler</a>' +
-          '<a href="image-to-pdf.html">Image to PDF</a>' +
-          '<a href="text-to-pdf.html">Text to PDF</a>' +
-          '<a href="qr-code.html">QR Code</a>' +
-          '<a href="calculator.html">Calculator</a>' +
-          '<a href="converter.html">Converter</a>' +
-          '<a href="word-counter.html">Word Counter</a>' +
-        '</div>' +
+  <h2>7. Not allowed</h2>
+  <ul class="bad">
+    <li>Illegal content or content that supports illegal activity.</li>
+    <li>Hateful, violent, sexual or abusive content.</li>
+    <li>Misleading or false content.</li>
+    <li>Content that harms, exploits or invades the privacy of others.</li>
+  </ul>
+  <div class="note">If a file contains mature content, you must tick the mature content option when you upload it.</div>
 
-        /* Column 4: Legal & Help */
-        '<div>' +
-          '<h4>Legal & Help</h4>' +
-          '<a href="privacy.html">Privacy Policy</a>' +
-          '<a href="terms.html">Terms of Service</a>' +
-          '<a href="dmca.html">DMCA</a>' +
-          '<a href="cookies.html">Cookie Policy</a>' +
-          '<a href="refund.html">Refund Policy</a>' +
-          '<a href="license.html">License Agreement</a>' +
-          '<a href="upload-condition.html">Upload Conditions</a>' +
-          '<a href="contact.html">Contact Us</a>' +
-          '<a href="faq.html">FAQ</a>' +
-          '<a href="about.html">About Us</a>' +
-        '</div>' +
+  <h2>8. Review and removal</h2>
+  <ul>
+    <li>Every file is reviewed before it is shown on the site. Its status stays <i>pending</i> until it is approved.</li>
+    <li>Files that break these conditions can be rejected or removed.</li>
+    <li>Repeated or serious violations can lead to the loss of upload access.</li>
+  </ul>
 
-        /* Column 5: Account */
-        '<div>' +
-          '<h4>Account</h4>' +
-          '<a href="login.html">Login</a>' +
-          '<a href="register.html">Register</a>' +
-          '<a href="account.html">My Account</a>' +
-          '<a href="dashboard.html">Dashboard</a>' +
-          '<a href="upload.html">Upload</a>' +
-          '<a href="portfolio.html">Portfolio</a>' +
-        '</div>' +
+  <div class="btns">
+    <a class="btn fill" href="upload.html">Go to Upload</a>
+    <a class="btn" href="index.html">Home</a>
+  </div>
+  <div class="upd">MINAMI STOCK &middot; Upload Conditions</div>
+</div>
 
-      '</div>' +
-
-      /* Bottom Bar */
-      '<div class="msf-bottom">' +
-        '<div class="msf-btns">' +
-          '<button type="button" class="msf-btn" data-act="region"><i class="fas fa-globe"></i> Change region</button>' +
-          '<button type="button" class="msf-btn" data-act="license"><i class="fas fa-balance-scale"></i> License Terms</button>' +
-        '</div>' +
-        '<div style="color:#64748b;">&copy; 2026 MINAMI STOCK &middot; All rights reserved</div>' +
-      '</div>';
-
-    var foot = document.createElement("footer");
-    foot.className = "msf";
-    foot.innerHTML = html;
-
-    var slot = document.getElementById("ms-footer");
-    if (slot) { slot.innerHTML = ""; slot.appendChild(foot); }
-    else document.body.appendChild(foot);
-
-    /* ---------- Popups ---------- */
-    var regions = ["Bangladesh","India","Pakistan","Nepal","Sri Lanka","United States","United Kingdom","Canada","Australia","Other"];
-    var pops = document.createElement("div");
-    pops.innerHTML =
-      '<div class="msf-pop" id="msf-region"><div class="msf-box">' +
-        '<h3>Change region</h3><select id="msf-region-sel">' +
-        regions.map(function (r) { return "<option>" + r + "</option>"; }).join("") +
-        '</select><div class="row"><button type="button" class="fill" id="msf-region-save">Save region</button><button type="button" data-close>Cancel</button></div>' +
-      '</div></div>' +
-
-      '<div class="msf-pop" id="msf-license"><div class="msf-box">' +
-        '<h3>License Terms</h3>' +
-        '<p>Photos and files on MINAMI STOCK can be used in websites, social media, print and advertising, within the projects your license covers.</p>' +
-        '<p>You may not resell or redistribute a file as-is, and you may not claim it as your own work. Contributors keep the copyright to what they upload.</p>' +
-        '<div class="row" style="margin-top:20px;"><button type="button" data-close>Close</button></div>' +
-      '</div></div>' +
-
-      '<div id="msf-toast"></div>';
-    document.body.appendChild(pops);
-
-    /* ---------- Helpers ---------- */
-    function $(id) { return document.getElementById(id); }
-    function toast(t) {
-      var el = $("msf-toast");
-      el.textContent = t;
-      el.classList.add("show");
-      clearTimeout(toast.t);
-      toast.t = setTimeout(function () { el.classList.remove("show"); }, 2200);
-    }
-    function closePops() {
-      $("msf-region").classList.remove("open");
-      $("msf-license").classList.remove("open");
-    }
-
-    /* ---------- Region ---------- */
-    function store(k, v) {
-      try {
-        if (v === undefined) return localStorage.getItem(k);
-        localStorage.setItem(k, v);
-      } catch (e) {}
-    }
-    var savedRegion = store("ms_region");
-    if (savedRegion) $("msf-region-sel").value = savedRegion;
-
-    /* ---------- Clicks ---------- */
-    foot.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-act]");
-      if (!b) return;
-      var act = b.getAttribute("data-act");
-      if (act === "region") $("msf-region").classList.add("open");
-      else if (act === "license") $("msf-license").classList.add("open");
-    });
-
-    $("msf-region-save").onclick = function () {
-      store("ms_region", $("msf-region-sel").value);
-      closePops();
-      toast("Region set to " + $("msf-region-sel").value);
-    };
-
-    pops.addEventListener("click", function (e) {
-      if (e.target.hasAttribute("data-close") || e.target.classList.contains("msf-pop")) closePops();
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closePops();
-    });
-  });
-})();
+<script src="site-footer.js"></script>
+</body>
+</html>
