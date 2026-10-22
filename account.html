@@ -4,64 +4,94 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Account - MINAMI STOCK</title>
+<!-- FontAwesome যুক্ত করা হয়েছে আইকনের জন্য -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f4f4f4;color:#2c2c2c;font-family:Arial,Helvetica,sans-serif;font-size:14px}
-.wrap{max-width:1000px;margin:0 auto;padding:20px 12px 40px;display:flex;gap:28px;align-items:flex-start}
-.side{position:sticky;top:12px;min-width:150px;display:flex;flex-direction:column;gap:14px;padding-top:14px}
-.side a{color:#6e6e6e;font-size:12px;text-transform:uppercase;text-decoration:none;letter-spacing:.3px}
-.side a:hover{color:#1473e6}
+body{margin:0;background:#f4f6f8;color:#2c2c2c;font-family:'Segoe UI', Arial, Helvetica, sans-serif;font-size:14px}
+.wrap{max-width:1050px;margin:0 auto;padding:30px 15px 60px;display:flex;gap:30px;align-items:flex-start}
+
+/* ★ নতুন আধুনিক সাইডবার ডিজাইন ★ */
+.side{
+    position:sticky; top:20px; width:240px; flex:none;
+    background:#fff; border-radius:12px; padding:15px 12px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.04); border:1px solid #edf2f7;
+    display:flex; flex-direction:column; gap:5px;
+}
+.side a{
+    display:flex; align-items:center; gap:12px;
+    color:#64748b; font-size:13.5px; font-weight:600;
+    text-decoration:none; padding:12px 15px; border-radius:8px;
+    transition: all 0.2s ease-in-out;
+}
+.side a i{font-size:16px; width:20px; text-align:center; color:#94a3b8; transition:0.2s;}
+.side a:hover{background:#f8fafc; color:#1e293b; transform:translateX(3px);}
+.side a:hover i{color:#1473e6;}
+.side a.active{background:#eff6ff; color:#1473e6;}
+.side a.active i{color:#1473e6;}
+
 main{flex:1;min-width:0}
-.card{background:#fff;padding:22px 24px;margin-bottom:22px;box-shadow:0 1px 2px rgba(0,0,0,.05);scroll-margin-top:12px}
-.card h2{margin:0 0 18px;font-size:14px;font-weight:400;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
-.card h2 a{font-size:12px;text-transform:none;color:#1473e6;text-decoration:none}
-.row{display:flex;align-items:center;margin-bottom:14px;gap:14px}
-.row>label{width:130px;flex:none;font-size:11px;color:#6e6e6e}
+.card{background:#fff;padding:24px 28px;margin-bottom:24px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.03);border:1px solid #edf2f7;scroll-margin-top:20px}
+.card h2{margin:0 0 20px;font-size:15px;font-weight:700;text-transform:uppercase;color:#1e293b;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:12px}
+.card h2 a{font-size:12.5px;text-transform:none;color:#1473e6;text-decoration:none;font-weight:600}
+.row{display:flex;align-items:center;margin-bottom:16px;gap:16px}
+.row>label{width:150px;flex:none;font-size:13px;color:#64748b;font-weight:600}
 .row .val{flex:1;min-width:0}
-input[type=text],input[type=tel],input[type=date],select{width:100%;padding:8px 10px;border:1px solid #d0d0d0;border-radius:2px;font-size:13px;background:#fff;color:#2c2c2c}
-input:focus,select:focus{outline:none;border-color:#1473e6}
-input[readonly]{background:#f8f8f8;color:#777}
-.note{font-size:12px;color:#6e6e6e;margin-top:4px}
-.note a{color:#1473e6}
-.btn{border:1px solid #1473e6;color:#1473e6;background:#fff;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:bold;cursor:pointer}
-.btn.fill{background:#1473e6;color:#fff}
-.btn.red{border-color:#d7373f;color:#d7373f}
-.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.badge{display:inline-block;padding:3px 9px;border-radius:2px;font-size:11px;font-weight:bold;color:#fff;background:#8a8a8a}
-.badge.ok{background:#008558}.badge.wait{background:#c79200}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2d9d78;margin-right:6px}
-.dot.off{background:#aaa}
-.cover{width:70px;height:46px;object-fit:cover;border:1px solid #ddd;border-radius:2px;vertical-align:middle;margin-right:8px;background:#eee}
-.idpair{display:flex;gap:12px;flex-wrap:wrap}
-.idbox{flex:1;min-width:140px}
-.idbox .ph{height:110px;border:1px dashed #bbb;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;overflow:hidden;background:#fafafa;cursor:pointer}
+input[type=text],input[type=tel],input[type=date],select{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;background:#fff;color:#1e293b;transition:0.2s;}
+input:focus,select:focus{outline:none;border-color:#1473e6;box-shadow:0 0 0 3px rgba(20,115,230,0.1);}
+input[readonly]{background:#f8fafc;color:#94a3b8;cursor:not-allowed;}
+.note{font-size:12px;color:#64748b;margin-top:6px}
+.note a{color:#1473e6;font-weight:600;text-decoration:none;}
+.btn{border:1px solid #cbd5e1;color:#475569;background:#fff;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;}
+.btn:hover{background:#f8fafc;}
+.btn.fill{background:#1473e6;border-color:#1473e6;color:#fff;}
+.btn.fill:hover{background:#0f62c6;box-shadow:0 4px 12px rgba(20,115,230,0.3);}
+.btn.red{border-color:#fecaca;color:#dc2626;background:#fef2f2;}
+.btn.red:hover{background:#fee2e2;}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.badge{display:inline-block;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;background:#94a3b8}
+.badge.ok{background:#10b981}.badge.wait{background:#f59e0b}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#10b981;margin-right:8px;box-shadow:0 0 0 3px rgba(16,185,129,0.2);}
+.dot.off{background:#cbd5e1;box-shadow:none;}
+.cover{width:90px;height:60px;object-fit:cover;border:1px solid #e2e8f0;border-radius:8px;vertical-align:middle;margin-right:12px;background:#f1f5f9}
+.idpair{display:flex;gap:16px;flex-wrap:wrap}
+.idbox{flex:1;min-width:160px}
+.idbox .ph{height:120px;border:2px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;overflow:hidden;background:#f8fafc;cursor:pointer;transition:0.2s;}
+.idbox .ph:hover{border-color:#1473e6;color:#1473e6;background:#eff6ff;}
 .idbox .ph img{width:100%;height:100%;object-fit:cover}
-.idbox small{display:block;margin-bottom:5px;color:#6e6e6e;font-size:11px}
-.chk{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:4px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}
-#toast.show{opacity:1}
-@media(max-width:700px){
- .wrap{flex-direction:column;gap:0}
- .side{position:static;flex-direction:row;overflow-x:auto;gap:18px;padding:6px 0 14px;width:100%;white-space:nowrap}
- .row{flex-direction:column;align-items:stretch;gap:4px}
- .row>label{width:auto}
- .card{padding:18px 16px}
+.idbox small{display:block;margin-bottom:8px;color:#475569;font-size:12px;font-weight:600;}
+.chk{display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer;font-size:14px;color:#334155;}
+.chk input{width:18px;height:18px;accent-color:#1473e6;cursor:pointer;}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:9999;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(-10px);}
+
+/* মোবাইলের জন্য রেসপন্সিভ ডিজাইন */
+@media(max-width:768px){
+ .wrap{flex-direction:column;gap:20px;padding-top:15px;}
+ .side{position:static;width:100%;flex-direction:row;overflow-x:auto;gap:10px;padding:10px;white-space:nowrap;border-radius:12px;}
+ .side a{padding:10px 15px;font-size:13px;flex:none;}
+ .side a:hover{transform:none;}
+ .row{flex-direction:column;align-items:stretch;gap:6px;}
+ .row>label{width:auto;}
+ .card{padding:20px 18px;}
 }
 </style>
 </head>
 <body>
 
-<script src="site-layout.js"></script>
+<!-- ★ top-bar.js যুক্ত করা হয়েছে ★ -->
+<script src="top-bar.js"></script>
 
-<div id="authMsg" style="display:none;max-width:1000px;margin:14px auto 0;padding:12px 16px;background:#fff3cd;color:#664d03;font-size:13px;border-radius:3px"></div>
+<div id="authMsg" style="display:none;max-width:1050px;margin:20px auto 0;padding:14px 20px;background:#fffbeb;color:#b45309;font-size:14px;border-radius:8px;border:1px solid #fcd34d;"></div>
 
 <div class="wrap">
-  <nav class="side">
-    <a href="#profile">My Profile</a>
-    <a href="#payout">Payout Information</a>
-    <a href="#nid">NID Card</a>
-    <a href="#email">Email Preferences</a>
-    <a href="#member">Member ID</a>
+  <!-- নতুন ডিজাইন করা সাইডবার -->
+  <nav class="side" id="sideNav">
+    <a href="#profile" class="active"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="#payout"><i class="fas fa-wallet"></i> Payout Info</a>
+    <a href="#nid"><i class="fas fa-id-card"></i> NID Card</a>
+    <a href="#email"><i class="fas fa-envelope-open-text"></i> Email Settings</a>
+    <a href="#member"><i class="fas fa-fingerprint"></i> Member ID</a>
   </nav>
 
   <main>
@@ -81,10 +111,10 @@ input[readonly]{background:#f8f8f8;color:#777}
         <div class="note">Your email is managed by your MINAMI STOCK login.</div></div></div>
       <div class="row"><label>Public Profile Cover</label><div class="val">
         <img class="cover" id="coverImg" alt="" style="display:none">
-        <span id="coverName" class="note">No cover selected</span>
-        <a href="#" id="coverPick" style="color:#1473e6;font-size:12px;margin-left:8px">Choose another image</a>
+        <span id="coverName" class="note" style="display:inline-block;margin-right:12px;">No cover selected</span>
+        <a href="#" id="coverPick" style="color:#1473e6;font-size:13px;font-weight:600;">Choose another image</a>
         <input type="file" id="coverFile" accept="image/*" hidden></div></div>
-      <div class="btns"><button class="btn fill" id="saveProfile">Save</button></div>
+      <div class="btns"><button class="btn fill" id="saveProfile">Save Changes</button></div>
     </section>
 
     <!-- PAYOUT -->
@@ -95,8 +125,8 @@ input[readonly]{background:#f8f8f8;color:#777}
           <option>Payoneer</option><option>PayPal</option><option>Bank Transfer</option><option>bKash</option><option>Nagad</option><option>Rocket</option>
         </select></div></div>
       <div class="row"><label>Account / Email / Number</label><div class="val"><input type="text" id="payAccount" placeholder="e.g. payoneer email or mobile number"></div></div>
-      <div class="row"><label>Status</label><div class="val"><span class="dot off" id="payDot"></span><span id="payStatus">Not connected</span></div></div>
-      <div class="btns"><button class="btn fill" id="savePay">Save payout</button></div>
+      <div class="row"><label>Status</label><div class="val"><span class="dot off" id="payDot"></span><span id="payStatus" style="font-weight:600;">Not connected</span></div></div>
+      <div class="btns"><button class="btn fill" id="savePay">Save Payout</button></div>
     </section>
 
     <!-- NID -->
@@ -113,12 +143,12 @@ input[readonly]{background:#f8f8f8;color:#777}
           <div class="idbox"><small>Back side</small><div class="ph" id="backPh">Tap to add</div><input type="file" id="backFile" accept="image/*" hidden></div>
         </div></div></div>
       <div class="row"><label>Status</label><div class="val"><span class="badge" id="nidBadge">Not submitted</span></div></div>
-      <div class="row"><label>Valid until</label><div class="val" id="nidSub" style="font-size:13px">-</div></div>
+      <div class="row"><label>Valid until</label><div class="val" id="nidSub" style="font-size:13px; font-weight:600; color:#64748b;">-</div></div>
       <div class="btns">
         <button class="btn fill" id="saveNid">Submit / Update</button>
         <button class="btn red" id="delNid">Remove</button>
       </div>
-      <div class="note" style="margin-top:10px">Your NID details are private and only linked to your own account.</div>
+      <div class="note" style="margin-top:14px">Your NID details are private and only linked to your own account.</div>
     </section>
 
     <!-- EMAIL -->
@@ -126,13 +156,13 @@ input[readonly]{background:#f8f8f8;color:#777}
       <h2>Email Preferences</h2>
       <label class="chk"><input type="checkbox" id="prefMod" checked> Daily moderation updates</label>
       <label class="chk"><input type="checkbox" id="prefEarn" checked> Daily earnings summary</label>
-      <div class="btns"><button class="btn fill" id="savePrefs">Save preferences</button></div>
+      <div class="btns"><button class="btn fill" id="savePrefs">Save Preferences</button></div>
     </section>
 
     <!-- MEMBER -->
     <section class="card" id="member">
       <h2>Member ID</h2>
-      <div id="memberId" style="font-size:13px">-</div>
+      <div id="memberId" style="font-size:16px; font-weight:700; color:#1473e6; letter-spacing:1px;">-</div>
     </section>
   </main>
 </div>
@@ -143,15 +173,17 @@ input[readonly]{background:#f8f8f8;color:#777}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-/* ====== FIREBASE CONFIG: login.html e ja config ache sheta ekhane paste koro ====== */
+/* ★ আসল Firebase Config বসানো হয়েছে ★ */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "creoverse-stock.firebaseapp.com",
-  projectId: "creoverse-stock",
-  storageBucket: "creoverse-stock.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
+    authDomain: "creoverse-stock.firebaseapp.com",
+    databaseURL: "https://creoverse-stock-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "creoverse-stock",
+    storageBucket: "creoverse-stock.firebasestorage.app",
+    messagingSenderId: "128072247505",
+    appId: "1:128072247505:web:47e58c3a140f4e858bbdf0"
 };
+
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -159,7 +191,15 @@ const db = firebase.firestore();
 const $ = id => document.getElementById(id);
 let user = null, cover = "", front = "", back = "";
 
-function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+// সাইডবারে ক্লিক করলে অ্যাক্টিভ ক্লাস পরিবর্তন হবে
+document.querySelectorAll('.side a').forEach(link => {
+    link.addEventListener('click', function() {
+        document.querySelectorAll('.side a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000)}
 
 function compress(file, max, q){
   return new Promise((res, rej)=>{
@@ -195,13 +235,10 @@ function setNidStatus(s){
 }
 
 function showAuthMsg(html){ const m=$("authMsg"); m.innerHTML=html; m.style.display="block"; }
-if (firebaseConfig.apiKey === "YOUR_API_KEY") {
-  showAuthMsg("<b>Firebase config baki ache.</b> File er upore <code>apiKey</code>, <code>messagingSenderId</code>, <code>appId</code> login.html er config theke copy kore boshao.");
-}
+
 auth.onAuthStateChanged(async u => {
   if (!u) {
-    if (firebaseConfig.apiKey !== "YOUR_API_KEY")
-      showAuthMsg('Tumi login koro nai. <a href="login.html">Login korun</a>');
+    showAuthMsg('You are not logged in. <a href="login.html">Login here</a>');
     return;
   }
   $("authMsg").style.display = "none";
@@ -269,7 +306,7 @@ $("saveProfile").onclick = async () => {
       updatedAt: Date.now()
     }, {merge:true});
     await user.updateProfile({displayName: dn});
-    toast("Profile saved");
+    toast("Profile saved successfully");
   } catch (e) { console.error(e); toast("Save failed"); }
 };
 

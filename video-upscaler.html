@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Upscaler | MINAMI STOCK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg-color: #f8fafc; --text-main: #1e293b; --text-light: #64748b; --white: #ffffff; --dark: #0f172a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        
+        .top-bar { background: var(--dark); color: white; text-align: center; padding: 8px; font-size: 14px; }
+        nav { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; margin-left: 25px; }
+        .nav-btn { background: var(--primary); color: white !important; padding: 8px 20px; border-radius: 6px; }
+
+        .hero { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 60px 8%; gap: 40px; }
+        .hero-text { flex: 1; min-width: 300px; }
+        .hero-text h1 { font-size: 48px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
+        .hero-text h1 span { background: linear-gradient(90deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .upload-box { background: var(--white); border: 2px dashed #cbd5e1; border-radius: 16px; padding: 40px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .upload-box input[type="file"] { display: none; }
+        .upload-btn { background: var(--primary); color: white; border: none; padding: 14px 28px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; max-width: 300px; }
+        .upload-btn:disabled { background: #a5b4fc; cursor: not-allowed; }
+        
+        .hero-visual { flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .slider-container { position: relative; width: 100%; height: 400px; }
+        .slider-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .img-after { clip-path: inset(0 0 0 50%); }
+        .slider { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; z-index: 10; }
+        .slider-line { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background: white; z-index: 5; transform: translateX(-50%); pointer-events: none; }
+        .slider-button { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; background: white; border-radius: 50%; z-index: 6; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; font-weight: bold; color: var(--primary); }
+
+        .how-it-works { padding: 80px 8%; text-align: center; background: var(--bg-color); }
+        .steps { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
+        .step-card { flex: 1; min-width: 250px; padding: 30px; border-radius: 16px; background: var(--white); border: 1px solid #e2e8f0; }
+        
+        .gallery-section { padding: 60px 8%; background: var(--white); text-align: center; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 40px; }
+        .gallery-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; transition: 0.3s; }
+        .gallery-grid img:hover { transform: scale(1.05); }
+
+        .faq-section { padding: 60px 8%; background: var(--white); max-width: 800px; margin: 0 auto; }
+        details { background: var(--bg-color); border-radius: 8px; margin-bottom: 15px; padding: 15px 20px; cursor: pointer; }
+        summary { font-weight: 600; font-size: 18px; list-style: none; display: flex; justify-content: space-between; }
+        summary::after { content: '+'; font-size: 24px; color: var(--primary); }
+        details[open] summary::after { content: '-'; }
+
+        footer { background: var(--dark); color: #94a3b8; padding: 60px 8% 20px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h3 { color: white; margin-bottom: 20px; }
+        .footer-col a { display: block; color: #94a3b8; text-decoration: none; margin-bottom: 10px; }
+
+        /* =========================================
+           নতুন ফুল-স্ক্রিন লোডিং ওভারলে (Loading Overlay)
+           ========================================= */
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none; /* 처음에는 숨김 */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            width: 60px; height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #overlayProgressBar {
+            width: 0%; height: 100%;
+            background: var(--primary);
+            transition: width 0.2s;
+            border-radius: 10px;
+        }
+        .progress-bg {
+            width: 80%; max-width: 400px; height: 12px;
+            background: #334155; border-radius: 10px;
+            margin-top: 20px; overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar & Navbar Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- লোডিং ওভারলে (প্রসেসিং এর সময় স্ক্রল বন্ধ রাখার জন্য) -->
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <h2>Processing Video...</h2>
+        <p style="color: #cbd5e1; margin-top: 10px;">Please do not scroll or close this tab.<br>Processing time depends on your device speed.</p>
+        <div class="progress-bg">
+            <div id="overlayProgressBar"></div>
+        </div>
+        <p id="overlayPercent" style="margin-top: 10px; font-weight: bold; color: var(--primary);">0%</p>
+    </div>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Enhance Your Videos with <span>AI Precision</span></h1>
+            <p>Transform your low-resolution videos into stunning HD quality instantly.</p>
+            
+            <div class="upload-box">
+                <p style="color: var(--text-light); margin-bottom: 15px;">Select a video to upscale</p>
+                <input type="file" id="videoInput" accept="video/mp4, video/webm">
+                <button class="upload-btn" onclick="document.getElementById('videoInput').click()">Browse Video</button>
+                
+                <a id="downloadLink" style="display:none; margin-top: 20px; background: #10b981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto;" download="minami_upscaled.webm">⬇ Download Enhanced Video</a>
+                
+                <video id="videoElement" style="display:none;"></video>
+                <canvas id="canvasElement" style="display:none;"></canvas>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="slider-container">
+                <img class="img-before" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" style="filter: blur(4px) contrast(80%);" alt="Before">
+                <img class="img-after" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="After">
+                <div class="slider-line"></div>
+                <div class="slider-button">↔</div>
+                <input type="range" min="0" max="100" value="50" class="slider" id="sliderRange">
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2>How to enhance your video</h2>
+        <div class="steps">
+            <div class="step-card"><div class="step-icon">📁</div><h3>1. Upload</h3><p>Select any standard video.</p></div>
+            <div class="step-card"><div class="step-icon">⚙️</div><h3>2. Processing</h3><p>Browser renders frames to 2x.</p></div>
+            <div class="step-card"><div class="step-icon">💾</div><h3>3. Download</h3><p>Save your HD video.</p></div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <h2>High-Quality Results</h2>
+        <div class="gallery-grid">
+            <img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=500&q=80" alt="1">
+            <img src="https://images.unsplash.com/photo-1682686581551-867e0b208bd1?w=500&q=80" alt="2">
+            <img src="https://images.unsplash.com/photo-1682695796954-bad0d0f59ff1?w=500&q=80" alt="3">
+            <img src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=500&q=80" alt="4">
+            <img src="https://images.unsplash.com/photo-1682695797221-8164ff1fafc9?w=500&q=80" alt="5">
+            <img src="https://images.unsplash.com/photo-1682687220198-88e9bdea9931?w=500&q=80" alt="6">
+            <img src="https://images.unsplash.com/photo-1682687982185-531d0b7f303c?w=500&q=80" alt="7">
+            <img src="https://images.unsplash.com/photo-1682686581362-796145f0e123?w=500&q=80" alt="8">
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2 style="text-align: center; margin-bottom: 40px;">FAQ</h2>
+        <details><summary>Why does my phone lag during upscaling?</summary><p>This is a browser-based tool. It uses your device's processor (CPU) to render every frame. Please avoid using other apps while it processes.</p></details>
+        <details><summary>Is it completely free?</summary><p>Yes, 100% free.</p></details>
+        <details><summary>Will there be a watermark?</summary><p>No watermark at all.</p></details>
+        <details><summary>Why is there no audio?</summary><p>Browsers cannot process audio and video simultaneously in this specific Canvas method. Output will be a silent video.</p></details>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="top-bar.js"></script>
+    <script src="site-footer.js"></script>
+    
+    <script>
+        // Before/After Slider
+        const slider = document.getElementById('sliderRange');
+        const imgAfter = document.querySelector('.img-after');
+        const sliderLine = document.querySelector('.slider-line');
+        const sliderButton = document.querySelector('.slider-button');
+
+        slider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            imgAfter.style.clipPath = `inset(0 0 0 ${value}%)`;
+            sliderLine.style.left = `${value}%`;
+            sliderButton.style.left = `${value}%`;
+        });
+
+        // Video Upscaler Logic
+        const videoInput = document.getElementById('videoInput');
+        const videoElement = document.getElementById('videoElement');
+        const canvasElement = document.getElementById('canvasElement');
+        const downloadLink = document.getElementById('downloadLink');
+        const uploadBtn = document.querySelector('.upload-btn');
+        
+        // Overlay Elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const overlayProgressBar = document.getElementById('overlayProgressBar');
+        const overlayPercent = document.getElementById('overlayPercent');
+
+        videoInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // ১. লোডিং স্ক্রিন অন করা
+            loadingOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // স্ক্রল বন্ধ করা
+            uploadBtn.disabled = true;
+            downloadLink.style.display = 'none';
+
+            videoElement.src = URL.createObjectURL(file);
+            
+            const ctx = canvasElement.getContext('2d');
+            const scaleFactor = 2; // 2x Resolution
+
+            if (videoElement.readyState < 1) {
+                await new Promise(resolve => videoElement.addEventListener('loadedmetadata', resolve));
+            }
+
+            // রেজোলিউশন সেট করা
+            canvasElement.width = videoElement.videoWidth * scaleFactor;
+            canvasElement.height = videoElement.videoHeight * scaleFactor;
+
+            // ব্রাউজার সাপোর্ট চেক
+            if (!MediaRecorder.isTypeSupported('video/webm')) {
+                alert("Your browser does not support video rendering. Please use Google Chrome.");
+                resetUI();
+                return;
+            }
+
+            const stream = canvasElement.captureStream(30); 
+            const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
+
+            mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.style.display = 'block';
+                
+                // লোডিং স্ক্রিন অফ করা
+                loadingOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto'; // স্ক্রল চালু করা
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = "Process Another Video";
+            };
+
+            videoElement.currentTime = 0;
+            videoElement.muted = true; // অডিও বন্ধ
+            
+            try {
+                await videoElement.play();
+                mediaRecorder.start();
+
+                function drawFrame() {
+                    if (!videoElement.paused && !videoElement.ended) {
+                        // ক্যানভাসে ফ্রেম আঁকা
+                        ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+                        
+                        // প্রোগ্রেস আপডেট
+                        const progress = Math.floor((videoElement.currentTime / videoElement.duration) * 100);
+                        overlayProgressBar.style.width = progress + '%';
+                        overlayPercent.innerText = progress + '%';
+
+                        requestAnimationFrame(drawFrame);
+                    } else if (videoElement.ended) {
+                        mediaRecorder.stop();
+                        videoElement.pause();
+                    }
+                }
+                drawFrame();
+            } catch (err) {
+                alert("Error processing video: " + err.message);
+                resetUI();
+            }
+        });
+
+        function resetUI() {
+            loadingOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            uploadBtn.disabled = false;
+        }
+    </script>
+</body>
+</html>

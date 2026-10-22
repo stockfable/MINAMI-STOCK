@@ -1,879 +1,517 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Dashboard - MINAMI STOCK</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contributor Hub - MINAMI STOCK</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<style>
+:root{--ink:#1e1e1e;--mute:#6b6b6b;--line:#e1e1e1;--soft:#f5f5f5;--blue:#1473e6;--green:#2d9d78;--bad:#d7373f;--pink:#e34ba9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#fff;color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;color:inherit;background:none;border:0}
+input,select,textarea{font:inherit;color:inherit}
+.hub-bar{display:flex;align-items:center;gap:8px;padding:0 20px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.hub-bar::-webkit-scrollbar{display:none}
+.hub-tab{padding:15px 14px 12px;font-size:14px;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;white-space:nowrap}
+.hub-tab.on{color:var(--ink);border-color:var(--blue)}
+.hub-bar .sp{flex:1}
+.pill{border:1px solid var(--ink);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;white-space:nowrap}
+.pill.fill{background:var(--blue);border-color:var(--blue);color:#fff}
+.view{display:none}.view.on{display:block}
+.msg{padding:60px 20px;text-align:center;color:var(--mute)}
+.msg a{color:var(--blue);font-weight:600}
 
-        body {
-            background-color: #ffffff;
-            color: #1e293b;
-            padding-bottom: 80px;
-        }
+/* overview */
+.stats{display:flex;align-items:center;gap:30px;padding:16px 24px;background:var(--soft);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.stats .grp{flex:1;display:flex;gap:40px;flex-wrap:wrap}
+.stat small{display:block;font-size:11px;color:var(--mute);margin-bottom:3px}
+.stat b{font-size:22px;font-weight:300}
+.stats select{border:1px solid var(--line);border-radius:4px;padding:7px 10px;background:#fff;font-size:13px}
+.trend{padding:22px 24px 8px;text-align:center}
+.trend h3{font-size:14px;font-weight:400;color:var(--mute);margin-bottom:8px}
+.legend{display:flex;justify-content:center;gap:18px;font-size:11px;color:var(--mute);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+#chart{width:100%;height:210px}
+.lib{padding:18px 24px 60px}
+.lib-head{display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:14px}
+.lib-head h2{font-size:18px;font-weight:400;color:var(--mute);margin-right:auto}
+.ftab{padding:11px 12px;font-size:13px;color:var(--mute);border-bottom:2px solid transparent}
+.ftab.on{color:var(--blue);border-color:var(--blue)}
+.tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.tools input,.tools select{border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:13px;background:#fff}
+.tools input{flex:1;min-width:150px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.pcard{background:#fafafa;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.pcard .im{height:150px;background:#ececec center/contain no-repeat;position:relative}
+.pcard .ft{padding:9px 12px 11px;background:#fff;font-size:11px;color:var(--mute)}
+.pcard .ft b{display:block;font-size:15px;font-weight:400;color:var(--ink);margin-top:3px}
+.pcard .tt{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.tag{position:absolute;top:6px;left:6px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.7);color:#fff}
+.tag.draft{background:#b45309}
+.none{grid-column:1/-1;text-align:center;color:var(--mute);padding:50px 10px}
 
-        /* ★★★ TOP NAVBAR ★★★ */
-        .dashboard-navbar {
-            background: #ffffff;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .navbar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .navbar-logo {
-            font-size: 16px;
-            font-weight: 800;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .navbar-logo i {
-            color: #d97706;
-        }
-        .navbar-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .nav-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-upload-nav {
-            background: #fbbf24;
-            color: #0a1628;
-        }
-        .btn-upload-nav:hover {
-            background: #f59e0b;
-        }
-        .btn-release {
-            background: transparent;
-            color: #1e293b;
-            border: 1px solid #cbd5e1;
-        }
-        .btn-release:hover {
-            background: #f1f5f9;
-        }
-        .nav-icon {
-            color: #64748b;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .nav-icon:hover {
-            color: #0f172a;
-        }
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #fbbf24;
-            color: #0a1628;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        /* ★★★ STATS BAR ★★★ */
-        .stats-bar {
-            background: #f8fafc;
-            padding: 15px 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 10px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 5px;
-            border-right: 1px solid #e2e8f0;
-        }
-        .stat-item:last-child {
-            border-right: none;
-        }
-        .stat-label {
-            font-size: 10px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-        .stat-value {
-            font-size: 18px;
-            font-weight: 800;
-            color: #0f172a;
-        }
-        .stat-value.green {
-            color: #10b981;
-        }
-        .stat-value.yellow {
-            color: #d97706;
-        }
-
-        /* ★★★ PROMO BANNER ★★★ */
-        .promo-banner {
-            background: #1e40af;
-            color: #fff;
-            padding: 10px 20px;
-            font-size: 12.5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 15px;
-            border-radius: 8px;
-        }
-        .promo-banner a {
-            color: #fbbf24;
-            text-decoration: underline;
-            font-weight: 700;
-        }
-        .promo-close {
-            background: transparent;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* ★★★ CHART SECTION ★★★ */
-        .chart-section {
-            background: #f8fafc;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .chart-header h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .chart-legend {
-            display: flex;
-            gap: 15px;
-            font-size: 11px;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .legend-dot.earnings { background: #3b82f6; }
-        .legend-dot.downloads { background: #ef4444; }
-        .chart-view-all {
-            color: #d97706;
-            font-size: 11px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Simple Bar Chart */
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            padding: 10px 0;
-            gap: 4px;
-            border-bottom: 1px solid #e2e8f0;
-            border-left: 1px solid #e2e8f0;
-            position: relative;
-        }
-        .bar-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            height: 100%;
-            position: relative;
-        }
-        .bar {
-            width: 100%;
-            max-width: 30px;
-            background: linear-gradient(180deg, #3b82f6, #1e40af);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.5s ease;
-            min-height: 4px;
-            position: relative;
-        }
-        .bar:hover {
-            background: #fbbf24;
-        }
-        .bar-label {
-            font-size: 8px;
-            color: #64748b;
-            margin-top: 5px;
-            white-space: nowrap;
-            transform: rotate(-45deg);
-            transform-origin: left;
-        }
-        .chart-y-axis {
-            position: absolute;
-            left: -35px;
-            top: 0;
-            bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 9px;
-            color: #64748b;
-            text-align: right;
-        }
-
-        /* ★★★ PORTFOLIO SECTION ★★★ */
-        .portfolio-section {
-            margin: 15px;
-        }
-        .portfolio-tabs {
-            display: flex;
-            gap: 5px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            margin-bottom: 15px;
-        }
-        .portfolio-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .tab-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background: transparent;
-            border: none;
-            color: #64748b;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
-        .tab-btn.active {
-            color: #d97706;
-            border-bottom: 2px solid #d97706;
-        }
-        .tab-btn:hover {
-            color: #0f172a;
-        }
-
-        /* Filter Bar */
-        .filter-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .filter-input {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: #1e293b;
-            font-size: 12px;
-            outline: none;
-            flex: 1;
-            min-width: 120px;
-        }
-        .filter-input:focus {
-            border-color: #fbbf24;
-        }
-        .filter-select {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: #1e293b;
-            font-size: 12px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        /* ★★★ PRODUCT GRID ★★★ */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .product-card {
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            transition: 0.3s;
-            position: relative;
-        }
-        .product-card:hover {
-            border-color: #fbbf24;
-            transform: translateY(-3px);
-        }
-        .product-img-wrap {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            overflow: hidden;
-            background: #f1f5f9;
-        }
-        .product-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: 0.5s;
-        }
-        .product-card:hover .product-img-wrap img {
-            transform: scale(1.05);
-        }
-        .product-checkbox {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            width: 18px;
-            height: 18px;
-            border: 2px solid #fff;
-            border-radius: 4px;
-            cursor: pointer;
-            background: rgba(0,0,0,0.3);
-        }
-        .free-badge {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: #fff;
-            color: #0a1628;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 800;
-        }
-        .product-info {
-            padding: 10px;
-        }
-        .product-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            margin-bottom: 5px;
-        }
-        .product-stats .label {
-            color: #64748b;
-            text-transform: uppercase;
-            font-size: 9px;
-            letter-spacing: 0.5px;
-        }
-        .product-stats .value {
-            color: #0f172a;
-            font-weight: 700;
-        }
-        .product-stats .value.earn {
-            color: #10b981;
-        }
-
-        /* Empty State */
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px 20px;
-            color: #64748b;
-        }
-        .empty-state i {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: #cbd5e1;
-        }
-
-        /* Loading */
-        .loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
-        }
-        .loading i {
-            animation: spin 1s linear infinite;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ★★★ MOBILE RESPONSIVE ★★★ */
-        @media (max-width: 600px) {
-            .stats-bar {
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                padding: 10px 8px;
-            }
-            .stat-value {
-                font-size: 14px;
-            }
-            .stat-label {
-                font-size: 8px;
-            }
-            .chart-section {
-                margin: 10px;
-                padding: 12px;
-            }
-            .portfolio-section {
-                margin: 10px;
-            }
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            .product-info {
-                padding: 6px;
-            }
-            .product-stats .label {
-                font-size: 7px;
-            }
-            .product-stats .value {
-                font-size: 10px;
-            }
-            .nav-btn {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
-            .navbar-logo {
-                font-size: 13px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .product-grid {
-                gap: 5px;
-            }
-            .product-stats .label {
-                font-size: 6px;
-            }
-            .product-stats .value {
-                font-size: 9px;
-            }
-        }
-    
-        /* ★★★ BACK BUTTON (BOTTOM) ★★★ */
-        .back-bar {
-            position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
-            padding: 10px 16px;
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.06);
-        }
-        .back-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; max-width: 520px; margin: 0 auto;
-            padding: 12px; border: none; border-radius: 10px;
-            background: #0a1628; color: #fff;
-            font-size: 14px; font-weight: 700; cursor: pointer;
-        }
-        .back-btn:active { transform: scale(0.98); }
+/* upload */
+.up{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 140px)}
+.up-l{padding:16px 24px 40px;border-right:1px solid var(--line);min-width:0}
+.up-tools{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.up-tools .sp{flex:1}
+.add{border:1px solid var(--blue);color:var(--blue);font-weight:700;border-radius:5px;padding:7px 16px;font-size:13px}
+.add:hover{background:var(--blue);color:#fff}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:5px;align-content:start}
+.d{position:relative;aspect-ratio:16/10;background:#eee center/cover;border:2px solid transparent;border-radius:4px;cursor:pointer;overflow:hidden}
+.d.sel{border-color:var(--blue)}.d.bad{border-color:var(--bad)}.d.done{opacity:.45}
+.d .ck{position:absolute;top:5px;left:5px;width:19px;height:19px;border-radius:4px;background:rgba(255,255,255,.85);border:1px solid #999;display:grid;place-items:center;font-size:10px;color:#fff}
+.d.sel .ck{background:var(--blue);border-color:var(--blue)}
+.d .kd{position:absolute;bottom:5px;left:5px;font-size:9px;font-weight:700;background:rgba(0,0,0,.75);color:#fff;padding:2px 6px;border-radius:3px}
+.d .st{position:absolute;bottom:5px;right:5px;font-size:9px;font-weight:700;color:#fff;background:var(--green);padding:2px 6px;border-radius:3px}
+.d .st.er{background:var(--bad)}
+.d .pg{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;font-size:11px;font-weight:700}
+.d .pg i{display:block;height:4px;width:1%;background:#fff;align-self:flex-start;transition:width .2s}
+.panel{padding:18px 20px 40px;background:var(--soft);position:sticky;top:0;max-height:100vh;overflow-y:auto}
+.f{margin-bottom:15px}
+.f>label,.f .lab{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--mute);margin-bottom:6px}
+.f select,.f input[type=text],.f textarea{width:100%;border:1px solid #ccc;border-radius:4px;padding:9px 10px;font-size:14px;background:#fff}
+.f textarea{resize:vertical;min-height:68px}
+.f select:focus,.f input:focus,.f textarea:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.ck-row{display:flex;align-items:center;gap:9px;font-size:13px;margin-bottom:12px;cursor:pointer}
+.seg{display:inline-flex;border:1px solid #ccc;border-radius:4px;overflow:hidden}
+.seg button{padding:7px 18px;font-size:13px;font-weight:600;color:var(--mute);background:#fff}
+.seg button.on{background:var(--blue);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips span{font-size:12px;background:#fff;border:1px solid #ccc;border-radius:14px;padding:3px 6px 3px 10px}
+.chips span i{margin-left:6px;cursor:pointer;color:var(--mute);font-style:normal}
+.acts{display:flex;gap:10px;margin-top:18px}
+.acts button{flex:1;padding:11px;border-radius:5px;font-weight:700;font-size:14px;border:1px solid #bbb;background:#fff}
+.acts .go{background:var(--green);border-color:var(--green);color:#fff}
+.acts button:disabled{opacity:.5}
+.nosel{color:var(--mute);text-align:center;padding:50px 10px;font-size:14px}
+#status{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin-top:14px}
+.ok{color:#15803d}.er{color:var(--bad)}
+.bar{height:6px;background:#ddd;border-radius:3px;overflow:hidden;margin-top:12px;display:none}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2100;align-items:center;justify-content:center;padding:16px}
+.box{background:#fff;border-radius:8px;padding:22px;width:100%;max-width:400px}
+.box h3{margin-bottom:6px}.box p{font-size:13px;color:var(--mute);margin-bottom:14px}
+@media(max-width:900px){.up{grid-template-columns:1fr}.up-l{border-right:0}.panel{position:static;max-height:none}}
 </style>
 </head>
 <body>
 
-    <!-- ★★★ TOP NAVBAR ★★★ -->
-    <div class="dashboard-navbar">
-        <div class="navbar-left">
-            <div class="navbar-logo">
-                <i class="fas fa-chart-line"></i> Seller Dashboard
-            </div>
-        </div>
-        <div class="navbar-right">
-            <a href="upload.html" class="nav-btn btn-upload-nav" onclick="window.location.href='upload.html'; return false;">
-                <i class="fas fa-upload"></i> Upload
-            </a>
-            <button class="nav-btn btn-release">
-                Create a release
-            </button>
-            <i class="fas fa-bell nav-icon"></i>
-            <div class="nav-avatar" id="navAvatar">U</div>
-            <i class="fas fa-bars nav-icon" onclick="window.location.href='index.html'"></i>
-        </div>
+<div id="site-topbar"></div>
+
+<nav class="hub-bar" id="nav">
+  <button class="hub-tab on" data-v="overview">Overview</button>
+  <button class="hub-tab" data-v="upload">Add files <small id="cDraft"></small></button>
+  <span class="sp"></span>
+  <button class="pill fill" id="goUpload">Upload</button>
+</nav>
+
+<!-- ============ OVERVIEW ============ -->
+<section class="view on" id="v-overview">
+  <div id="authMsg" class="msg" style="display:none">Sign in to see your hub. <a href="login.html">Go to login</a></div>
+  <div id="ovBody">
+    <div class="stats">
+      <div class="stat"><small>Period</small>
+        <select id="range"><option value="year">This year</option><option value="90">Last 90 days</option><option value="all">All time</option></select></div>
+      <div class="grp">
+        <div class="stat"><small>Total downloads</small><b id="sDl">0</b></div>
+        <div class="stat"><small>Total earned</small><b id="sEarn">$0.00</b></div>
+        <div class="stat"><small>Files live</small><b id="sFiles">0</b></div>
+      </div>
+      <div class="stat" style="text-align:right"><small>Ready to pay out</small><b id="sAvail">$0.00</b></div>
     </div>
-
-    <!-- ★★★ STATS BAR ★★★ -->
-    <div class="stats-bar">
-        <div class="stat-item">
-            <div class="stat-label">Time Frame</div>
-            <select class="filter-select" style="font-size:11px; padding:4px; margin-top:4px;" id="timeFrame">
-                <option>This year</option>
-                <option>This month</option>
-                <option>This week</option>
-                <option>All time</option>
-            </select>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Downloads</div>
-            <div class="stat-value yellow" id="totalDownloads">0</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Earnings</div>
-            <div class="stat-value green" id="totalEarnings">$0.00</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Available Earnings</div>
-            <div class="stat-value" style="color:#64748b;">$0.00 →</div>
-        </div>
+    <div class="trend">
+      <h3>Last 12 weeks</h3>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Earnings: <span id="lE">$0.00</span></span><span><i style="background:var(--pink)"></i>Downloads: <span id="lD">0</span></span></div>
+      <svg id="chart" viewBox="0 0 720 210" preserveAspectRatio="none"></svg>
     </div>
-
-    <!-- ★★★ PROMO BANNER ★★★ -->
-    <div class="promo-banner" id="promoBanner">
-        <span>Learn more about how to qualify for our <a href="#">CC Redemption Code Program</a></span>
-        <button class="promo-close" onclick="document.getElementById('promoBanner').style.display='none'">✕</button>
+    <div class="lib">
+      <div class="lib-head">
+        <h2>My library <span id="libCount" style="font-size:13px"></span></h2>
+        <button class="ftab on" data-f="all">Everything</button>
+        <button class="ftab" data-f="Photo">Photos</button>
+        <button class="ftab" data-f="Video">Videos</button>
+        <button class="ftab" data-f="Vlog">Vlogs</button>
+      </div>
+      <div class="tools">
+        <input type="text" id="q" placeholder="Search by title">
+        <select id="sort"><option value="dl">Most downloaded</option><option value="new">Newest first</option><option value="name">Title A-Z</option></select>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
     </div>
+  </div>
+</section>
 
-    <!-- ★★★ CHART SECTION ★★★ -->
-    <div class="chart-section">
-        <div class="chart-header">
-            <h3>12-Week Trend</h3>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <div class="legend-dot earnings"></div>
-                    <span>Earnings: <span id="legendEarnings">$0.00</span></span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot downloads"></div>
-                    <span>Downloads: <span id="legendDownloads">0</span></span>
-                </div>
-            </div>
-            <a href="#" class="chart-view-all">View My Statistics</a>
-        </div>
-
-        <div class="bar-chart" id="barChart">
-            <!-- Bars will be generated by JavaScript -->
-        </div>
+<!-- ============ UPLOAD ============ -->
+<section class="view" id="v-upload">
+  <div class="up">
+    <div class="up-l">
+      <div class="up-tools">
+        <label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="selAll"> Select all</label>
+        <span class="sp"></span>
+        <button class="add" id="delTop" style="border-color:var(--bad);color:var(--bad);margin-right:8px"><i class="fas fa-trash"></i> Delete</button><button class="add" id="addBtn"><i class="fas fa-plus"></i> Add files</button>
+      </div>
+      <div class="dgrid" id="dgrid"></div>
+      <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden>
+      <div class="bar" id="bar"><i id="barI"></i></div>
+      <div id="status"></div>
     </div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</section>
 
-    <!-- ★★★ PORTFOLIO SECTION ★★★ -->
-    <div class="portfolio-section">
-        <div class="portfolio-tabs">
-            <button class="tab-btn active" data-tab="all">All (<span id="allCount">0</span>)</button>
-            <button class="tab-btn" data-tab="illustrations">Illustrations</button>
-            <button class="tab-btn" data-tab="photos">Photos</button>
-            <button class="tab-btn" data-tab="vectors">Vectors</button>
-            <button class="tab-btn" data-tab="videos">Videos</button>
-            <button class="tab-btn" data-tab="collections">Collections</button>
-        </div>
+<div id="ms-footer"></div>
 
-        <div class="filter-bar">
-            <input type="text" class="filter-input" placeholder="🔍 File #" id="searchFile">
-            <select class="filter-select" id="filterPrice">
-                <option value="all">Filter by Price Tier</option>
-                <option value="free">Free</option>
-                <option value="paid">Paid</option>
-            </select>
-            <select class="filter-select" id="sortBy">
-                <option value="downloads">Sort by Downloads</option>
-                <option value="views">Sort by Views</option>
-                <option value="earnings">Sort by Earnings</option>
-                <option value="name">Sort by Name</option>
-            </select>
-        </div>
+<div class="modal" id="relModal">
+  <div class="box">
+    <h3>Attach a release</h3>
+    <p>If the file shows recognisable people or private property, attach the signed release.</p>
+    <div class="f"><label>Release type</label><select id="relType"><option>Model</option><option>Property</option></select></div>
+    <div class="f"><label>Reference name or ID</label><input type="text" id="relName" placeholder="e.g. Jane Doe 2026"></div>
+    <div class="f"><label>Signed file (PDF or image)</label><input type="file" id="relFile" accept=".pdf,image/*"></div>
+    <div class="acts"><button id="relCancel">Cancel</button><button class="go" id="relOk">Attach</button></div>
+  </div>
+</div>
 
-        <div class="product-grid" id="productGrid">
-            <div class="loading">
-                <i class="fas fa-spinner"></i>
-                <p>Loading your portfolio...</p>
-            </div>
-        </div>
-    </div>
+<script>
+/* ---------- config ---------- */
+const CLOUD_NAME="yt1jzpnb", UPLOAD_PRESET="minami_unsigned", FOLDER="minami-stock";
+const FB={apiKey:"AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",authDomain:"creoverse-stock.firebaseapp.com",projectId:"creoverse-stock",storageBucket:"creoverse-stock.firebasestorage.app",messagingSenderId:"128072247505",appId:"1:128072247505:web:47e58c3a140f4e858bbdf0"};
+const CATS=["Travel","Nature","Business","Technology","People","Food","AI Generated","Animals","Sports","Mockups","Backgrounds","Abstract","City","Architecture","Fashion","Health","Education","Music","Cars","Festival","Space","Flowers","Textures","Posters","Illustrations","Icons","3D","Typography","Night"];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>"$"+(+n||0).toFixed(2);
 
-    <!-- ★★★ BACK BUTTON ★★★ -->
-    <div class="back-bar">
-        <button type="button" class="back-btn" onclick="if (document.referrer && history.length > 1) { history.back(); } else { window.location.href = 'index.html'; }">
-            <i class="fas fa-arrow-left"></i> Back
-        </button>
-    </div>
+let db=null,user=null;
+try{
+  if(!firebase.apps.length) firebase.initializeApp(FB);
+  db=firebase.firestore();
+}catch(e){console.error(e);}
 
-    <!-- ★★★ FIREBASE SCRIPTS ★★★ -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { 
-            getAuth,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            query, 
-            where, 
-            getDocs 
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+/* ---------- tabs ---------- */
+function show(v){
+  document.querySelectorAll(".hub-tab").forEach(t=>t.classList.toggle("on",t.dataset.v===v));
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+}
+$("nav").onclick=e=>{const b=e.target.closest(".hub-tab");if(b)show(b.dataset.v);};
+$("goUpload").onclick=()=>show("upload");
 
-        // ★ আপনার Firebase Config এখানে বসান ★
-        const firebaseConfig = {
-            apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs",
-            authDomain: "creoverse-stock.firebaseapp.com",
-            databaseURL: "https://creoverse-stock-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "creoverse-stock",
-            storageBucket: "creoverse-stock.firebasestorage.app",
-            messagingSenderId: "128072247505",
-            appId: "1:128072247505:web:47e58c3a140f4e858bbdf0"
-        };
+/* ---------- overview data ---------- */
+let assets=[],dls=[],filter="all";
+const tsToDate=t=>t&&t.toDate?t.toDate():(t?new Date(t):null);
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+async function loadOverview(){
+  if(!db||!user){return;}
+  assets=[];dls=[];
+  try{
+    const s=await db.collection("stockphoto").where("ownerId","==",user.uid).get();
+    s.forEach(d=>{const x=d.data();assets.push({id:d.id,title:x.title||"Untitled",thumb:x.thumb||x.imageUrl||x.url,kind:x.fileType==="Video"?"Video":"Photo",status:x.status||"published",at:tsToDate(x.createdAt),dl:+x.downloads||0});});
+  }catch(e){console.warn("stockphoto",e);}
+  try{
+    const s=await db.collection("vlogs").where("ownerId","==",user.uid).get();
+    s.forEach(d=>{const x=d.data();assets.push({id:d.id,title:x.title||"Untitled",thumb:x.thumb,kind:"Vlog",status:x.status||"published",at:tsToDate(x.createdAt),dl:+x.downloads||0});});
+  }catch(e){console.warn("vlogs",e);}
+  try{
+    const s=await db.collection("downloads").where("ownerId","==",user.uid).get();
+    s.forEach(d=>{const x=d.data();dls.push({asset:x.photoId||x.assetId||x.imageId||x.itemId||null,at:tsToDate(x.createdAt||x.date||x.time),earn:+(x.earning||x.earnings||x.amount||0),paid:x.paid===true});});
+  }catch(e){console.warn("downloads",e);}
+  // per-asset counts from the downloads log, falling back to the stored number
+  const cnt={};dls.forEach(d=>{if(d.asset)cnt[d.asset]=(cnt[d.asset]||0)+1;});
+  assets.forEach(a=>{if(cnt[a.id])a.dl=cnt[a.id];});
+  drawStats();drawChart();drawLib();
+}
 
-        let allProducts = [];
-        let currentUser = null;
+function inRange(d){
+  const r=$("range").value; if(r==="all"||!d.at)return true;
+  const now=new Date();
+  if(r==="year")return d.at.getFullYear()===now.getFullYear();
+  return (now-d.at)/864e5<=90;
+}
+function drawStats(){
+  const list=dls.filter(inRange);
+  const totalDl=dls.length?list.length:assets.reduce((n,a)=>n+a.dl,0);
+  const earn=list.reduce((n,d)=>n+d.earn,0);
+  const avail=dls.filter(d=>!d.paid).reduce((n,d)=>n+d.earn,0);
+  $("sDl").textContent=totalDl;$("sEarn").textContent=money(earn);
+  $("sFiles").textContent=assets.filter(a=>a.status==="published").length;
+  $("sAvail").textContent=money(avail);
+}
+$("range").onchange=drawStats;
 
-        // ===== CHECK AUTH STATE =====
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const name = user.displayName || user.email?.split('@')[0] || 'U';
-                document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
-                
-                // Load Dashboard Data
-                await loadDashboardData(user.uid);
-            } else {
-                // Not logged in -> Redirect to login
-                window.location.href = 'login.html';
-            }
-        });
+function drawChart(){
+  const W=720,H=210,L=44,R=30,T=14,B=26,pw=W-L-R,ph=H-T-B;
+  const now=new Date(),weeks=[];
+  for(let i=11;i>=0;i--){const e=new Date(now);e.setDate(now.getDate()-i*7);weeks.push({end:e,earn:0,n:0});}
+  dls.forEach(d=>{if(!d.at)return;const diff=Math.floor((now-d.at)/(7*864e5));if(diff>=0&&diff<12){const w=weeks[11-diff];w.earn+=d.earn;w.n++;}});
+  const maxE=Math.max(1,...weeks.map(w=>w.earn)),maxD=Math.max(1,...weeks.map(w=>w.n));
+  $("lE").textContent=money(weeks.reduce((n,w)=>n+w.earn,0));
+  $("lD").textContent=weeks.reduce((n,w)=>n+w.n,0);
+  const bw=pw/12;let g="";
+  for(let i=0;i<=4;i++){const y=T+ph-ph*i/4;g+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="#eee"/><text x="${L-6}" y="${y+3}" font-size="9" fill="#999" text-anchor="end">${money(maxE*i/4).replace(".00","")}</text><text x="${W-R+6}" y="${y+3}" font-size="9" fill="#999">${Math.round(maxD*i/4)}</text>`;}
+  let bars="",pts=[],lab="";
+  weeks.forEach((w,i)=>{
+    const x=L+i*bw,h=ph*w.earn/maxE;
+    bars+=`<rect x="${x+bw*.2}" y="${T+ph-h}" width="${bw*.6}" height="${Math.max(h,1)}" fill="#1473e6"/>`;
+    pts.push((x+bw/2)+","+(T+ph-ph*w.n/maxD));
+    if(i%2===0)lab+=`<text x="${x+bw/2}" y="${H-8}" font-size="9" fill="#999" text-anchor="middle">${w.end.toLocaleDateString("en",{month:"short",day:"numeric"})}</text>`;
+  });
+  $("chart").innerHTML=g+bars+`<polyline points="${pts.join(" ")}" fill="none" stroke="#e34ba9" stroke-width="1.5"/>`+pts.map(p=>`<circle cx="${p.split(",")[0]}" cy="${p.split(",")[1]}" r="2.5" fill="#fff" stroke="#e34ba9"/>`).join("")+lab;
+}
 
-        // ===== LOAD DASHBOARD DATA =====
-        async function loadDashboardData(userId) {
-            const grid = document.getElementById('productGrid');
-            
-            try {
-                // Query: Only get products where sellerId == current user's uid
-                const q = query(
-                    collection(db, "products"), 
-                    where("sellerId", "==", userId)
-                );
-                
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    grid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-box-open"></i>
-                            <p>No products found. Upload your first product!</p>
-                            <a href="upload.html" style="color:#d97706; text-decoration:none; font-weight:700; margin-top:10px; display:inline-block;">Upload Now →</a>
-                        </div>
-                    `;
-                    updateStats(0, 0, 0);
-                    return;
-                }
+function drawLib(){
+  const q=$("q").value.trim().toLowerCase(),s=$("sort").value;
+  let v=assets.filter(a=>(filter==="all"||a.kind===filter)&&(!q||a.title.toLowerCase().includes(q)));
+  v.sort(s==="dl"?(a,b)=>b.dl-a.dl:s==="name"?(a,b)=>a.title.localeCompare(b.title):(a,b)=>(b.at||0)-(a.at||0));
+  $("libCount").textContent="("+v.length+")";
+  $("pgrid").innerHTML=v.length?v.map(a=>`<div class="pcard"><div class="im" style="background-image:url('${esc(a.thumb||"")}')"><span class="tag ${a.status==="draft"?"draft":""}">${a.status==="draft"?"Draft":a.kind}</span></div><div class="ft"><div class="tt">${esc(a.title)}</div>Downloads<b>${a.dl}</b></div></div>`).join(""):'<div class="none">Nothing here yet. Use Add files to publish your first one.</div>';
+}
+document.querySelector(".lib-head").onclick=e=>{const b=e.target.closest(".ftab");if(!b)return;filter=b.dataset.f;document.querySelectorAll(".ftab").forEach(x=>x.classList.toggle("on",x===b));drawLib();};
+$("q").oninput=drawLib;$("sort").onchange=drawLib;
 
-                allProducts = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    allProducts.push({
-                        id: doc.id,
-                        ...data,
-                        downloads: data.downloads || 0,
-                        views: data.views || 0,
-                        earnings: data.earnings || 0,
-                        price: data.price || 0
-                    });
-                });
+/* ---------- upload (files are stored per account in Firestore: uploadDrafts) ---------- */
+const DR="uploadDrafts";
+let items=[],sel=new Set(),tid=1,saveT=null;const dirty=new Set();
+const isLive=i=>i.state!=="published";
+const cur=()=>items.find(i=>sel.has(i.id)&&isLive(i)&&!i.up);
+const chosen=()=>items.filter(i=>sel.has(i.id)&&isLive(i)&&!i.up);
+function slog(m,c){const d=document.createElement("div");d.className=c||"";d.textContent=m;$("status").appendChild(d);}
 
-                // Calculate Totals
-                const totalDownloads = allProducts.reduce((sum, p) => sum + p.downloads, 0);
-                const totalEarnings = allProducts.reduce((sum, p) => sum + p.earnings, 0);
-                const totalViews = allProducts.reduce((sum, p) => sum + p.views, 0);
+function cloud(file,onP){
+  return new Promise((res,rej)=>{
+    const fd=new FormData();fd.append("file",file);fd.append("upload_preset",UPLOAD_PRESET);fd.append("folder",FOLDER);
+    const t=file.type.startsWith("video/")?"video":file.type==="application/pdf"?"raw":"image";
+    const x=new XMLHttpRequest();x.open("POST","https://api.cloudinary.com/v1_1/"+CLOUD_NAME+"/"+t+"/upload");
+    x.upload.onprogress=e=>{if(e.lengthComputable&&onP)onP(Math.round(e.loaded/e.total*100));};
+    x.onload=()=>{if(x.status>=200&&x.status<300){try{res(JSON.parse(x.responseText));}catch(e){rej(new Error("Cloudinary sent an unreadable reply"));}}else{let m="Cloudinary error ("+x.status+")";try{m+=": "+JSON.parse(x.responseText).error.message;}catch(e){}rej(new Error(m));}};
+    x.onerror=()=>rej(new Error("Network error while sending to Cloudinary"));
+    x.send(fd);
+  });
+}
+const timeout=(p,ms,l)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error(l+" did not respond in "+ms/1000+"s. Firestore may be offline.")),ms))]);
 
-                updateStats(totalDownloads, totalEarnings, totalViews);
-                renderProducts(allProducts);
-                renderChart(allProducts);
+/* autosave of details */
+function fieldsOf(i){return {title:i.title,cat:i.cat,desc:i.desc,kws:i.kws,ai:i.ai,ed:i.ed,people:i.people,release:i.release||null,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};}
+function touch(i){dirty.add(i.id);clearTimeout(saveT);saveT=setTimeout(flush,700);}
+async function flush(){
+  clearTimeout(saveT);
+  const ids=[...dirty];dirty.clear();
+  for(const id of ids){
+    const i=items.find(x=>x.id===id);if(!i||i.up)continue;
+    try{await db.collection(DR).doc(id).update(fieldsOf(i));}
+    catch(e){slog("Could not save details: "+e.message,"er");}
+  }
+}
 
-                console.log("✅ Dashboard loaded with", allProducts.length, "products");
+/* load this account's files */
+async function loadDrafts(){
+  if(!db||!user)return;
+  try{
+    const s=await db.collection(DR).where("ownerId","==",user.uid).get();
+    items=items.filter(i=>i.up);
+    s.forEach(d=>{
+      const x=d.data();
+      items.push({id:d.id,up:0,kind:x.kind||"Photo",fileUrl:x.fileUrl||"",thumb:x.thumb||"",meta:x.meta||{},fileName:x.fileName||"",title:x.title||"",cat:x.cat||"",desc:x.desc||"",kws:Array.isArray(x.kws)?x.kws:[],ai:!!x.ai,ed:!!x.ed,people:!!x.people,release:x.release||null,state:x.state||"draft",pubCol:x.pubCol||null,pubId:x.pubId||null,at:tsToDate(x.createdAt)||new Date(0),bad:false});
+    });
+    items.sort((a,b)=>(b.at||0)-(a.at||0));
+  }catch(e){slog("Could not load your files: "+e.message,"er");}
+  drawUp();
+}
 
-            } catch (error) {
-                console.error("❌ Error loading dashboard:", error);
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>Failed to load data. Please check your Firestore rules.</p>
-                    </div>
-                `;
-            }
-        }
+/* add files: upload at once and store a record, so they stay after logout */
+$("addBtn").onclick=()=>{if(!user){alert("Sign in first. Your files are saved to your account.");return;}$("fileInput").click();};
+$("fileInput").onchange=async e=>{
+  const files=Array.from(e.target.files);e.target.value="";
+  for(const f of files){
+    const vid=f.type.startsWith("video/"),img=f.type.startsWith("image/");
+    if(!vid&&!img)continue;
+    const tmp={id:"tmp"+(tid++),up:1,kind:vid?"Video":"Photo",fileUrl:"",thumb:img?URL.createObjectURL(f):"",meta:{},fileName:f.name,title:f.name.replace(/\.[^.]+$/,"").replace(/[-_]+/g," ").replace(/\b\w/g,c=>c.toUpperCase()),cat:"",desc:"",kws:[],ai:false,ed:false,people:false,release:null,state:"draft",pubCol:null,pubId:null,at:new Date(),bad:false};
+    items.unshift(tmp);drawUp();
+    try{
+      const r=await cloud(f,p=>{tmp.up=Math.max(1,p);const el=document.querySelector('.d[data-id="'+tmp.id+'"] .pg i');if(el)el.style.width=p+"%";});
+      const isV=r.resource_type==="video";
+      const thumb=isV?r.secure_url.replace("/upload/","/upload/so_1,w_400,q_auto,f_jpg/").replace(/\.[^.]+$/,".jpg"):r.secure_url.replace("/upload/","/upload/w_400,q_auto,f_auto/");
+      const meta={width:r.width||null,height:r.height||null,duration:r.duration||null,bytes:r.bytes||null,publicId:r.public_id||"",format:r.format||""};
+      const ref=await timeout(db.collection(DR).add(Object.assign({ownerId:user.uid,ownerEmail:user.email||"",kind:tmp.kind,fileUrl:r.secure_url,thumb:thumb,meta:meta,fileName:f.name,state:"draft",pubCol:null,pubId:null,createdAt:firebase.firestore.FieldValue.serverTimestamp()},fieldsOf(tmp))),20000,"Firestore");
+      tmp.id=ref.id;tmp.up=0;tmp.fileUrl=r.secure_url;tmp.thumb=thumb;tmp.meta=meta;
+      if(!sel.size)sel.add(tmp.id);
+    }catch(err){
+      console.error(err);
+      items=items.filter(x=>x!==tmp);
+      slog("Could not add "+f.name+": "+err.message,"er");
+    }
+    drawUp();
+  }
+};
 
-        // ===== UPDATE STATS BAR =====
-        function updateStats(downloads, earnings, views) {
-            document.getElementById('totalDownloads').textContent = downloads;
-            document.getElementById('totalEarnings').textContent = '$' + earnings.toFixed(2);
-            document.getElementById('legendEarnings').textContent = '$' + earnings.toFixed(2);
-            document.getElementById('legendDownloads').textContent = downloads;
-            document.getElementById('allCount').textContent = allProducts.length;
-        }
+$("delTop").onclick=deleteSel;
+$("selAll").onchange=e=>{sel.clear();if(e.target.checked)items.filter(i=>!i.up).forEach(i=>sel.add(i.id));drawUp();};
+$("dgrid").onclick=e=>{
+  const c=e.target.closest(".d");if(!c)return;const id=c.dataset.id;
+  if(e.target.closest(".ck")){sel.has(id)?sel.delete(id):sel.add(id);}else{sel.clear();sel.add(id);}
+  drawUp();
+};
+function drawUp(){
+  const open=items.filter(i=>isLive(i)).length;
+  $("cDraft").textContent=open?"("+open+")":"";
+  $("dgrid").innerHTML=items.length?items.map(i=>`<div class="d ${sel.has(i.id)?"sel":""} ${i.bad?"bad":""}" data-id="${i.id}" style="background-image:url('${esc(i.thumb)}')"><div class="ck"><i class="fas fa-check"></i></div><span class="kd">${i.kind==="Video"?"Video":"Photo"}</span>${i.up?'<div class="pg"><span>Uploading</span><i></i></div>':i.state==="published"?'<span class="st">Published</span>':""}</div>`).join(""):'<div class="none" style="grid-column:1/-1;text-align:center;color:#6b6b6b;padding:60px 10px">No files yet. Tap Add files. Everything you add stays here until you delete it.</div>';
+  $("selAll").checked=items.length>0&&items.filter(i=>!i.up).every(i=>sel.has(i.id));
+  drawPanel();
+}
+function setAll(k,v){chosen().forEach(i=>{i[k]=v;i.bad=false;touch(i);});}
+function addKw(raw){
+  raw.split(/[,\n;]+/).map(s=>s.trim().toLowerCase()).filter(Boolean).forEach(k=>chosen().forEach(i=>{if(!i.kws.includes(k)&&i.kws.length<50){i.kws.push(k);touch(i);}}));
+}
+function drawPanel(){
+  const p=$("panel"),c=cur();
+  if(!c){
+    const any=items.find(i=>sel.has(i.id));
+    if(any&&any.up){p.innerHTML='<div class="nosel">Uploading this file. Details unlock when it finishes.</div>';return;}
+    if(any&&any.state==="published"){
+      const page=any.kind==="Video"?"vlog-video.html":"stock-photo.html";
+      p.innerHTML=`<div class="f"><b>${esc(any.title||"Untitled")}</b></div><div class="f" style="font-size:13px;color:var(--mute)">Published to ${page}.</div><div class="acts"><button onclick="location.href='${page}'">Open ${page}</button></div><div class="acts"><button id="delBtn" style="color:var(--bad)">Delete from my list</button></div>`;
+      $("delBtn").onclick=deleteSel;return;
+    }
+    p.innerHTML='<div class="nosel">Pick a file to fill in its details.</div>';return;
+  }
+  const many=chosen().length>1;
+  p.innerHTML=`
+  ${many?`<div class="f" style="font-size:13px;color:var(--blue);font-weight:600">${chosen().length} files selected. Edits apply to all of them.</div>`:""}
+  <div style="font-size:12px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 11px;margin-bottom:14px;color:var(--mute)">${c.kind==="Video"?'Videos are published to <b style="color:var(--ink)">vlog-video.html</b>. Collection is optional.':'Photos are published to <b style="color:var(--ink)">stock-photo.html</b>.'}</div>
+  <div class="f"><label>Collection</label><select id="pCat"><option value="">Select a collection</option>${CATS.map(t=>`<option ${c.cat===t?"selected":""}>${t}</option>`).join("")}</select></div>
+  <label class="ck-row"><input type="checkbox" id="pEd" ${c.ed?"checked":""}> Editorial use only</label>
+  <label class="ck-row"><input type="checkbox" id="pAi" ${c.ai?"checked":""}> Made with AI</label>
+  <div class="f"><span class="lab">Shows recognisable people or private property?</span>
+    <div class="seg"><button data-ppl="1" class="${c.people?"on":""}">Yes</button><button data-ppl="0" class="${c.people?"":"on"}">No</button></div>
+    ${c.people?`<div style="margin-top:8px"><button id="relBtn" style="color:var(--blue);font-size:13px;font-weight:600"><i class="fas fa-file-signature"></i> ${c.release?"Release: "+esc(c.release.name):"Attach a release"}</button></div>`:""}</div>
+  <div class="f"><label>Title <span id="tCnt">${c.title.length}/200</span></label><textarea id="pTitle" maxlength="200">${esc(c.title)}</textarea></div>
+  <div class="f"><label>Description</label><textarea id="pDesc">${esc(c.desc)}</textarea></div>
+  <div class="f"><span class="lab"><span>Keywords (5 to 50)</span><span id="kCnt">${c.kws.length}</span></span>
+    <textarea id="pKw" placeholder="Type or paste keywords, separated by commas"></textarea>
+    <div class="chips" id="chips">${c.kws.map(k=>`<span>${esc(k)}<i data-rm="${esc(k)}">&times;</i></span>`).join("")}</div></div>
+  <div class="acts"><button id="clr">Clear</button><button id="draft">Save details</button><button class="go" id="pub">Publish</button></div>
+  <div class="acts"><button id="delBtn" style="color:var(--bad)">Delete selected</button></div>`;
+  $("pCat").onchange=e=>setAll("cat",e.target.value);
+  $("pEd").onchange=e=>setAll("ed",e.target.checked);
+  $("pAi").onchange=e=>setAll("ai",e.target.checked);
+  $("pDesc").oninput=e=>setAll("desc",e.target.value);
+  $("pTitle").oninput=e=>{setAll("title",e.target.value);$("tCnt").textContent=e.target.value.length+"/200";};
+  $("pKw").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addKw(e.target.value);e.target.value="";drawPanel();}};
+  $("pKw").onblur=e=>{if(e.target.value.trim()){addKw(e.target.value);e.target.value="";drawPanel();}};
+  $("chips").onclick=e=>{const r=e.target.closest("[data-rm]");if(!r)return;chosen().forEach(i=>{i.kws=i.kws.filter(x=>x!==r.dataset.rm);touch(i);});drawPanel();};
+  p.querySelectorAll("[data-ppl]").forEach(b=>b.onclick=()=>{setAll("people",b.dataset.ppl==="1");if(b.dataset.ppl==="0")setAll("release",null);drawPanel();if(b.dataset.ppl==="1")$("relModal").style.display="flex";});
+  if($("relBtn"))$("relBtn").onclick=()=>$("relModal").style.display="flex";
+  $("clr").onclick=()=>{setAll("title","");setAll("cat","");setAll("desc","");chosen().forEach(i=>{i.kws=[];touch(i);});drawPanel();};
+  $("draft").onclick=async()=>{$("status").textContent="";await flush();slog("Details saved to your account.","ok");};
+  $("pub").onclick=publish;
+  $("delBtn").onclick=deleteSel;
+}
+$("relCancel").onclick=()=>$("relModal").style.display="none";
+$("relOk").onclick=async()=>{
+  const name=$("relName").value.trim();if(!name){alert("Enter a reference name or ID.");return;}
+  const f=$("relFile").files[0],btn=$("relOk");let fileUrl=null;
+  if(f){btn.disabled=true;btn.textContent="Uploading...";
+    try{fileUrl=(await cloud(f)).secure_url;}catch(e){alert("Release upload failed: "+e.message);btn.disabled=false;btn.textContent="Attach";return;}
+    btn.disabled=false;btn.textContent="Attach";}
+  setAll("release",{type:$("relType").value,name,fileUrl});setAll("people",true);
+  $("relModal").style.display="none";$("relName").value="";$("relFile").value="";drawPanel();
+};
 
-        // ===== RENDER PRODUCTS =====
-        function renderProducts(products) {
-            const grid = document.getElementById('productGrid');
-            
-            if (products.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <p>No products match your filter.</p>
-                    </div>
-                `;
-                return;
-            }
+/* delete from the list (and optionally from the website) */
+async function deleteSel(){
+  const list=items.filter(i=>sel.has(i.id)&&!i.up);
+  if(!list.length){alert("Select a file first.");return;}
+  if(!confirm("Delete "+list.length+" file(s) from your list?"))return;
+  let alsoSite=false;
+  if(list.some(i=>i.state==="published"))alsoSite=confirm("Some of these are published.\nOK = also remove them from the website.\nCancel = keep them live on the website.");
+  $("status").textContent="";
+  for(const i of list){
+    try{
+      if(alsoSite&&i.state==="published"&&i.pubCol&&i.pubId)await db.collection(i.pubCol).doc(i.pubId).delete();
+      await db.collection(DR).doc(i.id).delete();
+      items=items.filter(x=>x!==i);sel.delete(i.id);
+    }catch(e){slog("Could not delete "+(i.title||i.fileName)+": "+e.message,"er");}
+  }
+  drawUp();loadOverview();
+}
 
-            grid.innerHTML = '';
-            products.forEach((p) => {
-                const isFree = p.price === 0 || p.price === '0' || p.free === true;
-                const freeBadge = isFree ? '<span class="free-badge">FREE</span>' : '';
-                
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-img-wrap">
-                            <input type="checkbox" class="product-checkbox">
-                            <img src="${p.imageUrl || 'https://via.placeholder.com/300x300/f1f5f9/94a3b8?text=No+Image'}" 
-                                 alt="${p.name}" 
-                                 onerror="this.src='https://via.placeholder.com/300x300/f1f5f9/94a3b8?text=No+Image'">
-                            ${freeBadge}
-                        </div>
-                        <div class="product-info">
-                            <div class="product-stats">
-                                <span class="label">Downloads</span>
-                                <span class="value">${p.downloads}</span>
-                            </div>
-                            <div class="product-stats">
-                                <span class="label">Views</span>
-                                <span class="value">${p.views}</span>
-                            </div>
-                            <div class="product-stats">
-                                <span class="label">Earnings</span>
-                                <span class="value earn">$${p.earnings.toFixed(2)}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+/* publish: files are already uploaded, so this only writes the public record */
+async function publish(){
+  $("status").textContent="";
+  if(!db){slog("Firebase did not start. Reload the page.","er");return;}
+  if(!user){slog("Sign in first, then publish.","er");return;}
+  const kb=$("pKw");if(kb&&kb.value.trim()){addKw(kb.value);kb.value="";}
+  let list=chosen();if(!list.length)list=items.filter(i=>isLive(i)&&!i.up);
+  if(!list.length){slog("Add a file first.","er");return;}
+  const probs=[];
+  list.forEach(i=>{
+    const m=[];const v=i.kind==="Video";
+    if(!i.title.trim())m.push("title");
+    if(!v&&!i.cat)m.push("collection");
+    if(!v&&i.kws.length<5)m.push("keywords ("+i.kws.length+"/5)");
+    i.bad=m.length>0;if(i.bad)probs.push((i.title||i.fileName)+": needs "+m.join(", "));
+  });
+  if(probs.length){sel.clear();list.filter(i=>i.bad).forEach(i=>sel.add(i.id));drawUp();probs.forEach(p=>slog(p,"er"));return;}
+  document.querySelectorAll(".acts button").forEach(b=>b.disabled=true);
+  const failed=[];
+  let n=0;
+  for(const i of list){
+    n++;
+    try{
+      slog(`(${n}/${list.length}) Publishing "${i.title}"...`);
+      await flush();
+      const v=i.kind==="Video";
+      const base={ownerId:user.uid,ownerEmail:user.email||"",createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+      const m=i.meta||{};
+      const col=v?"vlogs":"stockphoto";
+      const data=v
+        ?Object.assign({title:i.title.trim(),category:i.cat||"General",description:i.desc.trim(),keywords:i.kws,videoUrl:i.fileUrl,thumb:i.thumb,fileType:"Video",duration:m.duration||null,bytes:m.bytes||null,status:"published",uploadedBy:user.uid},base)
+        :Object.assign({title:i.title.trim(),category:i.cat,fileType:"Photo",description:i.desc.trim(),keywords:i.kws,imageUrl:i.fileUrl,url:i.fileUrl,thumb:i.thumb,width:m.width||null,height:m.height||null,duration:null,bytes:m.bytes||null,publicId:m.publicId||"",format:m.format||"",aiGenerated:i.ai,editorial:i.ed,recognizable:i.people,releaseAttached:!!i.release,releaseInfo:i.release||null,status:"published",uploadedBy:user.uid},base);
+      const ref=await timeout(db.collection(col).add(data),20000,"Firestore");
+      await db.collection(DR).doc(i.id).update({state:"published",pubCol:col,pubId:ref.id,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      i.state="published";i.pubCol=col;i.pubId=ref.id;sel.delete(i.id);
+      slog(`Published "${i.title}" to ${col}`,"ok");
+    }catch(e){
+      console.error(e);failed.push(i);
+      slog(`Failed to publish "${i.title}": ${e.message}`,"er");
+    }
+  }
+  drawUp();loadOverview();
+  const okList=list.filter(i=>i.state==="published");
+  if(okList.length){
+    const hasV=okList.some(i=>i.kind==="Video"),hasP=okList.some(i=>i.kind!=="Video");
+    const links=[];
+    if(hasV)links.push(["vlog-video.html","Open vlog-video.html"]);
+    if(hasP)links.push(["stock-photo.html","Open stock-photo.html"]);
+    const box=document.createElement("div");box.style.marginTop="10px";
+    box.innerHTML=links.map(l=>`<a href="${l[0]}" style="display:inline-block;margin:0 8px 6px 0;padding:8px 14px;border-radius:5px;background:var(--blue);color:#fff;font-weight:700;font-size:13px;text-decoration:none">${l[1]}</a>`).join("");
+    $("status").appendChild(box);
+    if(links.length===1&&!failed.length){
+      slog("Opening "+links[0][0]+" ...","ok");
+      setTimeout(()=>{location.href=links[0][0];},1800);
+    }
+  }
+}
 
-        // ===== RENDER SIMPLE BAR CHART =====
-        function renderChart(products) {
-            const chart = document.getElementById('barChart');
-            chart.innerHTML = '';
-            
-            // Generate 12 weeks of data (dummy data based on product downloads)
-            // In real app, you would fetch actual weekly data from Firestore
-            const weeks = ['Jul 20', 'Jul 27', 'Aug 3', 'Aug 10', 'Aug 17', 'Aug 24', 'Aug 31', 'Sep 7', 'Sep 14', 'Sep 21', 'Sep 28', 'Oct 5'];
-            
-            // Create dummy weekly data by distributing total downloads
-            const totalDownloads = products.reduce((sum, p) => sum + p.downloads, 0);
-            const weeklyData = weeks.map((w, i) => {
-                // Simple distribution: more weight to recent weeks
-                const base = Math.floor(totalDownloads / 12);
-                const variance = Math.floor(Math.random() * 3);
-                return Math.max(0, base + variance - (i > 9 ? 0 : 1));
-            });
-            
-            const maxVal = Math.max(...weeklyData, 1);
-            
-            weeks.forEach((week, i) => {
-                const heightPercent = (weeklyData[i] / maxVal) * 100;
-                const barWrapper = document.createElement('div');
-                barWrapper.className = 'bar-wrapper';
-                barWrapper.innerHTML = `
-                    <div class="bar" style="height: ${heightPercent}%;" title="${weeklyData[i]} downloads"></div>
-                    <div class="bar-label">${week}</div>
-                `;
-                chart.appendChild(barWrapper);
-            });
-        }
+/* ---------- auth ---------- */
+drawUp();
+if(db){
+  firebase.auth().onAuthStateChanged(u=>{
+    user=u;
+    $("authMsg").style.display=u?"none":"block";
+    $("ovBody").style.display=u?"block":"none";
+    if(u){loadOverview();loadDrafts();}else{items=[];sel.clear();drawUp();}
+  });
+}else{
+  $("authMsg").style.display="block";$("authMsg").textContent="Firebase did not load. Check your connection and reload.";
+  $("ovBody").style.display="none";
+}
+</script>
 
-        // ===== TAB FILTERING =====
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const tab = btn.dataset.tab;
-                let filtered = allProducts;
-                
-                if (tab !== 'all') {
-                    // Filter by category (if your product has a 'category' field)
-                    filtered = allProducts.filter(p => p.category === tab);
-                }
-                
-                renderProducts(filtered);
-            });
-        });
-
-        // ===== SEARCH FILTER =====
-        document.getElementById('searchFile').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filtered = allProducts.filter(p => 
-                (p.name && p.name.toLowerCase().includes(searchTerm)) ||
-                (p.fileNumber && p.fileNumber.toLowerCase().includes(searchTerm))
-            );
-            renderProducts(filtered);
-        });
-
-        // ===== PRICE FILTER =====
-        document.getElementById('filterPrice').addEventListener('change', (e) => {
-            const val = e.target.value;
-            let filtered = allProducts;
-            
-            if (val === 'free') {
-                filtered = allProducts.filter(p => p.price === 0 || p.price === '0' || p.free === true);
-            } else if (val === 'paid') {
-                filtered = allProducts.filter(p => p.price > 0);
-            }
-            
-            renderProducts(filtered);
-        });
-
-        // ===== SORT FILTER =====
-        document.getElementById('sortBy').addEventListener('change', (e) => {
-            const val = e.target.value;
-            let sorted = [...allProducts];
-            
-            if (val === 'downloads') sorted.sort((a, b) => b.downloads - a.downloads);
-            else if (val === 'views') sorted.sort((a, b) => b.views - a.views);
-            else if (val === 'earnings') sorted.sort((a, b) => b.earnings - a.earnings);
-            else if (val === 'name') sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            
-            renderProducts(sorted);
-        });
-
-    </script>
+<script src="top-bar.js"></script>
+<script src="site-footer.js"></script>
 </body>
 </html>

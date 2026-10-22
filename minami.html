@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minami AI - Your Smart Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* স্ক্রল বার ডিজাইন */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        .typing-dots::after {
+            content: '...';
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; }
+        }
+        /* AI-এর লেখা কোড ব্লকের ডিজাইন */
+        pre { background: #0f172a; padding: 10px; border-radius: 8px; overflow-x: auto; margin-top: 8px; margin-bottom: 8px; }
+        code { font-family: monospace; color: #10b981; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-gray-800 p-4 shadow-md flex justify-between items-center border-b border-gray-700">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/50">M</div>
+            <h1 class="text-xl font-semibold tracking-wide">Minami AI</h1>
+        </div>
+        <a href="index.html" class="text-sm text-gray-400 hover:text-white transition">← Back to Home</a>
+    </header>
+
+    <!-- Chat Area -->
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-6 flex flex-col">
+        <!-- Welcome Message -->
+        <div class="flex gap-4 max-w-3xl mx-auto w-full">
+            <div class="w-8 h-8 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm">M</div>
+            <div class="bg-gray-800 p-4 rounded-lg rounded-tl-none text-gray-200 w-full shadow-sm">
+                Hello! I am <strong>Minami AI</strong>. How can I help you today? You can ask me to write code, translate text, or answer your questions.
+            </div>
+        </div>
+    </main>
+
+    <!-- Input Area -->
+    <footer class="bg-gray-900 p-4 border-t border-gray-700">
+        <div class="max-w-3xl mx-auto flex gap-2 items-end bg-gray-800 p-2 rounded-xl border border-gray-600 focus-within:border-indigo-500 transition shadow-lg">
+            <textarea id="user-input" rows="1" placeholder="Message Minami AI..." 
+                class="w-full bg-transparent text-white resize-none outline-none p-2 max-h-32 overflow-y-auto"></textarea>
+            <button id="send-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg transition disabled:opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                </svg>
+            </button>
+        </div>
+        <p class="text-center text-xs text-gray-500 mt-2">Minami AI can make mistakes. Verify important information.</p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // আপনার API Key এখানে বসানো হয়েছে
+        const API_KEY = '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'; 
+        // ==========================================
+        
+        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // মেসেজ হিস্ট্রি (AI যাতে আগের কথা মনে রাখতে পারে)
+        let messages = [
+            { role: "system", content: "You are Minami AI, a helpful, smart, and friendly assistant created by Minami Stock. Answer concisely and accurately. If asked who you are, say you are Minami AI." }
+        ];
+
+        // টেক্সট এরিয়া অটো সাইজ
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // এন্টার চাপলে মেসেজ পাঠানো (Shift+Enter দিলে নতুন লাইন হবে)
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // ১. ইউজারের মেসেজ UI-তে দেখানো
+            appendMessage('user', text);
+            messages.push({ role: "user", content: text });
+            
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            sendBtn.disabled = true; // ডাবল ক্লিক বন্ধ করতে
+            
+            // ২. লোডিং অ্যানিমেশন দেখানো
+            const loadingId = appendMessage('ai', '<span class="typing-dots text-gray-400">Minami is thinking</span>');
+
+            try {
+                // ৩. Groq API-তে রিকোয়েস্ট পাঠানো
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama3-8b-8192", // ফ্রি এবং খুব ফাস্ট মডেল
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 1024
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+
+                const aiReply = data.choices[0].message.content;
+                messages.push({ role: "assistant", content: aiReply });
+
+                // ৪. লোডিং সরিয়ে AI-এর উত্তর দেখানো (Markdown সাপোর্ট সহ)
+                document.getElementById(loadingId).innerHTML = marked.parse(aiReply);
+
+            } catch (error) {
+                document.getElementById(loadingId).innerHTML = `<span class="text-red-400">Error: ${error.message || 'Something went wrong. Check your API Key.'}</span>`;
+            } finally {
+                sendBtn.disabled = false;
+            }
+            
+            // অটো স্ক্রল নিচে নামানো
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // UI-তে মেসেজ যোগ করার ফাংশন
+        function appendMessage(sender, text) {
+            const id = 'msg-' + Date.now();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = "flex gap-4 max-w-3xl mx-auto w-full";
+            
+            const isUser = sender === 'user';
+            const avatar = isUser 
+                ? `<div class="w-8 h-8 bg-gray-600 rounded-full flex-shrink-0 flex items-center justify-center text-sm">U</div>`
+                : `<div class="w-8 h-8 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/50">M</div>`;
+            
+            const bgClass = isUser ? "bg-gray-800" : "bg-gray-800 border border-gray-700";
+            
+            messageDiv.innerHTML = `
+                ${avatar}
+                <div id="${id}" class="${bgClass} p-4 rounded-lg ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} text-gray-200 w-full overflow-x-auto shadow-sm">
+                    ${isUser ? text : text}
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return id;
+        }
+    </script>
+</body>
+</html>
