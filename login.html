@@ -76,9 +76,9 @@
         }
 
         .forgot-row { text-align: right; margin: -6px 0 16px; }
-        .forgot-row a, .forgot-row button {
+        .forgot-row button {
             background: none; border: none; cursor: pointer;
-            color: #d97706; font-size: 13.5px; font-weight: 700; text-decoration: none;
+            color: #d97706; font-size: 13.5px; font-weight: 700;
         }
 
         .btn {
@@ -91,6 +91,7 @@
             cursor: pointer;
             transition: 0.2s;
             text-decoration: none;
+            box-sizing: border-box;
         }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-primary { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0a1628; }
@@ -117,15 +118,37 @@
         .msg.ok { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
         .msg.err { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
-        .switch-text { text-align: center; margin-top: 20px; font-size: 14.5px; color: #64748b; }
-        .switch-text a { color: #d97706; font-weight: 800; text-decoration: none; }
-
-        /* back button at the bottom */
-        .back-wrap { margin-top: auto; padding-top: 30px; }
-        .btn-back { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
-        .btn-back:hover { border-color: #fbbf24; color: #b45309; }
-
-        .hidden { display: none !important; }
+        /* ★★★ Bottom Buttons — Register + Back ★★★ */
+        .bottom-actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-register {
+            background: #ffffff;
+            color: #d97706;
+            border: 2px solid #fbbf24;
+            font-weight: 800;
+        }
+        .btn-register:hover {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #b45309;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(251,191,36,0.3);
+        }
+        .btn-back {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1.5px solid #e2e8f0;
+        }
+        .btn-back:hover {
+            border-color: #fbbf24;
+            color: #b45309;
+            background: #fffbeb;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -155,7 +178,7 @@
                 <div class="input-wrap">
                     <i class="fas fa-lock lead"></i>
                     <input type="password" id="password" placeholder="Your password" autocomplete="current-password">
-                    <button type="button" class="eye-btn" id="eyeBtn" title="Show / hide password"><i class="fas fa-eye"></i></button>
+                    <button type="button" class="eye-btn" id="eyeBtn"><i class="fas fa-eye"></i></button>
                 </div>
             </div>
 
@@ -170,13 +193,19 @@
             <button class="btn btn-google" id="googleBtn"><i class="fab fa-google"></i> Continue with Google</button>
 
             <div class="msg" id="msg"></div>
-
-            <p class="switch-text">Don't have an account? <a href="register.html">Register</a></p>
         </div>
 
-        <!-- ★ BACK BUTTON (bottom) ★ -->
-        <div class="back-wrap">
-            <a href="index.html" class="btn btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+        <!-- ★★★ নিচের বাটনগুলো — Register + Back ★★★ -->
+        <div class="bottom-actions">
+            <!-- ★ Register Button ★ -->
+            <a href="register.html" class="btn btn-register">
+                <i class="fas fa-user-plus"></i> Register New Account
+            </a>
+
+            <!-- Back Button -->
+            <a href="index.html" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
         </div>
     </div>
 
@@ -221,12 +250,11 @@
             if (c === 'auth/network-request-failed') return 'Network error. Check your internet.';
             if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return 'Google login was cancelled.';
             if (c === 'auth/popup-blocked') return 'Popup was blocked. Allow popups and try again.';
-            if (c === 'auth/unauthorized-domain') return 'This domain is not authorized in Firebase (Authentication > Settings > Authorized domains).';
-            if (c === 'auth/operation-not-allowed') return 'This login method is not enabled in Firebase Authentication.';
+            if (c === 'auth/unauthorized-domain') return 'This domain is not authorized in Firebase.';
+            if (c === 'auth/operation-not-allowed') return 'This login method is not enabled in Firebase.';
             return (err && err.message) ? err.message : 'Something went wrong.';
         }
 
-        // save / update user data in Firestore (never blocks login)
         async function saveUserData(user, isNew) {
             try {
                 const data = {
@@ -239,7 +267,7 @@
                 if (isNew) data.createdAt = serverTimestamp();
                 await setDoc(doc(db, 'users', user.uid), data, { merge: true });
             } catch (err) {
-                console.warn('Could not save user data (check Firestore rules):', err);
+                console.warn('Could not save user data:', err);
             }
         }
 
@@ -248,7 +276,6 @@
             window.location.href = 'index.html';
         }
 
-        // ===== EMAIL LOGIN =====
         async function doLogin() {
             const email = $('email').value.trim();
             const pass = $('password').value;
@@ -260,7 +287,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
             try {
-                redirecting = true; // hold auto-redirect until data is saved
+                redirecting = true;
                 const cred = await signInWithEmailAndPassword(auth, email, pass);
                 await saveUserData(cred.user, false);
                 showMsg('Login successful! Redirecting...', 'ok');
@@ -278,7 +305,6 @@
         $('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
         $('email').addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
 
-        // ===== GOOGLE LOGIN =====
         $('googleBtn').addEventListener('click', async () => {
             const btn = $('googleBtn');
             btn.disabled = true;
@@ -297,20 +323,18 @@
             }
         });
 
-        // ===== FORGOT PASSWORD =====
         $('forgotBtn').addEventListener('click', async () => {
             const email = $('email').value.trim();
-            if (!email) return showMsg('Enter your email above first, then tap "Forgot password?".', 'err');
+            if (!email) return showMsg('Enter your email above first.', 'err');
             try {
                 await sendPasswordResetEmail(auth, email);
-                showMsg('Password reset email sent to ' + email + '. Check your inbox (and spam).', 'ok');
+                showMsg('Password reset email sent to ' + email, 'ok');
             } catch (err) {
                 console.error(err);
                 showMsg(friendlyError(err), 'err');
             }
         });
 
-        // ===== SHOW / HIDE PASSWORD =====
         $('eyeBtn').addEventListener('click', () => {
             const inp = $('password');
             const show = inp.type === 'password';
@@ -318,7 +342,6 @@
             $('eyeBtn').innerHTML = show ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
         });
 
-        // ===== ALREADY LOGGED IN -> index.html =====
         onAuthStateChanged(auth, (user) => {
             if (user && !redirecting) goHome();
         });

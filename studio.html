@@ -10,27 +10,29 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 a{color:inherit;text-decoration:none}
 body{background:#0d0f14}
 
-#sb{position:fixed;left:0;top:60px;bottom:0;width:54px;background:#120e26;display:flex;flex-direction:column;align-items:center;gap:13px;padding:12px 0;z-index:5;color:#d8d8e8}
+#sb{position:fixed;right:0;top:60px;bottom:0;width:54px;background:#120e26;display:flex;flex-direction:column;align-items:center;gap:13px;padding:12px 0;z-index:5;color:#d8d8e8}
 #sb a,#sb button{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;font-size:9.5px;transition:0.2s;}
 #sb a:hover,#sb button:hover{color:#fff;}
 #sb .ic{font-size:17px;line-height:1}
 #sb .cr{width:34px;height:34px;border-radius:50%;background:#8b3dff;display:grid;place-items:center;font-size:22px}
 #sb .sp{flex:1}
 #av{width:28px;height:28px;border-radius:50%;background:#3a3a4a;display:grid;place-items:center;font-size:12px;overflow:hidden}
-#cm{display:none;position:fixed;left:60px;top:120px;background:#1c1f26;border:1px solid #ffffff1a;border-radius:12px;padding:6px;z-index:6;box-shadow:0 10px 30px #000a}
+#cm{display:none;position:fixed;right:60px;top:120px;background:#1c1f26;border:1px solid #ffffff1a;border-radius:12px;padding:6px;z-index:6;box-shadow:0 10px 30px #000a}
 #cm div{padding:9px 14px;font-size:13px;border-radius:8px;cursor:pointer}
 #cm div:hover{background:#2a2e38}
-#mn{margin-left:54px;margin-top:60px;min-height:calc(100vh - 60px)}
-.hero{background:linear-gradient(135deg,#0b4a52 0%,#1b2a6b 55%,#3b1a78 100%);border-top-left-radius:14px;padding:50px 14px 22px;text-align:center;position:relative}
+#mn{margin-right:54px;margin-top:60px;min-height:calc(100vh - 60px)}
+.hero{background:linear-gradient(135deg,#dc2626 0%,#7f1d1d 35%,#1a0505 70%,#000000 100%);border-top-right-radius:14px;padding:50px 14px 22px;text-align:center;position:relative}
 .try{position:absolute;right:12px;top:12px;background:#0b0b10;border:1px solid #ffffff30;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600}
-.hero h1{font-size:28px;font-weight:700;background:linear-gradient(90deg,#3de0d2,#a08cff);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:12px}
+.hu{display:flex;flex-direction:column;align-items:center;gap:3px;max-width:420px;margin:0 auto 14px;padding:12px 14px;border:2px dashed #ffffff88;border-radius:14px;background:#00000055;cursor:pointer}
+.hu b{font-size:15px}.hu small{font-size:11px;color:#fecaca}
+.hu.on{border-color:#fff;background:#ef444466}
+.hero h1{font-size:28px;font-weight:700;background:linear-gradient(90deg,#ffffff,#fecaca 60%,#ff6b6b);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:12px}
 .tabs{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
 .tabs span{border:1px solid #ffffff40;border-radius:16px;padding:4px 12px;font-size:12px;background:#ffffff14;cursor:pointer}
-.sr{display:flex;align-items:center;gap:8px;padding:0 12px;border:2px solid #8b5cf6;border-radius:12px;background:#0b0a1c;box-shadow:0 0 16px #7c3aed55}
+.sr{display:flex;align-items:center;gap:8px;padding:0 12px;border:2px solid #ef4444;border-radius:12px;background:#0a0505;box-shadow:0 0 16px #ef444466}
 .sr input{flex:1;background:none;border:0;color:#fff;padding:12px 0;font-size:13px;outline:0}
 .cats{display:flex;gap:14px;overflow-x:auto;padding:16px 14px;scrollbar-width:none;border-bottom:1px solid #1f2229}
 
-/* 🔥 ক্যাটাগরি আইকন হাইলাইট করার CSS */
 .cat{flex:none;width:66px;text-align:center;font-size:10.5px;color:#cfd0dc;cursor:pointer;transition:0.2s;position:relative;}
 .cat i{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;margin:0 auto 6px;font-style:normal;font-size:19px;color:#fff;transition:0.2s;}
 .cat:hover{color:#fff;}
@@ -42,7 +44,7 @@ h2 a{font-size:12px;font-weight:600;color:#c9cad6;cursor:pointer}
 .rw{position:relative}
 .row{display:flex;gap:10px;overflow-x:auto;padding:0 14px 8px;scrollbar-width:none;scroll-behavior:smooth}
 .arr{position:absolute;right:8px;top:50%;transform:translateY(-60%);width:34px;height:34px;border-radius:50%;background:#1c1f26;border:1px solid #ffffff30;display:grid;place-items:center;font-size:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;padding:0 14px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:15px;padding:0 14px 10px}
 .tc{background:#1c1f26;border-radius:12px;overflow:hidden;cursor:pointer;position:relative}
 .row .tc{flex:none;width:136px}
 .th{height:110px;display:grid;place-items:center;background:#262a33;padding:8px;position:relative}
@@ -79,7 +81,7 @@ h2 a{font-size:12px;font-weight:600;color:#c9cad6;cursor:pointer}
 .qa i{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;margin:0 auto 6px;font-style:normal;font-size:18px;color:#fff}
 .cf{display:flex;flex-direction:column;gap:10px;font-size:13px}
 .cf input{background:#262a33;border:0;color:#fff;border-radius:8px;padding:9px;width:110px;font:inherit}
-#hp{position:fixed;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:#7c3aed;font-weight:700;z-index:4}
+#hp{position:fixed;left:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:#7c3aed;font-weight:700;z-index:4}
 .ib{padding:7px 12px;border-radius:8px;background:#262634;font-size:13px;white-space:nowrap}
 .ib.p{background:var(--pu)}
 #ed{display:none;position:fixed;top:60px;left:0;right:0;bottom:0;background:#1a1a22;flex-direction:column;z-index:10}
@@ -97,6 +99,258 @@ h2 a{font-size:12px;font-weight:600;color:#c9cad6;cursor:pointer}
 .lb{font-size:12px;color:var(--mu);display:flex;gap:6px;align-items:center}
 #tt{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#fff;color:#111;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:99}
 #tt.on{opacity:1}
+
+/* =========================================
+   আপনার দেওয়া ৭০০ টেমপ্লেটের CSS
+   ========================================= */
+.tpl {
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+    container-type: inline-size; display: flex; flex-direction: column; background: #fff;
+    border-radius: 12px;
+}
+.tpl-number {
+    position: absolute; top: 8px; left: 8px; background: rgba(0, 0, 0, 0.8); color: #fff;
+    padding: 2px 6px; font-size: 10px; border-radius: 4px; z-index: 100; font-weight: bold;
+    backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);
+}
+.img-box { width: 100%; flex: 1; overflow: hidden; position: relative; z-index: 1; background: #cbd5e1; }
+.img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* কর্পোরেট (১-১৫) */
+.lay-b1 { display: flex; flex-direction: row; }
+.lay-b1 .left { width: 50%; padding: 5cqw; display: flex; flex-direction: column; justify-content: center; }
+.lay-b1 .right { width: 50%; position: relative; }
+.lay-b1 .title { font-family: 'Space Grotesk', sans-serif; font-size: 9cqw; font-weight: 700; line-height: 1; margin-bottom: 3cqw; }
+.lay-b1 .text { font-size: 2.2cqw; line-height: 1.5; }
+.lay-b1 .right img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
+.lay-b2 { padding: 5cqw; display: flex; flex-direction: column; }
+.lay-b2 .header { font-family: 'Inter', sans-serif; font-size: 3cqw; font-weight: 600; margin-bottom: 4cqw; }
+.lay-b2 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw; height: 45cqw; margin-bottom: 4cqw; }
+.lay-b2 .title { font-family: 'Space Grotesk', sans-serif; font-size: 10cqw; font-weight: 700; margin-bottom: 3cqw; }
+.lay-b2 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b3 { position: relative; justify-content: flex-end; }
+.lay-b3 .bg { position: absolute; inset: 0; z-index: 1; }
+.lay-b3 .bg::after { content:''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); }
+.lay-b3 .content { position: relative; z-index: 2; padding: 6cqw; color: #fff; }
+.lay-b3 .badge { background: #3b82f6; color: #fff; font-size: 2.5cqw; padding: 1cqw 3cqw; border-radius: 5cqw; display: inline-block; margin-bottom: 2cqw; font-weight: bold; }
+.lay-b3 .title { font-family: 'Syne', sans-serif; font-size: 12cqw; font-weight: 800; line-height: 1; margin-bottom: 2cqw; }
+.lay-b3 .text { font-size: 2.2cqw; line-height: 1.5; color: #cbd5e1; }
+
+.lay-b4 { padding: 5cqw; display: flex; flex-direction: column; justify-content: flex-end; }
+.lay-b4 .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(2cqw); padding: 4cqw; border-radius: 3cqw; border: 0.3cqw solid rgba(255,255,255,0.2); height: 100%; display: flex; flex-direction: column; }
+.lay-b4 .title { font-family: 'Playfair Display', serif; font-size: 9cqw; margin-bottom: 3cqw; }
+.lay-b4 .img-box { height: 45cqw; border-radius: 2cqw; margin-bottom: 3cqw; flex: none; }
+.lay-b4 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b5 { padding: 6cqw; display: flex; flex-direction: column; border-left: 1cqw solid #111; }
+.lay-b5 .title { font-family: 'Inter', sans-serif; font-size: 9cqw; font-weight: 800; margin-bottom: 4cqw; text-transform: uppercase; }
+.lay-b5 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; filter: grayscale(100%); }
+.lay-b5 .text { font-size: 2.2cqw; line-height: 1.6; column-count: 2; column-gap: 2cqw; text-align: justify; margin-top: auto; }
+
+.lay-b6 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-b6 .header { display: flex; justify-content: space-between; font-size: 2.5cqw; border-bottom: 0.2cqw solid; padding-bottom: 2cqw; margin-bottom: 3cqw; }
+.lay-b6 .title { font-family: 'Oswald', sans-serif; font-size: 14cqw; text-transform: uppercase; line-height: 0.9; margin-bottom: 4cqw; }
+.lay-b6 .img-box { border: 0.3cqw solid; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-b6 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b7 { padding: 6cqw; display: flex; flex-direction: column; border-top: 1.5cqw solid; }
+.lay-b7 .title { font-family: 'Playfair Display', serif; font-size: 10cqw; margin-bottom: 4cqw; }
+.lay-b7 .img-box { border-radius: 3cqw; height: 55cqw; margin-bottom: 4cqw; flex: none; }
+.lay-b7 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; font-weight: 600; }
+
+.lay-b8 { padding: 5cqw; border: 1cqw solid; display: flex; flex-direction: column; }
+.lay-b8 .title { font-family: 'Bebas Neue', sans-serif; font-size: 16cqw; line-height: 0.9; margin-bottom: 4cqw; }
+.lay-b8 .img-box { border: 1cqw solid; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-b8 .text { font-size: 2.5cqw; font-weight: 600; line-height: 1.4; margin-top: auto; }
+
+.lay-b9 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-b9 .title { font-family: 'Space Grotesk', sans-serif; font-size: 8cqw; margin-bottom: 4cqw; }
+.lay-b9 .img-box { border: 0.3cqw dashed; height: 50cqw; margin-bottom: 4cqw; flex: none; padding: 1cqw; }
+.lay-b9 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b10 { padding: 6cqw; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+.lay-b10::before { content:''; position: absolute; top: -5cqw; right: -5cqw; width: 40cqw; height: 40cqw; border-radius: 50%; z-index: 0; background: rgba(0,0,0,0.1); }
+.lay-b10 .title { font-family: 'Syne', sans-serif; font-size: 10cqw; z-index: 1; margin-bottom: 4cqw; }
+.lay-b10 .img-box { z-index: 1; height: 50cqw; margin-bottom: 4cqw; flex: none; border-radius: 2cqw; }
+.lay-b10 .text { font-size: 2.2cqw; line-height: 1.5; z-index: 1; margin-top: auto; }
+
+.lay-b11 { padding: 4cqw; display: flex; flex-direction: column; }
+.lay-b11 .inner { border: 0.3cqw solid; padding: 4cqw; height: 100%; display: flex; flex-direction: column; }
+.lay-b11 .title { font-family: 'Cinzel', serif; font-size: 10cqw; text-align: center; margin-bottom: 4cqw; }
+.lay-b11 .img-box { border: 0.2cqw solid; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-b11 .text { font-size: 2.2cqw; line-height: 1.5; text-align: center; margin-top: auto; }
+
+.lay-b12 { display: flex; flex-direction: row; }
+.lay-b12 .left { width: 55%; padding: 5cqw; display: flex; flex-direction: column; justify-content: center; }
+.lay-b12 .right { width: 45%; position: relative; }
+.lay-b12 .title { font-family: 'Oswald', sans-serif; font-size: 10cqw; margin-bottom: 3cqw; text-transform: uppercase; }
+.lay-b12 .text { font-size: 2.2cqw; line-height: 1.5; }
+.lay-b12 .right img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
+.lay-b13 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-b13 .badge { font-size: 2.5cqw; padding: 1.5cqw 3cqw; display: inline-block; align-self: flex-start; margin-bottom: 3cqw; font-weight: bold; }
+.lay-b13 .title { font-family: 'Inter', sans-serif; font-size: 8cqw; font-weight: 800; margin-bottom: 4cqw; }
+.lay-b13 .img-box { border-radius: 2cqw; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-b13 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b14 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-b14 .title { font-family: 'Space Grotesk', sans-serif; font-size: 10cqw; margin-bottom: 4cqw; border-bottom: 0.5cqw solid; padding-bottom: 2cqw; }
+.lay-b14 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; opacity: 0.8; }
+.lay-b14 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-b15 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-b15 .title { font-family: 'Playfair Display', serif; font-size: 11cqw; margin-bottom: 4cqw; font-style: italic; }
+.lay-b15 .img-box { height: 55cqw; margin-bottom: 4cqw; flex: none; border: 0.5cqw solid; padding: 1cqw; }
+.lay-b15 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+/* ক্যাটাগরি (১৬-২৫) */
+.lay-c1 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-c1 .header { font-family: 'Great Vibes', cursive; font-size: 10cqw; text-align: center; margin-bottom: 2cqw; }
+.lay-c1 .img-box { border-radius: 20cqw 20cqw 2cqw 2cqw; height: 45cqw; margin-bottom: 4cqw; flex: none; }
+.lay-c1 .title { font-family: 'Playfair Display', serif; font-size: 8cqw; font-weight: 700; margin-bottom: 2cqw; }
+.lay-c1 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-c2 { padding: 5cqw; border: 1cqw solid; display: flex; flex-direction: column; }
+.lay-c2 .title { font-family: 'Dancing Script', cursive; font-size: 12cqw; margin-bottom: 4cqw; text-align: right; }
+.lay-c2 .img-box { border-radius: 2cqw; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-c2 .text { font-size: 2.2cqw; line-height: 1.6; column-count: 2; column-gap: 2cqw; text-align: justify; margin-top: auto; }
+
+.lay-c3 { padding: 6cqw; display: flex; flex-direction: column; position: relative; }
+.lay-c3::before { content:''; position: absolute; top: 10cqw; right: 10cqw; width: 30cqw; height: 30cqw; border-radius: 50%; filter: blur(8cqw); opacity: 0.5; background: rgba(0,0,0,0.1); }
+.lay-c3 .header { font-family: 'Great Vibes', cursive; font-size: 10cqw; margin-bottom: 4cqw; z-index: 1; }
+.lay-c3 .img-box { border-radius: 50%; height: 50cqw; width: 70cqw; margin: 0 auto 4cqw; border: 0.5cqw dashed; z-index: 1; padding: 1cqw; }
+.lay-c3 .text { font-size: 2.2cqw; line-height: 1.5; text-align: center; z-index: 1; margin-top: auto; }
+
+.lay-c4 { padding: 6cqw; border: 0.5cqw solid; display: flex; flex-direction: column; }
+.lay-c4 .title { font-family: 'Dancing Script', cursive; font-size: 12cqw; margin-bottom: 4cqw; text-align: center; }
+.lay-c4 .img-box { border-radius: 2cqw; height: 55cqw; margin-bottom: 4cqw; flex: none; }
+.lay-c4 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-c5 { padding: 6cqw; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.lay-c5::after { content:''; position: absolute; bottom: -10cqw; right: -10cqw; width: 50cqw; height: 50cqw; transform: rotate(45deg); z-index: 0; background: rgba(0,0,0,0.1); }
+.lay-c5 .title { font-family: 'Bebas Neue', sans-serif; font-size: 16cqw; line-height: 0.9; margin-bottom: 4cqw; z-index: 1; }
+.lay-c5 .img-box { border-radius: 2cqw; height: 50cqw; margin-bottom: 4cqw; flex: none; z-index: 1; border: 0.5cqw solid; }
+.lay-c5 .text { font-size: 2.2cqw; line-height: 1.5; z-index: 1; margin-top: auto; font-weight: 600; }
+
+.lay-c6 { padding: 6cqw; display: flex; flex-direction: column; }
+.lay-c6 .title { font-family: 'Great Vibes', cursive; font-size: 14cqw; margin-bottom: 4cqw; text-align: center; }
+.lay-c6 .img-box { border-radius: 50% 50% 0 0; height: 55cqw; margin-bottom: 4cqw; flex: none; border: 1cqw solid; }
+.lay-c6 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-c7 { padding: 5cqw; border: 1cqw solid; display: flex; flex-direction: column; }
+.lay-c7 .title { font-family: 'Dancing Script', cursive; font-size: 12cqw; margin-bottom: 4cqw; text-align: center; }
+.lay-c7 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; filter: sepia(0.6); border: 0.2cqw solid; padding: 1cqw; }
+.lay-c7 .text { font-size: 2.2cqw; line-height: 1.5; text-align: justify; margin-top: auto; }
+
+.lay-c8 { padding: 6cqw; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+.lay-c8::before { content:''; position: absolute; top: -10cqw; left: -10cqw; width: 50cqw; height: 50cqw; border-radius: 50%; z-index: 0; background: rgba(0,0,0,0.1); }
+.lay-c8 .title { font-family: 'Great Vibes', cursive; font-size: 14cqw; z-index: 1; margin-bottom: 4cqw; }
+.lay-c8 .img-box { z-index: 1; height: 50cqw; margin-bottom: 4cqw; flex: none; border-radius: 2cqw; }
+.lay-c8 .text { font-size: 2.2cqw; line-height: 1.5; z-index: 1; margin-top: auto; font-weight: 600; }
+
+.lay-c9 { padding: 6cqw; display: flex; flex-direction: column; border-top: 1.5cqw solid; }
+.lay-c9 .title { font-family: 'Dancing Script', cursive; font-size: 10cqw; margin-bottom: 4cqw; }
+.lay-c9 .img-box { border-radius: 2cqw; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-c9 .text { font-size: 2.2cqw; line-height: 1.5; margin-top: auto; }
+
+.lay-c10 { padding: 4cqw; display: flex; flex-direction: column; }
+.lay-c10 .inner { border: 0.3cqw solid; padding: 4cqw; height: 100%; display: flex; flex-direction: column; }
+.lay-c10 .title { font-family: 'Great Vibes', cursive; font-size: 14cqw; text-align: center; margin-bottom: 4cqw; }
+.lay-c10 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; border: 0.2cqw solid; }
+.lay-c10 .text { font-size: 2.2cqw; line-height: 1.5; text-align: center; margin-top: auto; }
+
+/* ফ্যাশন ও অ্যাডভান্সড (২৬-৪০) */
+.lay-f1 { padding: 4cqw; }
+.lay-f1 .grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2cqw; height: 75cqw; margin-bottom: 3cqw; }
+.lay-f1 .top-text { font-size: 2cqw; margin-bottom: 2cqw; }
+.lay-f1 .text { font-size: 2.2cqw; line-height: 1.5; }
+
+.lay-f2 { padding: 4cqw; justify-content: center; align-items: center; }
+.lay-f2 .main { width: 80cqw; height: 100cqw; z-index: 1; }
+.lay-f2 .sub { position: absolute; top: 20cqw; right: 4cqw; width: 35cqw; height: 45cqw; z-index: 2; border: 1cqw solid #fff; }
+.lay-f2 .text { position: absolute; bottom: 10cqw; left: 10cqw; font-size: 2.2cqw; z-index: 3; background: rgba(0,0,0,0.5); color: #fff; padding: 2cqw; }
+
+.lay-f3 { padding: 4cqw; }
+.lay-f3 .b1 { position: absolute; top: 15cqw; left: 10cqw; width: 40cqw; height: 50cqw; background: rgba(0,0,0,0.1); }
+.lay-f3 .i1 { position: absolute; top: 25cqw; left: 15cqw; width: 35cqw; height: 45cqw; z-index: 2; }
+.lay-f3 .i2 { position: absolute; bottom: 20cqw; right: 15cqw; width: 45cqw; height: 55cqw; z-index: 3; }
+.lay-f3 .title { position: absolute; bottom: 12cqw; left: 10cqw; font-family: 'Playfair Display', serif; font-size: 8cqw; z-index: 4; }
+.lay-f3 .text { position: absolute; top: 12cqw; right: 10cqw; font-size: 2.2cqw; z-index: 4; width: 30cqw; }
+
+.lay-f4 { display: flex; flex-direction: row; }
+.lay-f4 .left { width: 35%; padding: 4cqw; display: flex; flex-direction: column; gap: 3cqw; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); }
+.lay-f4 .left .img-box { width: 100%; aspect-ratio: 1/1; border: 0.5cqw solid #fff; flex: none; }
+.lay-f4 .right { width: 65%; position: relative; }
+.lay-f4 .right .main-img { width: 100%; height: 100%; object-fit: cover; }
+.lay-f4 .right .title { position: absolute; top: 10cqw; left: 5cqw; font-family: 'Oswald', sans-serif; font-size: 10cqw; font-weight: 800; line-height: 0.9; z-index: 2; }
+.lay-f4 .right .text { position: absolute; bottom: 10cqw; left: 5cqw; font-size: 2.2cqw; z-index: 2; width: 80%; background: rgba(255,255,255,0.8); padding: 2cqw; }
+
+.lay-f5 { padding: 4cqw; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2cqw; }
+.lay-f5 .img-box:nth-child(1) { grid-column: 1; grid-row: 1; }
+.lay-f5 .img-box:nth-child(2) { grid-column: 2; grid-row: 1; }
+.lay-f5 .img-box:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; }
+.lay-f5 .overlay { position: absolute; bottom: 8cqw; right: 8cqw; text-align: right; background: rgba(255,255,255,0.9); padding: 2cqw; border-radius: 1cqw; z-index: 5; }
+.lay-f5 .overlay p { font-size: 2.5cqw; font-weight: 600; color: #111; }
+.lay-f5 .overlay span { font-size: 4cqw; font-weight: 800; color: #222; }
+.lay-f5 .text { position: absolute; top: 8cqw; left: 8cqw; font-size: 2.2cqw; color: #fff; background: rgba(0,0,0,0.6); padding: 2cqw; width: 50%; z-index: 5; }
+
+.lay-f6 { padding: 4cqw; }
+.lay-f6 .script { position: absolute; top: 4cqw; left: 6cqw; font-family: 'Dancing Script', cursive; font-size: 12cqw; z-index: 3; }
+.lay-f6 .main { position: absolute; top: 15cqw; left: 50%; transform: translateX(-50%); width: 80cqw; height: 80cqw; z-index: 1; }
+.lay-f6 .sub { position: absolute; bottom: 15cqw; left: 10cqw; width: 35cqw; height: 45cqw; z-index: 2; border: 1cqw solid #fff; }
+.lay-f6 .text { position: absolute; bottom: 6cqw; left: 10cqw; font-size: 2.2cqw; font-weight: 600; z-index: 4; }
+
+.lay-f7 { padding: 8cqw 4cqw; align-items: center; justify-content: center; }
+.lay-f7 .box { background: #fff; padding: 3cqw 3cqw 10cqw 3cqw; box-shadow: 0 4cqw 10cqw rgba(0,0,0,0.2); transform: rotate(-3deg); width: 80cqw; height: 90cqw; display: flex; flex-direction: column; }
+.lay-f7 .box .img-box { width: 100%; flex: 1; }
+.lay-f7 .box .caption { font-family: 'Dancing Script', cursive; font-size: 6cqw; text-align: center; margin-top: 2cqw; color: #333; }
+
+.lay-f8 { background: #000; }
+.lay-f8 .main { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+.lay-f8 .title { position: absolute; top: 5cqw; left: 5cqw; right: 5cqw; font-family: 'Playfair Display', serif; font-size: 16cqw; font-weight: 700; color: #fff; text-align: center; text-transform: uppercase; z-index: 2; }
+.lay-f8 .text { position: absolute; bottom: 5cqw; left: 5cqw; right: 5cqw; color: #fff; text-align: center; font-size: 2.2cqw; z-index: 2; }
+
+.lay-f9 { padding: 4cqw; border: 1cqw solid; }
+.lay-f9 .title { font-family: 'Oswald', sans-serif; font-size: 12cqw; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 3cqw; }
+.lay-f9 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw; height: 60cqw; }
+.lay-f9 .grid .img-box { border: 0.5cqw solid; }
+.lay-f9 .text { font-size: 2.2cqw; margin-top: 3cqw; }
+
+.lay-f10 { padding: 8cqw 6cqw; justify-content: center; }
+.lay-f10 .line { width: 20cqw; height: 0.5cqw; background: currentColor; margin-bottom: 4cqw; }
+.lay-f10 .title { font-family: 'Outfit', sans-serif; font-size: 10cqw; font-weight: 300; line-height: 1.2; margin-bottom: 4cqw; }
+.lay-f10 .title span { font-weight: 800; }
+.lay-f10 .img-box { height: 50cqw; width: 100%; margin-bottom: 3cqw; }
+.lay-f10 .text { font-size: 2.2cqw; line-height: 1.5; }
+
+.lay-f11 { padding: 6cqw; border-top: 1.5cqw solid; }
+.lay-f11 .title { font-family: 'Syne', sans-serif; font-size: 12cqw; margin-bottom: 4cqw; }
+.lay-f11 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; filter: contrast(1.2); }
+.lay-f11 .text { font-size: 2.2cqw; line-height: 1.5; }
+
+.lay-f12 { padding: 6cqw; position: relative; }
+.lay-f12::before { content:''; position: absolute; top: 0; left: 0; width: 100%; height: 40%; z-index: 0; background: rgba(0,0,0,0.05); }
+.lay-f12 .title { font-family: 'Inter', sans-serif; font-size: 10cqw; font-weight: 800; margin-bottom: 4cqw; z-index: 1; position: relative; }
+.lay-f12 .img-box { height: 55cqw; margin-bottom: 4cqw; flex: none; z-index: 1; border-radius: 2cqw; }
+.lay-f12 .text { font-size: 2.2cqw; line-height: 1.5; z-index: 1; margin-top: auto; }
+
+.lay-f13 { background: #111; color: #fff; padding: 6cqw; border-left: 1cqw solid; }
+.lay-f13 .title { font-family: 'Space Grotesk', sans-serif; font-size: 11cqw; margin-bottom: 4cqw; }
+.lay-f13 .img-box { height: 50cqw; margin-bottom: 4cqw; flex: none; filter: grayscale(100%) contrast(1.5); }
+.lay-f13 .text { font-size: 2.2cqw; line-height: 1.5; }
+
+.lay-f14 { padding: 6cqw; border: 0.5cqw solid; margin: 2cqw; }
+.lay-f14 .inner { border: 0.3cqw solid; padding: 4cqw; height: 100%; display: flex; flex-direction: column; }
+.lay-f14 .title { font-family: 'Cinzel', serif; font-size: 9cqw; text-align: center; margin-bottom: 4cqw; }
+.lay-f14 .img-box { height: 45cqw; margin-bottom: 4cqw; flex: none; border: 0.2cqw solid; }
+.lay-f14 .text { font-size: 2.2cqw; line-height: 1.5; text-align: center; }
+
+.lay-f15 { padding: 5cqw; }
+.lay-f15 .title { font-family: 'Bebas Neue', sans-serif; font-size: 15cqw; line-height: 0.9; text-transform: uppercase; margin-bottom: 4cqw; }
+.lay-f15 .img-box { border: 0.5cqw solid; height: 50cqw; margin-bottom: 4cqw; flex: none; }
+.lay-f15 .text { font-size: 2.2cqw; line-height: 1.5; }
 </style></head><body>
 
 <div id="home">
@@ -122,12 +376,13 @@ h2 a{font-size:12px;font-weight:600;color:#c9cad6;cursor:pointer}
 <div id="mn">
  <div class="hero">
   <a class="try" href="register.html">👑 Join free today</a>
-  <h1>What will you design today?</h1>
+  <h1>Edit your photos like a pro</h1>
+  <label class="hu" for="hf"><b>🖼 Choose an image file</b><small>JPG, PNG or WEBP. It opens straight in the editor.</small></label>
+  <input type="file" id="hf" accept="image/*" style="position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px">
   <div class="tabs"><span onclick="scrollTo({top:0,behavior:'smooth'})">⌂ Home</span><span onclick="pick('')">▣ Templates</span></div>
   <div class="sr"><span>🔍</span><input id="q" placeholder="Search anything"></div>
  </div>
  
- <!-- ক্যাটাগরি আইকনসমূহ -->
  <div class="cats" id="cats"></div>
  
  <h2>Continue designing <a onclick="MN=30;loadList()">See all</a></h2>
@@ -201,23 +456,88 @@ const SZ={ig:[1080,1080],story:[1080,1920],pres:[1920,1080],poster:[1200,1700],r
 const CT=[['ig','Instagram Post','📷','#fda4af'],['story','Your Story','📱','#f0abfc'],['pres','Presentation','📊','#fdba74'],['poster','Poster','🖼️','#c4b5fd'],['resume','Resume','📄','#7dd3fc'],['logo','Logo','✨','#fde047'],['flyer','Flyer','📣','#5eead4'],['card','Business Card','💳','#cbd5e1'],['inv','Invitation','💌','#f9a8d4'],['doc','Document','📝','#a5b4fc']];
 const CL=Object.fromEntries(CT.map(x=>[x[0],x[1]]));
 const TT={ig:'NEW COLLECTION',story:'YOUR STORY',pres:'Presentation Title',poster:'GRAND EVENT',resume:'YOUR NAME',logo:'BRAND',flyer:'BIG SALE',card:'Your Name',inv:'YOU ARE INVITED',doc:'Document Title'};
-const PL=[['#111111','#e3fb2a','#ffffff'],['#1b1464','#ff4d8d','#ffffff'],['#fff4e6','#ff7a00','#222222'],['#0b3d2e','#9be15d','#ffffff'],['#f3e8ff','#7c3aed','#2b1055'],['#fde2e4','#e63946','#1d3557']];
-const PN=['Neon','Pop','Warm','Forest','Violet','Rose'],LN=['Bold','Split','Frame','Circle'];
+
+const PL=[
+['#111111','#e3fb2a','#ffffff'],
+['#1b1464','#ff4d8d','#ffffff'],
+['#fff4e6','#ff7a00','#222222'],
+['#0b3d2e','#9be15d','#ffffff'],
+['#f3e8ff','#7c3aed','#2b1055'],
+['#fde2e4','#e63946','#1d3557'],
+['#111827','#10b981','#ffffff'],
+['#eff6ff','#3b82f6','#1e3a8a'],
+['#fef2f2','#ef4444','#7f1d1d'],
+['#fdf2f8','#ec4899','#831843']
+];
+
+const PN=['Neon','Pop','Warm','Forest','Violet','Rose','Mint','Sky','Ruby','Pink'],LN=['Bold','Split','Frame','Circle','ImageTop','ImageBottom','FullOverlay','Magazine','Diagonal','Minimal'];
 const TX=(x,y,w,h,txt,fs,col,b,al)=>({t:'text',x,y,w,h,txt,fs,col,b,al,ff:'Arial'});
 const RC=(x,y,w,h,fill,t)=>({t:t||'rect',x,y,w,h,fill});
-const LY=[
- (w,h,p,c)=>[RC(0,h*.62,w,h*.38,p[1]),TX(w*.08,h*.12,w*.84,h*.4,TT[c],w*.1,p[2],1,'left'),TX(w*.08,h*.7,w*.84,h*.2,'Your subtitle goes here',w*.045,'#111111',0,'left')],
- (w,h,p,c)=>[RC(0,0,w*.45,h,p[1]),TX(w*.05,h*.4,w*.36,h*.2,'NEW',w*.07,'#111111',1,'left'),TX(w*.52,h*.3,w*.4,h*.4,TT[c],w*.07,p[2],1,'left')],
- (w,h,p,c)=>[{t:'rect',x:w*.05,y:h*.05,w:w*.9,h:h*.9,fill:'none',stroke:p[1]},TX(w*.12,h*.38,w*.76,h*.24,TT[c],w*.08,p[2],1,'center'),TX(w*.12,h*.68,w*.76,h*.1,'Add your text here',w*.035,p[1],0,'center')],
- (w,h,p,c)=>[RC(w*.2,h*.1,w*.6,w*.6,p[1],'ellipse'),TX(w*.25,h*.1+w*.27,w*.5,h*.1,TT[c],w*.07,'#111111',1,'center'),TX(w*.1,h*.8,w*.8,h*.1,'Your subtitle goes here',w*.04,p[2],0,'center')]
+
+const IMGS = [
+    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80',
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80',
+    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80',
+    'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&q=80',
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80',
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80',
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80',
+    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80',
+    'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80',
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80',
+    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80',
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80'
 ];
-function tpl(c,pi,li){const[w,h]=SZ[c];return{cat:c,name:PN[pi]+' '+LN[li]+' '+CL[c],w,h,bg:PL[pi][0],els:LY[li](w,h,PL[pi],c)}}
-const ALL=[];for(let k=0;k<24;k++)for(const x of CT)ALL.push([x[0],k%6,k/6|0]);
+
+const LY=[
+ (w,h,p,c,i)=>[RC(0,h*.62,w,h*.38,p[1]),TX(w*.08,h*.12,w*.84,h*.4,TT[c],w*.1,p[2],1,'left'),TX(w*.08,h*.7,w*.84,h*.2,'Your subtitle goes here',w*.045,'#111111',0,'left')],
+ (w,h,p,c,i)=>[RC(0,0,w*.45,h,p[1]),TX(w*.05,h*.4,w*.36,h*.2,'NEW',w*.07,'#111111',1,'left'),TX(w*.52,h*.3,w*.4,h*.4,TT[c],w*.07,p[2],1,'left')],
+ (w,h,p,c,i)=>[{t:'rect',x:w*.05,y:h*.05,w:w*.9,h:h*.9,fill:'none',stroke:p[1]},TX(w*.12,h*.38,w*.76,h*.24,TT[c],w*.08,p[2],1,'center'),TX(w*.12,h*.68,w*.76,h*.1,'Add your text here',w*.035,p[1],0,'center')],
+ (w,h,p,c,i)=>[RC(w*.2,h*.1,w*.6,w*.6,p[1],'ellipse'),TX(w*.25,h*.1+w*.27,w*.5,h*.1,TT[c],w*.07,'#111111',1,'center'),TX(w*.1,h*.8,w*.8,h*.1,'Your subtitle goes here',w*.04,p[2],0,'center')],
+ (w,h,p,c,i)=>[{t:'img',src:IMGS[i%IMGS.length],x:0,y:0,w:w,h:h*.6},RC(0,h*.6,w,h*.4,p[0]),TX(w*.08,h*.65,w*.84,h*.15,TT[c],w*.08,p[2],1,'left'),TX(w*.08,h*.8,w*.84,h*.1,'Discover more',w*.04,p[1],0,'left')],
+ (w,h,p,c,i)=>[RC(0,0,w,h*.4,p[0]),TX(w*.08,h*.08,w*.84,h*.2,TT[c],w*.08,p[2],1,'left'),TX(w*.08,h*.25,w*.84,h*.1,'Subtitle here',w*.04,p[1],0,'left'),{t:'img',src:IMGS[(i+1)%IMGS.length],x:0,y:h*.4,w:w,h:h*.6}],
+ (w,h,p,c,i)=>[{t:'img',src:IMGS[(i+2)%IMGS.length],x:0,y:0,w:w,h:h},RC(0,h*.5,w,h*.5,'rgba(0,0,0,0.6)'),TX(w*.08,h*.6,w*.84,h*.2,TT[c],w*.1,'#ffffff',1,'left'),TX(w*.08,h*.8,w*.84,h*.1,'Exclusive offer',w*.04,p[1],0,'left')],
+ (w,h,p,c,i)=>[{t:'img',src:IMGS[(i+3)%IMGS.length],x:w*.1,y:h*.2,w:w*.8,h:h*.5},TX(w*.1,h*.75,w*.8,h*.15,TT[c],w*.08,p[2],1,'center'),RC(w*.1,h*.1,w*.3,h*.02,p[1])],
+ (w,h,p,c,i)=>[{t:'poly',pts:[[0,0],[1,0],[0,1]],fill:p[1],x:0,y:0,w:w,h:h},TX(w*.1,h*.15,w*.6,h*.2,TT[c],w*.08,p[2],1,'left'),TX(w*.5,h*.7,w*.4,h*.2,'Learn more',w*.04,'#111111',0,'right')],
+ (w,h,p,c,i)=>[RC(w*.1,h*.1,w*.15,h*.02,p[1]),TX(w*.1,h*.15,w*.8,h*.15,TT[c],w*.1,p[2],1,'left'),TX(w*.1,h*.3,w*.8,h*.2,'A modern and sleek design for your business.',w*.035,'#666666',0,'left'),{t:'img',src:IMGS[(i+4)%IMGS.length],x:w*.1,y:h*.55,w:w*.8,h:h*.35}]
+];
+
+function tpl(c,pi,li){
+    const[w,h]=SZ[c];
+    return{
+        cat:c,
+        name:PN[pi%PN.length]+' '+LN[li%LN.length]+' '+CL[c],
+        w,h,
+        bg:PL[pi][0],
+        els:LY[li](w,h,PL[pi],c,pi+li)
+    }
+}
+
+const ALL=[];
+for(let i=0; i<700; i++) {
+    const cIndex = i % 10; 
+    const pIndex = Math.floor(i / 10) % 10; 
+    const lIndex = Math.floor(i / 100) % 7; 
+    ALL.push([CT[cIndex][0], pIndex, lIndex]);
+}
 
 /* ---- drawing (thumbnails + export) ---- */
 const rot=(c,e,f)=>{c.save();if(e.rot){const x=e.x+e.w/2,y=e.y+e.h/2;c.translate(x,y);c.rotate(e.rot*Math.PI/180);c.translate(-x,-y)}f();c.restore()};
 function wrapT(c,t,w){const o=[];t.split('\n').forEach(p=>{let l='';p.split(' ').forEach(wd=>{const s=l?l+' '+wd:wd;if(c.measureText(s).width>w&&l){o.push(l);l=wd}else l=s});o.push(l)});return o}
-const im=e=>e._i||(e._i=Object.assign(new Image(),{src:e.src}));
+
+const im=e=>{
+    if(!e._i){
+        const img = new Image();
+        if(e.src.startsWith('http')) img.crossOrigin = 'Anonymous';
+        img.src = e.src;
+        e._i = img;
+    }
+    return e._i;
+};
+
 function draw(c,d,s){c.save();c.scale(s,s);c.fillStyle=d.bg;c.fillRect(0,0,d.w,d.h);
  d.els.forEach(e=>rot(c,e,()=>{
   if(e.t=='text'){
@@ -227,7 +547,15 @@ function draw(c,d,s){c.save();c.scale(s,s);c.fillStyle=d.bg;c.fillRect(0,0,d.w,d
    const X=e.al=='center'?e.x+e.w/2:e.al=='right'?e.x+e.w:e.x;
    wrapT(c,e.txt,e.w).forEach((l,i)=>{const Y=e.y+i*e.fs*1.2;if(e.sk){c.lineWidth=e.fs*.06;c.strokeStyle=e.sk;c.strokeText(l,X,Y)}c.fillStyle=f;c.fillText(l,X,Y)})}
   else if(e.t=='poly'){c.beginPath();e.pts.forEach((p,i)=>c[i?'lineTo':'moveTo'](e.x+p[0]*e.w,e.y+p[1]*e.h));c.closePath();c.fillStyle=e.fill;c.fill()}
-  else if(e.t=='img'){const m=im(e);if(m.complete)c.drawImage(m,e.x,e.y,e.w,e.h)}
+  else if(e.t=='img'){
+      const m=im(e);
+      if(m.complete) c.drawImage(m,e.x,e.y,e.w,e.h);
+      else {
+          c.fillStyle='#333';c.fillRect(e.x,e.y,e.w,e.h);
+          c.fillStyle='#666';c.font=(e.w*0.1)+'px Arial';c.textAlign='center';c.textBaseline='middle';
+          c.fillText('...',e.x+e.w/2,e.y+e.h/2);
+      }
+  }
   else if(e.t=='ellipse'){c.beginPath();c.ellipse(e.x+e.w/2,e.y+e.h/2,e.w/2,e.h/2,0,0,7);if(e.fill!='none'){c.fillStyle=e.fill;c.fill()}if(e.stroke){c.strokeStyle=e.stroke;c.lineWidth=d.w*.006;c.stroke()}}
   else{if(e.fill!='none'){c.fillStyle=e.fill;c.fillRect(e.x,e.y,e.w,e.h)}if(e.stroke){c.strokeStyle=e.stroke;c.lineWidth=d.w*.006;c.strokeRect(e.x,e.y,e.w,e.h)}}
  }));c.restore()}
@@ -240,18 +568,185 @@ function ago(t){const m=Math.round((Date.now()-t)/6e4);if(m<1)return'just now';i
 function card(d,fn,ov,sz){const c=document.createElement('div');c.className='tc';const t=document.createElement('div');t.className='th';t.appendChild(thumb(d,sz||100));if(ov)t.insertAdjacentHTML('beforeend','<span class="ov"><b>☆</b><b>⋯</b></span>');c.appendChild(t);c.insertAdjacentHTML('beforeend','<p class="nm">'+esc(d.name)+'</p><p class="mt">'+esc(CL[d.cat]||'Design')+' · '+d.w+' x '+d.h+' px</p>');c.onclick=fn;return c}
 function blank(c){const[w,h]=SZ[c];newD(CL[c]||'Design',w,h)}
 
+// 🔥 আপনার দেওয়া ৭০০ টেমপ্লেটের ডাটা
+const bizTexts = [
+    "We are a leading strategic consulting firm dedicated to driving growth and innovation for forward-thinking enterprises. Our data-driven approach combines market analysis, operational efficiency, and digital transformation to maximize your ROI and secure a competitive advantage in the global marketplace.",
+    "Innovative software solutions designed for the modern enterprise. We build scalable cloud infrastructure and AI-driven analytics platforms that empower your business to make data-backed decisions, streamline operations, and stay ahead of the competition in a rapidly evolving technological landscape.",
+    "Empowering your business with comprehensive financial insights and strategic planning. Our expert team provides top-tier auditing, tax advisory, and wealth management services, ensuring your assets are protected and positioned for long-term sustainable growth across all market conditions.",
+    "Transform your retail and e-commerce operations with our cutting-edge logistics and supply chain management. We optimize inventory, reduce overhead costs, and ensure lightning-fast delivery, providing a seamless end-to-end experience for your customers and driving higher conversion rates.",
+    "Award-winning digital marketing agency specializing in SEO, social media management, and content creation. We turn clicks into loyal customers through strategic, data-backed campaigns that resonate with your target audience, build brand authority, and deliver measurable business results.",
+    "Building the future with sustainable materials and innovative engineering. Experts in commercial and residential real estate development, we transform visions into reality. Our commitment to quality, safety, and environmental responsibility ensures every project is a landmark success.",
+    "Unlock the potential of your human capital with our specialized HR and recruitment solutions. We connect you with top-tier talent, implement effective employee retention strategies, and design corporate cultures that foster innovation, productivity, and long-term loyalty.",
+    "Pioneering the future of fintech with secure, lightning-fast financial services designed for the digital age. Manage your wealth, track investments, and transfer funds globally with zero hidden fees. We leverage blockchain and AI to provide unparalleled financial security.",
+    "Your strategic partner in legal compliance and corporate law. Our seasoned attorneys provide comprehensive legal advisory, contract negotiation, and risk mitigation services, ensuring your business is fully protected against regulatory challenges and intellectual property disputes.",
+    "Accelerating business growth through tailored venture capital and private equity investments. We identify high-potential startups and scale-ups, providing not just capital, but also mentorship, strategic guidance, and access to our vast network of industry experts.",
+    "Creating immersive digital experiences and corporate branding that leave a lasting impression. We specialize in UI/UX design, corporate identity, and interactive media, ensuring your brand stands out across all digital touchpoints and communicates its core values effectively.",
+    "Optimizing your manufacturing and production lines with Industry 4.0 technologies. We implement IoT sensors, automation, and predictive maintenance to reduce downtime, increase output quality, and drive operational excellence in modern manufacturing.",
+    "Expert corporate training and leadership development programs. We equip your executives and teams with the skills, mindset, and strategic vision required to navigate complex business challenges, lead with confidence, and drive organizational change.",
+    "Comprehensive cybersecurity solutions to protect your digital assets. We offer threat detection, penetration testing, and robust data encryption services, ensuring your sensitive corporate information remains secure against evolving cyber threats.",
+    "Elevating your corporate events and global conferences. We provide end-to-end event management, from venue selection and speaker curation to high-impact digital marketing, ensuring your next event leaves a lasting legacy.",
+    "Strategic supply chain consulting and vendor management. We help you build resilient, transparent, and cost-effective supply networks that can withstand global disruptions and adapt to changing market demands.",
+    "Transforming healthcare management with modern tech solutions. We provide electronic health record systems, telemedicine platforms, and data analytics tools that improve patient outcomes and streamline clinical operations.",
+    "Revolutionizing the agricultural sector with smart farming technologies. Our data-driven solutions optimize crop yields, conserve resources, and promote sustainable agricultural practices for a growing global population.",
+    "Expert M&A advisory services. We guide you through every stage of the merger and acquisition process, from target identification and due diligence to post-merger integration, ensuring maximum value creation.",
+    "Next-generation cloud hosting and IT infrastructure management. We provide 99.99% uptime, scalable server solutions, and 24/7 dedicated support to keep your business operations running smoothly and securely."
+];
+const catTexts = [
+    "Experience the ultimate in culinary excellence with our carefully curated menu. We source only the freshest, locally-sourced organic ingredients to create dishes that are as visually stunning as they are delicious. Every bite is a celebration of flavor, tradition, and passion.",
+    "Embark on a journey to the world's most breathtaking destinations. We specialize in crafting bespoke travel itineraries that go beyond the ordinary, offering exclusive access to hidden gems, cultural immersion, and unforgettable adventures tailored just for you.",
+    "Pushing the boundaries of human exploration. We are dedicated to uncovering the mysteries of the cosmos through cutting-edge technology and relentless curiosity. Join us as we take giant leaps for mankind and venture into the great unknown.",
+    "Feel the rhythm and let the music move you. Our state-of-the-art audio experiences are designed to deliver crystal clear sound, deep bass, and an immersive atmosphere that brings your favorite tracks to life. Sound has never looked this good.",
+    "Unleash your full potential with our high-performance fitness gear and training programs. Whether you are a seasoned athlete or just starting your journey, we provide the tools and motivation you need to break your limits and achieve peak physical conditioning.",
+    "Reconnect with the natural world. We are committed to sustainable living and eco-friendly practices. From organic farming to renewable energy, our mission is to protect the planet while providing you with pure, natural products that enhance your well-being.",
+    "Step back in time with our classic vintage collection. Celebrating the nostalgia of the past, we bring you timeless designs, retro aesthetics, and high-quality craftsmanship. Every piece tells a story of a bygone era, reimagined for the modern world.",
+    "Express yourself through the power of abstract art. We provide a platform for bold creativity and unconventional thinking. Our curated collection features vibrant colors, geometric shapes, and fluid forms that challenge the mind and inspire the soul.",
+    "Empowering the next generation through knowledge and creativity. We offer innovative educational programs, interactive learning tools, and fun activities designed to spark curiosity and foster a lifelong love for learning in children of all ages.",
+    "Indulge in the finer things in life with our premium luxury goods. Meticulously crafted with the finest materials and unparalleled attention to detail, our exclusive collection is designed for those who demand nothing but the best. Elevate your lifestyle today."
+];
+const advTexts = [
+    "Discover the latest curated trends for the modern wardrobe. Minimalist aesthetics, maximum impact. We believe in quality over quantity, and our pieces are designed to seamlessly integrate into your daily life, providing both comfort and undeniable style.",
+    "Award-winning architecture and interior design. We create spaces that harmonize with their environment, utilizing natural light and sustainable materials to craft environments that are both functional and deeply inspiring.",
+    "The future of digital art and visual storytelling. We push the boundaries of creativity, combining traditional techniques with cutting-edge technology to produce stunning visuals that captivate and engage audiences across all platforms.",
+    "Elevating the coffee experience. We source the finest beans from around the world, roasting them to perfection to deliver a rich, complex flavor profile that awakens the senses and provides the perfect start to your day.",
+    "Redefining modern living. Our smart home solutions integrate seamlessly into your lifestyle, offering unparalleled convenience, security, and energy efficiency. Experience the future of home automation today.",
+    "Crafting unforgettable experiences. From immersive brand activations to large-scale public events, we bring visions to life with meticulous planning, innovative design, and flawless execution.",
+    "The ultimate destination for automotive enthusiasts. We feature the latest models, expert reviews, and in-depth analysis of the automotive industry, celebrating the passion for driving and engineering excellence.",
+    "Nourishing your body and soul. Our holistic wellness programs combine nutrition, mindfulness, and physical activity to help you achieve optimal health and a balanced, fulfilling life.",
+    "Showcasing the finest in contemporary art. We represent a diverse roster of emerging and established artists, providing a platform for bold expression and challenging perspectives.",
+    "Redefining the boundaries of fashion photography. We capture the essence of style, blending high-fashion aesthetics with raw, authentic emotion to create images that leave a lasting impression."
+];
+const allTexts = [...bizTexts, ...catTexts, ...advTexts];
+
+const htmlPalettes = [
+    { bg: '#f8fafc', text: '#0f172a' }, { bg: '#0f172a', text: '#fff' }, { bg: '#ffffff', text: '#111' },
+    { bg: '#1e1b4b', text: '#fff' }, { bg: '#f0fdf4', text: '#064e3b' }, { bg: '#facc15', text: '#000' },
+    { bg: '#eff6ff', text: '#1e3a8a' }, { bg: '#020617', text: '#10b981' }, { bg: '#fdf2f8', text: '#831843' },
+    { bg: '#121212', text: '#d4af37' }, { bg: '#fef2f2', text: '#7f1d1d' }, { bg: '#fff', text: '#000' }
+];
+function getImg(seed, w, h) { return `https://picsum.photos/seed/minami-700-${seed}/${w}/${h}`; }
+
+const HTML_TEMPLATES = [];
+for (let i = 1; i <= 700; i++) {
+    const img1 = getImg(`${i}-a`, 400, 500);
+    const img2 = getImg(`${i}-b`, 400, 500);
+    const img3 = getImg(`${i}-c`, 400, 500);
+    const img4 = getImg(`${i}-d`, 400, 500);
+
+    const p = htmlPalettes[i % htmlPalettes.length];
+    const text = allTexts[i % allTexts.length];
+    const layout = i % 40;
+    let innerHTML = '';
+    let extraStyle = `background:${p.bg}; color:${p.text};`;
+
+    if (layout === 0) innerHTML = `<div class="lay-b1" style="${extraStyle}"><div class="left"><div class="title">Strategic<br>Growth</div><div class="text">${text}</div></div><div class="right"><img src="${img1}" loading="lazy"></div></div>`;
+    else if (layout === 1) innerHTML = `<div class="lay-b2" style="${extraStyle}"><div class="header" style="color:${p.text}; opacity:0.7;">MINAMI FINANCIAL</div><div class="grid"><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="img-box"><img src="${img2}" loading="lazy"></div></div><div class="title">Market<br>Analysis</div><div class="text">${text}</div></div>`;
+    else if (layout === 2) innerHTML = `<div class="lay-b3"><div class="img-box bg"><img src="${img1}" loading="lazy"></div><div class="content"><div class="badge">NEW VENTURE</div><div class="title">Tech<br>Startup</div><div class="text">${text}</div></div></div>`;
+    else if (layout === 3) innerHTML = `<div class="lay-b4" style="background:linear-gradient(135deg, ${p.text}, ${p.bg});"><div class="card" style="color:${p.bg};"><div class="title">Global<br>Consulting</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div></div>`;
+    else if (layout === 4) innerHTML = `<div class="lay-b5" style="${extraStyle}; border-color:${p.text}"><div class="title">Corporate<br>Minimal</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 5) innerHTML = `<div class="lay-b6" style="${extraStyle}"><div class="header" style="border-color:${p.text};"><span>EXECUTIVE</span><span>2024</span></div><div class="title">The<br>Report</div><div class="img-box" style="border-color:${p.text};"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 6) innerHTML = `<div class="lay-b7" style="${extraStyle}; border-color:${p.text}"><div class="title">Real<br>Estate</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 7) innerHTML = `<div class="lay-b8" style="${extraStyle}; border-color:${p.text}"><div class="title" style="text-shadow:1cqw 1cqw 0 ${p.bg};">BOLD<br>MOVES</div><div class="img-box" style="border-color:${p.text}; box-shadow:1.5cqw 1.5cqw 0 ${p.text};"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 8) innerHTML = `<div class="lay-b9" style="${extraStyle}"><div class="title">Data<br>Driven</div><div class="img-box" style="border-color:${p.text};"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 9) innerHTML = `<div class="lay-b10" style="${extraStyle}"><div class="title">Creative<br>Agency</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 10) innerHTML = `<div class="lay-b11" style="${extraStyle}"><div class="inner" style="border-color:${p.text};"><div class="title">LUXURY<br>ASSETS</div><div class="img-box" style="border-color:${p.text};"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div></div>`;
+    else if (layout === 11) innerHTML = `<div class="lay-b12" style="${extraStyle}"><div class="left"><div class="title">SMART<br>APP</div><div class="text">${text}</div></div><div class="right"><img src="${img1}" loading="lazy"></div></div>`;
+    else if (layout === 12) innerHTML = `<div class="lay-b13" style="${extraStyle}"><div class="badge" style="background:${p.text}; color:${p.bg};">TECH</div><div class="title">Cloud<br>Solutions</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 13) innerHTML = `<div class="lay-b14" style="${extraStyle}"><div class="title">Global<br>Finance</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 14) innerHTML = `<div class="lay-b15" style="${extraStyle}"><div class="title">Legal<br>Advisory</div><div class="img-box" style="border-color:${p.text};"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 15) innerHTML = `<div class="lay-c1" style="${extraStyle}"><div class="header">Food & Culinary</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="title">Delicious<br>Recipes</div><div class="text">${text}</div></div>`;
+    else if (layout === 16) innerHTML = `<div class="lay-c2" style="${extraStyle}; border-color:${p.text}"><div class="title">Explore World</div><div class="img-box" style="box-shadow: 0.5cqw 0.5cqw 0 ${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 17) innerHTML = `<div class="lay-c3" style="${extraStyle}"><div class="header">Space & Sci-Fi</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 18) innerHTML = `<div class="lay-c4" style="${extraStyle}; border-color:${p.text}"><div class="title">Feel The Beat</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 19) innerHTML = `<div class="lay-c5" style="${extraStyle}"><div class="title">NO<br>LIMITS</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 20) innerHTML = `<div class="lay-c6" style="${extraStyle}"><div class="title">Nature & Eco</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 21) innerHTML = `<div class="lay-c7" style="${extraStyle}; border-color:${p.text}"><div class="title">Classic<br>Vibes</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 22) innerHTML = `<div class="lay-c8" style="${extraStyle}"><div class="title">Pure<br>Art</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 23) innerHTML = `<div class="lay-c9" style="${extraStyle}; border-color:${p.text}"><div class="title">Learn &<br>Grow</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 24) innerHTML = `<div class="lay-c10" style="${extraStyle}"><div class="inner" style="border-color:${p.text}"><div class="title">Luxury Lifestyle</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div></div>`;
+    else if (layout === 25) innerHTML = `<div class="lay-f1" style="${extraStyle}"><div class="top-text">MINAMI STUDIO</div><div class="grid"><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="img-box"><img src="${img2}" loading="lazy"></div><div class="img-box"><img src="${img3}" loading="lazy"></div><div class="img-box"><img src="${img4}" loading="lazy"></div></div><div class="text">${text}</div></div>`;
+    else if (layout === 26) innerHTML = `<div class="lay-f2" style="${extraStyle}"><div class="img-box main"><img src="${img1}" loading="lazy"></div><div class="img-box sub"><img src="${img2}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 27) innerHTML = `<div class="lay-f3" style="${extraStyle}"><div class="b1"></div><div class="img-box i1"><img src="${img1}" loading="lazy"></div><div class="img-box i2"><img src="${img2}" loading="lazy"></div><div class="title">Exclusive</div><div class="text">${text}</div></div>`;
+    else if (layout === 28) innerHTML = `<div class="lay-f4" style="${extraStyle}"><div class="left"><div class="img-box"><img src="${img2}" loading="lazy"></div><div class="img-box"><img src="${img3}" loading="lazy"></div><div class="img-box"><img src="${img4}" loading="lazy"></div></div><div class="right"><div class="title">NEW<br>STYLE</div><img src="${img1}" class="main-img" loading="lazy"><div class="text">${text}</div></div></div>`;
+    else if (layout === 29) innerHTML = `<div class="lay-f5" style="${extraStyle}"><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="img-box"><img src="${img2}" loading="lazy"></div><div class="img-box"><img src="${img3}" loading="lazy"></div><div class="overlay"><p>${text.substring(0,20)}...</p><span>30% OFF</span></div><div class="text">${text}</div></div>`;
+    else if (layout === 30) innerHTML = `<div class="lay-f6" style="${extraStyle}"><div class="script">Discount</div><div class="img-box main"><img src="${img1}" loading="lazy"></div><div class="img-box sub"><img src="${img2}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 31) innerHTML = `<div class="lay-f7" style="${extraStyle}"><div class="box"><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="caption">${text.substring(0,20)}...</div></div></div>`;
+    else if (layout === 32) innerHTML = `<div class="lay-f8" style="${extraStyle}"><img src="${img1}" class="main" loading="lazy"><div class="title">Magazine</div><div class="text">${text}</div></div>`;
+    else if (layout === 33) innerHTML = `<div class="lay-f9" style="${extraStyle}; border-color:${p.text}"><div class="title">BRUTAL</div><div class="grid"><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="img-box" style="border-color:${p.text}"><img src="${img2}" loading="lazy"></div></div><div class="text">${text}</div></div>`;
+    else if (layout === 34) innerHTML = `<div class="lay-f10" style="${extraStyle}"><div class="line"></div><div class="title">Less is<br><span>More.</span></div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 35) innerHTML = `<div class="lay-f11" style="${extraStyle}; border-color:${p.text}"><div class="title">VIBRANT</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 36) innerHTML = `<div class="lay-f12" style="${extraStyle}"><div class="title">OVERLAY</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 37) innerHTML = `<div class="lay-f13" style="${extraStyle}; border-color:${p.text}"><div class="title">GLITCH</div><div class="img-box"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+    else if (layout === 38) innerHTML = `<div class="lay-f14" style="${extraStyle}; border-color:${p.text}"><div class="inner" style="border-color:${p.text}"><div class="title">DECO</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div></div>`;
+    else innerHTML = `<div class="lay-f15" style="${extraStyle}"><div class="title">ULTIMATE</div><div class="img-box" style="border-color:${p.text}"><img src="${img1}" loading="lazy"></div><div class="text">${text}</div></div>`;
+
+    HTML_TEMPLATES.push({ html: innerHTML, num: i });
+}
+
+
+
+/* ===== HTML template card -> editable design (text, shapes, photos become real elements) ===== */
+const _hx=v=>{const m=(v||'').match(/rgba?\(([^)]+)\)/);if(!m)return null;const p=m[1].split(/[ ,\/]+/).filter(Boolean).map(Number),a=p.length>3?p[3]:1;if(a<.03)return null;return{c:'#'+[0,1,2].map(i=>Math.round(p[i]).toString(16).padStart(2,'0')).join(''),a}};
+const _ff=f=>{f=((f||'').split(',')[0]||'').toLowerCase();return /impact|bebas|anton|oswald|league/.test(f)?'Impact':/playfair|georgia|times|lora|merriweather|cormorant|serif/.test(f)&&!/sans/.test(f)?'Georgia':/mono|courier/.test(f)?'Courier New':'Arial'};
+const _dir=d=>{if(d==null)return 180;if(/deg/.test(d))return parseFloat(d);const m={'to top':0,'to right':90,'to bottom':180,'to left':270,'to top right':45,'to bottom right':135,'to bottom left':225,'to top left':315};return m[d.trim()]!=null?m[d.trim()]:180};
+async function domToDesign(html){
+ const host=document.createElement('div');host.className='tc';host.style.cssText='position:fixed;left:-99999px;top:0;width:1080px;aspect-ratio:4/5;overflow:hidden;background:#fff';
+ host.innerHTML='<div class="tpl" style="width:100%;height:100%;position:relative">'+html.replace(/ loading="lazy"/g,'')+'</div>';document.body.appendChild(host);
+ try{
+  await Promise.all([...host.querySelectorAll('img')].map(i=>new Promise(r=>{if(i.complete&&i.naturalWidth)return r();i.onload=i.onerror=r;setTimeout(r,8000)})));
+  const base=host.getBoundingClientRect(),els=[];let bg='#ffffff';
+  const walk=(el,op)=>{const cs=getComputedStyle(el);if(cs.display=='none'||cs.visibility=='hidden')return;const o=op*parseFloat(cs.opacity||1);if(o<.03)return;
+   const r=el.getBoundingClientRect(),x=r.left-base.left,y=r.top-base.top,w=r.width,h=r.height;if(w<2||h<2)return;
+   const rd=(()=>{const v=cs.borderTopLeftRadius;if(!v||v=='0px')return 0;return v.endsWith('%')?Math.min(50,parseFloat(v)):Math.min(50,parseFloat(v)/(Math.min(w,h)/2)*50)})();
+   const bgc=_hx(cs.backgroundColor),gm=(cs.backgroundImage||'').match(/linear-gradient\(\s*(to [a-z ]+|-?[\d.]+deg)?,?\s*(rgba?\([^)]+\)),\s*(?:[^()]*?,\s*)?(rgba?\([^)]+\))\s*\)/);
+   const bw=['Top','Right','Bottom','Left'].map(k=>parseFloat(cs['border'+k+'Width'])||0),bs=cs.borderTopStyle!='none'&&cs.borderTopStyle!='hidden',bcl=_hx(cs.borderTopColor);
+   const sm=(cs.boxShadow&&cs.boxShadow!='none')?cs.boxShadow.match(/(rgba?\([^)]+\))\s+(-?[\d.]+)px\s+(-?[\d.]+)px\s+([\d.]+)px/):null;
+   const isImg=el.tagName=='IMG',pad=['Top','Right','Bottom','Left'].map(k=>parseFloat(cs['padding'+k])||0);
+   const tag=e=>{if(o<.97)e.op=Math.round(o*100);return e};
+   const hasBox=!!(bgc||gm||isImg||(bs&&bw[0]>0&&bcl));
+   if(sm&&hasBox){const ox=parseFloat(sm[2]),oy=parseFloat(sm[3]),bl=parseFloat(sm[4]),c=_hx(sm[1]);if(c&&bl==0&&(ox||oy))els.push(tag({t:'rect',x:x+ox,y:y+oy,w,h,fill:c.c,rd}))}
+   if(gm){const c1=_hx(gm[2]),c2=_hx(gm[3]);if(c1&&c2)els.push(tag({t:'rect',x,y,w,h,fill:c1.c,fg:[c1.c,c2.c,_dir(gm[1])],rd}))}
+   else if(bgc){const e=tag({t:'rect',x,y,w,h,fill:bgc.c,rd});if(bgc.a<.97)e.op=Math.round(bgc.a*o*100);els.push(e);if(w>=1060&&h>=1330&&bgc.a>.97)bg=bgc.c}
+   if(!isImg&&bs&&bcl){if(bw[0]>0&&bw.every(v=>v==bw[0])){const last=els[els.length-1];if(last&&last.x==x&&last.y==y&&last.w==w&&!last.bd)last.bd={w:bw[0],c:bcl.c};else els.push(tag({t:'rect',x,y,w,h,fill:'none',bd:{w:bw[0],c:bcl.c},rd}))}
+    else{if(bw[0]>0)els.push({t:'rect',x,y,w,h:bw[0],fill:bcl.c});if(bw[2]>0)els.push({t:'rect',x,y:y+h-bw[2],w,h:bw[2],fill:bcl.c});if(bw[3]>0)els.push({t:'rect',x,y,w:bw[3],h,fill:bcl.c});if(bw[1]>0)els.push({t:'rect',x:x+w-bw[1],y,w:bw[1],h,fill:bcl.c})}}
+   if(isImg){const nw=el.naturalWidth||w,nh=el.naturalHeight||h,a=w/h,sa=nw/nh,e=tag({t:'img',src:el.currentSrc||el.src,x,y,w,h,rd});
+    if(cs.objectFit=='cover'||cs.objectFit=='')e.cr=sa>a?[(1-a/sa)/2,0,(1-a/sa)/2,0]:[0,(1-sa/a)/2,0,(1-sa/a)/2];
+    if(bs&&bcl&&bw[0]>0&&bw.every(v=>v==bw[0]))e.bd={w:bw[0],c:bcl.c};
+    if(sm){const bl=parseFloat(sm[4]);if(bl>0)e.sd='drop'}
+    if(/grayscale/.test(cs.filter))e.flt='bw';
+    els.push(e);return}
+   const direct=[...el.childNodes].some(n=>n.nodeType==3&&n.textContent.trim());
+   if(direct&&[...el.querySelectorAll('*')].every(n=>/^(BR|SPAN|B|I|STRONG|EM|A|SMALL|U)$/.test(n.tagName))){
+    const col=_hx(cs.color),fs=parseFloat(cs.fontSize),lh=parseFloat(cs.lineHeight)||fs*1.2,cx=x+bw[3]+pad[3],cw=w-bw[1]-bw[3]-pad[1]-pad[3],cy=y+bw[0]+pad[0],ch=h-bw[0]-bw[2]-pad[0]-pad[2];
+    const txt=el.innerText.replace(/\n{2,}/g,'\n').trim(),lines=Math.max(1,Math.round(ch/lh)),oh=lines*fs*1.2;
+    if(txt&&col){const al=cs.textAlign=='center'?'center':cs.textAlign=='right'||cs.textAlign=='end'?'right':'left';
+     els.push(tag({t:'text',x:cx,y:cy+(ch-oh)/2,w:cw+4,h:oh,txt,fs,col:col.c,b:parseInt(cs.fontWeight)>=600?1:0,it:cs.fontStyle=='italic'?1:0,al,ff:_ff(cs.fontFamily)}))}
+    return}
+   [...el.children].forEach(c=>walk(c,o))};
+  [...host.firstChild.children].forEach(c=>walk(c,1));
+  return{cat:'ig',w:1080,h:1350,bg,els}
+ }finally{host.remove()}}
+async function openTpl(t){toast('Opening template...');try{const d=await domToDesign(t.html);d.name='Template '+t.num;openD(d)}catch(e){console.error(e);toast('Could not open this template')}}
+
 function renderG(){
  const g=$('g');g.innerHTML='';
  if(F.cat){
     const b=document.createElement('div');b.className='tc';b.innerHTML='<div class="th" style="font-size:34px;color:#a78bfa">+</div><p class="nm">Blank '+esc(CL[F.cat])+'</p><p class="mt">'+SZ[F.cat][0]+' x '+SZ[F.cat][1]+' px</p>';b.onclick=()=>blank(F.cat);g.appendChild(b)
  }
- const q=F.q.toLowerCase();
- const list=ALL.map(a=>tpl(...a)).filter(d=>(!F.cat||d.cat==F.cat)&&(!q||d.name.toLowerCase().includes(q)));
- list.slice(0,F.n).forEach(d=>g.appendChild(card(d,()=>openD(d))));
- $('more').style.display=list.length>F.n?'':'none';
  
- // 🔥 হেডিং আপডেট এবং Clear Filter বাটন
- if(q){
+ HTML_TEMPLATES.slice(0, F.n).forEach((t) => {
+    const c = document.createElement('div');
+    c.className = 'tc';
+    c.style.overflow = 'hidden';
+    c.style.aspectRatio = '4/5';
+    c.style.background = '#fff';
+    c.innerHTML = `<div class="tpl" style="width:100%; height:100%; position:relative;">${t.html}</div>`;
+    c.onclick = () => openTpl(t);
+    g.appendChild(c);
+ });
+ 
+ $('more').style.display = HTML_TEMPLATES.length > F.n ? '' : 'none';
+ 
+ if(F.q){
     $('gh').innerHTML = `Search: "${F.q}" <span style="font-size:12px; color:#a78bfa; cursor:pointer; margin-left:10px;" onclick="$('q').value=''; pick('')">✕ Clear</span>`;
  } else if(F.cat){
     $('gh').innerHTML = `${CL[F.cat]} Templates <span style="font-size:12px; color:#a78bfa; cursor:pointer; margin-left:10px;" onclick="pick('')">✕ Clear Filter</span>`;
@@ -260,20 +755,14 @@ function renderG(){
  }
 }
 
-// 🔥 pick ফাংশনে স্ক্রল এবং অ্যাক্টিভ ক্লাস যোগ করা হয়েছে
 function pick(c){
     F={cat:c,q:'',n:24};
     $('q').value='';
-    
-    // অ্যাক্টিভ ক্লাস আপডেট
     document.querySelectorAll('.cat').forEach((el, index) => {
         if (IC[index][0] === c) el.classList.add('active');
         else el.classList.remove('active');
     });
-
     renderG();
-    
-    // স্মুথলি অল টেমপ্লেট সেকশনে স্ক্রল করা
     setTimeout(() => {
         $('gh').scrollIntoView({behavior:'smooth', block:'start'});
     }, 100);
@@ -443,8 +932,27 @@ async function dl(){
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u],{type}));a.download=(($('nm').value||'design')+'-'+dpi+'dpi.'+(jp?'jpg':'png'));a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Downloaded at '+dpi+' DPI ('+W+' x '+Hh+' px)')},type,.95)}
 
-function loadTpl(){if(!db)return;db.collection('templates').limit(12).get().then(q=>{const a=[];q.forEach(x=>{try{const v=x.data(),d=JSON.parse(v.json);d.name=v.name;a.push(d)}catch(e){}});a.forEach(d=>$('fy').prepend(card(d,()=>openD(d),1,120)))}).catch(e=>console.log('templates',e.message))}
-loadTpl();
+/* loadTpl() মেথডটি সম্পূর্ণ মুছে ফেলা হয়েছে যাতে Firebase থেকে পুরনো ডিজাইন না আসে */
+
+
+/* ===== image file -> editor ===== */
+function photoToEditor(f){
+ if(!f)return;if(!/^image\//.test(f.type))return toast('Please choose an image file');
+ toast('Opening editor...');
+ const rd=new FileReader();rd.onerror=()=>toast('Could not read this file');
+ rd.onload=()=>{const i=new Image();i.onerror=()=>toast('This image format is not supported');
+  i.onload=()=>{try{
+   const k=Math.min(1,1800/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);
+   let src=f.type=='image/png'?c.toDataURL('image/png'):'';if(!src||src.length>2400000)src=c.toDataURL('image/jpeg',.88);
+   const p=Math.min(1,2400/Math.max(i.width,i.height)),w=Math.round(i.width*p),h=Math.round(i.height*p);
+   localStorage.setItem('ms_open',JSON.stringify({cat:'photo',name:(f.name||'Photo').replace(/\.[^.]+$/,'').slice(0,60)||'Photo',w,h,bg:'#ffffff',els:[{t:'img',src,x:0,y:0,w,h}]}));
+   location.href='edit.html'}catch(err){console.error(err);toast('Image is too large to open')}};
+  i.src=rd.result};rd.readAsDataURL(f)}
+$('hf').onchange=ev=>{const f=ev.target.files&&ev.target.files[0];photoToEditor(f);setTimeout(()=>{ev.target.value=''},800)};
+(()=>{const h=document.querySelector('.hero'),z=document.querySelector('.hu');
+ ['dragenter','dragover'].forEach(n=>h.addEventListener(n,ev=>{ev.preventDefault();z.classList.add('on')}));
+ ['dragleave','drop'].forEach(n=>h.addEventListener(n,ev=>{ev.preventDefault();z.classList.remove('on')}));
+ h.addEventListener('drop',ev=>photoToEditor(ev.dataTransfer.files&&ev.dataTransfer.files[0]))})();
 try{const o=localStorage.getItem('ms_open');if(o){localStorage.removeItem('ms_open');openD(JSON.parse(o))}}catch(e){}
 </script>
 

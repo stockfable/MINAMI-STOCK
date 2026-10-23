@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Editor - MINAMI STOCK</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{box-sizing:border-box;margin:0}
 html,body{height:100%;overflow:hidden;background:#0d0f14;color:#e8e8f0;font-family:system-ui,Arial,sans-serif}
@@ -84,7 +85,60 @@ button,a{font:inherit;color:inherit;cursor:pointer;background:none;border:0;text
 .ex .px input{width:48%}
 .ex .chips{display:flex;gap:6px;flex-wrap:wrap}
 .ex .chk{justify-content:flex-start;font-size:12px}
+
+/* =========================================
+   Upscaler Modal CSS
+   ========================================= */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 15px; }
+.modal-overlay.active { display: flex; }
+.modal-box { background: #1e1e24; border: 1px solid #3f3f46; border-radius: 16px; width: 100%; max-width: 450px; padding: 20px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto; color: white; }
+.close-btn { position: absolute; top: 15px; right: 15px; background: #27272a; border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.modal-box h2 { font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.up-preview-box { width: 100%; height: 200px; background: #121215; border: 1px dashed #52525b; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 10px; }
+.up-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; display: none; transition: filter 0.2s; cursor: zoom-in; }
+.up-preview-box .placeholder { color: #71717a; text-align: center; font-size: 14px; }
+.up-size-info { display: flex; justify-content: space-between; font-size: 12px; color: #a1a1aa; margin-bottom: 15px; background: #121215; padding: 8px; border-radius: 8px; }
+.up-size-info span { font-weight: bold; color: #e4e4e7; }
+
+/* Sliders */
+.up-slider-group { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.up-slider-group label { font-size: 12px; color: #a1a1aa; width: 70px; }
+.up-slider-group input[type="range"] { flex: 1; accent-color: #8b5cf6; }
+.up-slider-group span { font-size: 12px; width: 35px; text-align: right; }
+
+.up-input-group { margin-bottom: 12px; }
+.up-input-group label { display: block; font-size: 12px; color: #a1a1aa; margin-bottom: 5px; }
+.up-input-group input[type="text"], .up-input-group textarea, .up-input-group select { width: 100%; background: #121215; border: 1px solid #3f3f46; color: white; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+.up-btn-primary { width: 100%; background: #8b5cf6; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;}
+.up-btn-secondary { width: 100%; background: #27272a; color: white; border: 1px solid #3f3f46; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.up-loader { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#up-file-input { display: none; }
+
+/* =========================================
+   Zoom Overlay CSS
+   ========================================= */
+#zoomImgOverlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+    z-index: 99999; align-items: center; justify-content: center;
+}
+#zoomImgOverlay img {
+    max-width: 98vw; max-height: 95vh; object-fit: contain; border-radius: 8px;
+}
+#zoomImgOverlay .close-zoom {
+    position: absolute; top: 20px; right: 20px; color: white;
+    font-size: 35px; font-weight: bold; cursor: pointer; background: rgba(0,0,0,0.5);
+    width: 50px; height: 50px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+}
 </style></head><body>
+
+<!-- Zoom Overlay -->
+<div id="zoomImgOverlay" onclick="this.style.display='none'">
+    <div class="close-zoom">&times;</div>
+    <img id="zoomedImg" src="">
+</div>
+
 <div id="ed" style="display:flex">
  <header class="top">
   <a href="studio.html" title="Home">⌂</a>
@@ -109,7 +163,7 @@ button,a{font:inherit;color:inherit;cursor:pointer;background:none;border:0;text
   <button data-k="uploads" onclick="tab('uploads')"><i>⇪</i>Uploads</button>
   <button data-k="tools" onclick="tab('tools')"><i>✎</i>Tools</button>
   <button onclick="tab('projects')"><i>▭</i>Projects</button>
-  <button onclick="tab('apps')"><i>⊞</i>Apps</button>
+  <button onclick="tab('apps')"><i class="fa-solid fa-wand-magic-sparkles"></i>Apps</button>
  </nav>
 </div>
 <input type="file" id="fi" accept="image/*" style="position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px">
@@ -117,6 +171,111 @@ button,a{font:inherit;color:inherit;cursor:pointer;background:none;border:0;text
 <input type="file" id="fi3" accept="image/*" capture="user" style="position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px">
 <input type="file" id="fi4" accept="image/*" style="position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px">
 <div id="tt"></div>
+
+<!-- =========================================
+     Upscaler Modal HTML
+     ========================================= -->
+<div class="modal-overlay" id="upscalerModal">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeUpscaler()">✕</button>
+        <h2><i class="fa-solid fa-expand" style="color:#8b5cf6"></i> Photo Upscaler & Meta</h2>
+        
+        <div class="up-preview-box" id="upPreviewBox">
+            <div class="placeholder" id="upPlaceholder">
+                Upload an image to upscale
+            </div>
+            <img id="upPreviewImg" alt="Preview" title="Click to zoom">
+        </div>
+
+        <div class="up-size-info" id="upSizeInfo" style="display:none;">
+            <div>Original: <span id="upOrigSize">0x0</span></div>
+            <div>Output: <span id="upOutSize">0x0</span> (<span id="upOutMP">0</span> MP)</div>
+        </div>
+
+        <input type="file" id="up-file-input" accept="image/*" onchange="handleUpImage(event)">
+        
+        <button class="up-btn-secondary" id="upSelectBtn" onclick="document.getElementById('up-file-input').click()">
+            <i class="fa-solid fa-plus"></i> Select Image
+        </button>
+
+        <div id="upMetaForm" style="display:none;">
+            
+            <!-- Image Adjustments -->
+            <div style="background:#121215; padding:10px; border-radius:8px; margin-bottom:15px;">
+                <div style="font-size:12px; color:#8b5cf6; font-weight:600; margin-bottom:10px;">Image Adjustments</div>
+                
+                <div class="up-slider-group">
+                    <label>Brightness</label>
+                    <input type="range" id="upBrightness" min="0" max="200" value="100" oninput="updatePreviewStyle()">
+                    <span id="upBrightnessVal">100%</span>
+                </div>
+                
+                <div class="up-slider-group">
+                    <label>Contrast</label>
+                    <input type="range" id="upContrast" min="0" max="200" value="100" oninput="updatePreviewStyle()">
+                    <span id="upContrastVal">100%</span>
+                </div>
+                
+                <div class="up-slider-group">
+                    <label>Shadow</label>
+                    <input type="range" id="upShadow" min="0" max="50" value="0" oninput="updatePreviewStyle()">
+                    <span id="upShadowVal">0px</span>
+                </div>
+            </div>
+
+            <!-- File Size Booster Section -->
+            <div style="background:#1a1625; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid #7c3aed;">
+                <div style="font-size:12px; color:#a78bfa; font-weight:600; margin-bottom:10px;">File Size (MB) Booster</div>
+                
+                <div class="up-input-group" style="margin-bottom:8px;">
+                    <label>Image Format</label>
+                    <select id="upFormat">
+                        <option value="jpeg">JPG (Smaller MB)</option>
+                        <option value="png" selected>PNG (Huge MB, Lossless)</option>
+                    </select>
+                </div>
+                
+                <div class="up-slider-group">
+                    <label style="width:90px; color:#e4e4e7;">Add Noise</label>
+                    <input type="range" id="upNoise" min="0" max="50" value="0" oninput="document.getElementById('upNoiseVal').innerText=this.value">
+                    <span id="upNoiseVal" style="color:#a78bfa;">0</span>
+                </div>
+                <small style="color:#8e91a3; font-size:10px; display:block; margin-top:5px;">Higher noise = drastically bigger MB size.</small>
+            </div>
+
+            <div class="up-input-group">
+                <label>Adobe Stock Title</label>
+                <input type="text" id="upAdobeTitle" placeholder="e.g. Beautiful modern workspace">
+            </div>
+            <div class="up-input-group">
+                <label>Keywords (comma separated)</label>
+                <textarea id="upAdobeKeywords" rows="2" placeholder="business, office, desk, laptop"></textarea>
+            </div>
+            
+            <div class="up-input-group">
+                <label>Download DPI (Adobe needs 300)</label>
+                <select id="upDpi">
+                    <option value="72">72 DPI (Web)</option>
+                    <option value="150">150 DPI (Standard)</option>
+                    <option value="300" selected>300 DPI (Print / Adobe Stock)</option>
+                    <option value="600">600 DPI (High Res)</option>
+                </select>
+            </div>
+
+            <button class="up-btn-primary" id="upProcessBtn" onclick="processUpscale()">
+                <span id="upProcessText">Upscale & Download Image</span>
+                <div class="up-loader" id="upBtnLoader"></div>
+            </button>
+
+            <!-- আলাদা মেটাডেটা ডাউনলোড বাটন -->
+            <button class="up-btn-secondary" onclick="downloadMeta()" style="margin-top:10px; font-size:12px; padding:8px;">
+                <i class="fa-solid fa-file-lines"></i> Download Metadata (.txt)
+            </button>
+            <p style="font-size:11px; color:#71717a; margin-top:10px; text-align:center;">Image will download first. Tap above for Title/Keywords file.</p>
+        </div>
+    </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -132,21 +291,7 @@ let user=null,db=null,began=0;
 const rot=(c,e,f)=>{c.save();if(e.rot){const x=e.x+e.w/2,y=e.y+e.h/2;c.translate(x,y);c.rotate(e.rot*Math.PI/180);c.translate(-x,-y)}f();c.restore()};
 function wrapT(c,t,w){const o=[];t.split('\n').forEach(p=>{let l='';p.split(' ').forEach(wd=>{const s=l?l+' '+wd:wd;if(c.measureText(s).width>w&&l){o.push(l);l=wd}else l=s});o.push(l)});return o}
 const im=e=>e._i||(e._i=Object.assign(new Image(),{src:e.src}));
-function draw(c,d,s){c.save();c.scale(s,s);c.fillStyle=d.bg;c.fillRect(0,0,d.w,d.h);
- d.els.forEach(e=>rot(c,e,()=>{
-  if(e.t=='text'){
-   c.font=(e.it?'italic ':'')+(e.b?'bold ':'')+e.fs+'px '+e.ff;c.textBaseline='top';c.textAlign=e.al;c.lineJoin='round';
-   let f=e.col;if(e.gr){f=c.createLinearGradient(0,e.y,0,e.y+e.fs*1.2);f.addColorStop(0,e.gr[0]);f.addColorStop(1,e.gr[1])}
-   if(e.gl){c.shadowColor=e.gl;c.shadowBlur=e.fs*.25*s}
-   const X=e.al=='center'?e.x+e.w/2:e.al=='right'?e.x+e.w:e.x;
-   wrapT(c,e.txt,e.w).forEach((l,i)=>{const Y=e.y+i*e.fs*1.2;if(e.sk){c.lineWidth=e.fs*.06;c.strokeStyle=e.sk;c.strokeText(l,X,Y)}c.fillStyle=f;c.fillText(l,X,Y)})}
-  else if(e.t=='poly'){c.beginPath();e.pts.forEach((p,i)=>c[i?'lineTo':'moveTo'](e.x+p[0]*e.w,e.y+p[1]*e.h));c.closePath();c.fillStyle=e.fill;c.fill()}
-  else if(e.t=='img'){const m=im(e);if(m.complete)c.drawImage(m,e.x,e.y,e.w,e.h)}
-  else if(e.t=='ellipse'){c.beginPath();c.ellipse(e.x+e.w/2,e.y+e.h/2,e.w/2,e.h/2,0,0,7);if(e.fill!='none'){c.fillStyle=e.fill;c.fill()}if(e.stroke){c.strokeStyle=e.stroke;c.lineWidth=d.w*.006;c.stroke()}}
-  else{if(e.fill!='none'){c.fillStyle=e.fill;c.fillRect(e.x,e.y,e.w,e.h)}if(e.stroke){c.strokeStyle=e.stroke;c.lineWidth=d.w*.006;c.strokeRect(e.x,e.y,e.w,e.h)}}
- }));c.restore()}
 function thumb(d,box){const s=Math.min(box/d.w,box/d.h),c=document.createElement('canvas');c.width=Math.max(1,Math.round(d.w*s));c.height=Math.max(1,Math.round(d.h*s));draw(c.getContext('2d'),d,s);return c}
-
 
 /* ---- editor ---- */
 let D,sel=null,H=[],hi=-1,S=1,L0=0,T0=0,dr=null;
@@ -165,17 +310,6 @@ function ps(n,e){const s=n.style;s.left=e.x+'px';s.top=e.y+'px';s.width=e.w+'px'
 let Z=1,PX=0,PY=0;
 function fitS(){const w=$('wrap');return Math.max(.01,Math.min((w.clientWidth-24)/D.w,(w.clientHeight-24)/D.h))}
 function view(){const w=$('wrap');S=fitS()*Z;L0=(w.clientWidth-D.w*S)/2+PX;T0=(w.clientHeight-D.h*S)/2+PY;st.style.left=L0+'px';st.style.top=T0+'px';st.style.transform='scale('+S+')';const l=$('zl');if(l)l.textContent=Math.round(Z*100)+'%'}
-function rs(){
- st.style.cssText='overflow:hidden;width:'+D.w+'px;height:'+D.h+'px;background:'+D.bg;view();
- st.innerHTML='';
- D.els.forEach((e,i)=>{const n=document.createElement('div');n.className='el'+(i===sel?' sel':'');n.dataset.i=i;ps(n,e);
-  if(e.t=='text')n.innerHTML='<span></span>';
-  if(e.t=='img')n.innerHTML='<img draggable="false" style="width:100%;height:100%;pointer-events:none">';
-  n.insertAdjacentHTML('beforeend','<b class="hd"></b>');
-  if(e.t=='text')n.firstChild.textContent=e.txt;
-  if(e.t=='img')n.firstChild.src=e.src;
-  st.appendChild(n)});
-}
 function mark(){[...st.children].forEach((n,i)=>n.classList.toggle('sel',i===sel))}
 st.addEventListener('pointerdown',ev=>{
  const n=ev.target.closest('.el');
@@ -286,7 +420,12 @@ function sheet(k,force){const s=$('sheet');if(!k||(SH==k&&!force)){SH='';s.style
  s.innerHTML=h;s.style.display='block';
  [...document.querySelectorAll('#bar button')].forEach(b=>b.classList.toggle('on',b.dataset.k==k))}
 async function go(u){if(hi>0&&confirm('Save before leaving?'))await save();location.href=u}
-function tab(k){if(k=='templates')go('template.html');else if(k=='projects')go('studio.html');else if(k=='apps')go('tools.html');else sheet(k)}
+function tab(k){
+ if(k=='templates')go('template.html');
+ else if(k=='projects')go('studio.html');
+ else if(k=='apps')openUpscaler();
+ else sheet(k)
+}
 $('wrap').addEventListener('pointerdown',()=>{if(SH)sheet('')});
 
 function pn(){const e=E(),p=$('pn');if(!e){p.style.display='none';requestAnimationFrame(rs);return}
@@ -577,5 +716,213 @@ async function dl(){
   let u=new Uint8Array(await b.arrayBuffer());u=jp?jpgDpi(u,dpi):pngDpi(u,dpi,meta);if(jp&&meta)u=jpgXmp(u,meta);
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u],{type}));a.download=(($('nm').value||'design')+'-'+W+'x'+Hh+'.'+(jp?'jpg':'png'));a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Downloaded '+W+' x '+Hh+' px at '+dpi+' DPI')},type,.95)}
+
+/* =========================================
+   Apps Modal (Upscaler) Logic
+   ========================================= */
+let upFile = null;
+let upTargetW = 0, upTargetH = 0;
+
+function openUpscaler() {
+    if(SH) sheet('');
+    document.getElementById('upscalerModal').classList.add('active');
+}
+function closeUpscaler() {
+    document.getElementById('upscalerModal').classList.remove('active');
+}
+
+function handleUpImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    upFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = document.getElementById('upPreviewImg');
+        
+        img.onload = () => {
+            img.style.display = 'block';
+            document.getElementById('upPlaceholder').style.display = 'none';
+            document.getElementById('upSelectBtn').style.display = 'none';
+            document.getElementById('upMetaForm').style.display = 'block';
+            document.getElementById('upSizeInfo').style.display = 'flex';
+
+            const origW = img.naturalWidth;
+            const origH = img.naturalHeight;
+            document.getElementById('upOrigSize').innerText = `${origW}x${origH}`;
+
+            const minPixels = 4000000; // 4MP minimum
+            let currPixels = origW * origH;
+            let scale = 1;
+
+            if (currPixels < minPixels) {
+                scale = Math.sqrt(minPixels / currPixels);
+            } else {
+                scale = 2; 
+            }
+
+            upTargetW = Math.round(origW * scale);
+            upTargetH = Math.round(origH * scale);
+
+            const maxSize = 8000; 
+            if (upTargetW > maxSize || upTargetH > maxSize) {
+                const ratio = Math.min(maxSize / upTargetW, maxSize / upTargetH);
+                upTargetW = Math.round(upTargetW * ratio);
+                upTargetH = Math.round(upTargetH * ratio);
+            }
+
+            const mp = ((upTargetW * upTargetH) / 1000000).toFixed(1);
+            document.getElementById('upOutSize').innerText = `${upTargetW}x${upTargetH}`;
+            document.getElementById('upOutMP').innerText = mp;
+            
+            updatePreviewStyle();
+        };
+        
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+document.getElementById('upPreviewImg').onclick = function() {
+    if(this.src && this.style.display !== 'none') {
+        document.getElementById('zoomedImg').src = this.src;
+        document.getElementById('zoomImgOverlay').style.display = 'flex';
+    }
+}
+
+function updatePreviewStyle() {
+    const img = document.getElementById('upPreviewImg');
+    const b = document.getElementById('upBrightness').value;
+    const c = document.getElementById('upContrast').value;
+    const s = document.getElementById('upShadow').value;
+    
+    document.getElementById('upBrightnessVal').innerText = b + '%';
+    document.getElementById('upContrastVal').innerText = c + '%';
+    document.getElementById('upShadowVal').innerText = s + 'px';
+    
+    if(img.style.display !== 'none') {
+        img.style.filter = `brightness(${b}%) contrast(${c}%) drop-shadow(0 0 ${s}px rgba(0,0,0,0.8))`;
+    }
+}
+
+// Only Download Image
+function processUpscale() {
+    if (!upFile) return;
+
+    const btn = document.getElementById('upProcessBtn');
+    const btnText = document.getElementById('upProcessText');
+    const loader = document.getElementById('upBtnLoader');
+    const img = document.getElementById('upPreviewImg');
+
+    btn.disabled = true;
+    btnText.style.display = 'none';
+    loader.style.display = 'block';
+
+    const brightness = document.getElementById('upBrightness').value;
+    const contrast = document.getElementById('upContrast').value;
+    const shadow = document.getElementById('upShadow').value;
+    const dpi = parseInt(document.getElementById('upDpi').value);
+    
+    const format = document.getElementById('upFormat').value;
+    const noiseAmount = parseInt(document.getElementById('upNoise').value);
+    const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+    const fileExt = format === 'png' ? 'png' : 'jpg';
+
+    setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = upTargetW;
+        canvas.height = upTargetH;
+        
+        ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+        
+        if(shadow > 0) {
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = shadow;
+            ctx.drawImage(img, shadow/2, shadow/2, upTargetW - shadow, upTargetH - shadow);
+        } else {
+            ctx.drawImage(img, 0, 0, upTargetW, upTargetH);
+        }
+        
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        if (noiseAmount > 0) {
+            const imgData = ctx.getImageData(0, 0, upTargetW, upTargetH);
+            const data = imgData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const noise = (Math.random() - 0.5) * noiseAmount;
+                data[i] = Math.min(255, Math.max(0, data[i] + noise));
+                data[i+1] = Math.min(255, Math.max(0, data[i+1] + noise));
+                data[i+2] = Math.min(255, Math.max(0, data[i+2] + noise));
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        const quality = format === 'png' ? 1.0 : 0.98; 
+
+        canvas.toBlob((blob) => {
+            if (!blob) { 
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+                return; 
+            }
+
+            blob.arrayBuffer().then(buffer => {
+                let uint8 = new Uint8Array(buffer);
+                
+                if (format === 'png') {
+                    uint8 = pngDpi(uint8, dpi);
+                } else {
+                    uint8 = jpgDpi(uint8, dpi); 
+                }
+                
+                const url = URL.createObjectURL(new Blob([uint8], { type: mimeType }));
+                const a = document.createElement('a');
+                a.href = url;
+                
+                const originalName = upFile.name;
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                a.download = `${nameWithoutExt}_upscaled_${dpi}dpi.${fileExt}`;
+                
+                document.body.appendChild(a);
+                a.click(); // Download Image ONLY
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+                toast(`Success! Downloaded at ${upTargetW}x${upTargetH} (${dpi} DPI)`);
+            });
+        }, mimeType, quality);
+    }, 1000);
+}
+
+// আলাদা টেক্সট ফাইল ডাউনলোড করার ফাংশন
+function downloadMeta() {
+    if (!upFile) return;
+    
+    const title = document.getElementById('upAdobeTitle').value || "Untitled";
+    const keywords = document.getElementById('upAdobeKeywords').value || "";
+    const metaText = `Title: ${title}\nKeywords: ${keywords}`;
+    
+    const originalName = upFile.name;
+    const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+    
+    const metaBlob = new Blob([metaText], { type: 'text/plain' });
+    const metaUrl = URL.createObjectURL(metaBlob);
+    const metaA = document.createElement('a');
+    metaA.href = metaUrl;
+    metaA.download = `${nameWithoutExt}_metadata.txt`;
+    document.body.appendChild(metaA);
+    metaA.click();
+    document.body.removeChild(metaA);
+    URL.revokeObjectURL(metaUrl);
+    
+    toast('Metadata downloaded successfully!');
+}
 </script>
 </body></html>
