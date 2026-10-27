@@ -8,65 +8,90 @@
 :root{--y:#ffc400;--y2:#e6b000;--red:#e5534b;--blue:#3b7ddd;--text:#f2f2f2;--muted:#9a9a9a;--line:#2a2a2a;--bg:#000;--card:#111;--chip:#1c1c1c}
 *{box-sizing:border-box;margin:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-nav{background:#0a0a0a;border-bottom:1px solid var(--line);padding:12px 18px;font-weight:800;font-size:1.2rem;position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center}
+nav{background:#0a0a0a;border-bottom:1px solid var(--line);padding:12px 18px;font-weight:800;font-size:1.2rem;position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;box-shadow: 0 4px 20px rgba(0,0,0,0.8);}
 nav span{color:var(--y)}
-nav a{color:var(--text);font-size:.9rem;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:8px}
+nav a{color:var(--text);font-size:.9rem;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:8px;transition: 0.3s;}
+nav a:hover { border-color: var(--y); color: var(--y); box-shadow: 0 0 10px rgba(255,196,0,0.2); }
 .wrap{max-width:760px;margin:0 auto;padding:18px 14px 60px}
 h1{font-size:1.5rem;text-align:center;margin:10px 0 4px}
 .sub{text-align:center;color:var(--muted);margin-bottom:16px}
-.drop{background:var(--card);border:2px dashed var(--y);border-radius:16px;padding:28px 14px;text-align:center}
+.drop{background:var(--card);border:2px dashed var(--y);border-radius:16px;padding:28px 14px;text-align:center;box-shadow: 0 0 20px rgba(255, 196, 0, 0.05) inset, 0 8px 25px rgba(0,0,0,0.6); transition: 0.3s;}
+.drop:hover, .drop.over{box-shadow: 0 0 25px rgba(255, 196, 0, 0.15) inset, 0 8px 30px rgba(0,0,0,0.8); transform: translateY(-2px);}
 .drop.over{background:#1a1500}
-.btn{border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;color:#000;background:var(--y);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
-.btn:hover{background:var(--y2)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn.red{background:var(--red);color:#fff}.btn.blue{background:var(--blue);color:#fff}.btn.gray{background:#1c1c1c;color:var(--text);border:1px solid var(--line)}
-.btn.big{font-size:1.1rem;padding:14px 26px}
-.btn:focus-visible,select:focus-visible,input:focus-visible,.seg button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;color:#000;background:var(--y);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px; box-shadow: 0 4px 15px rgba(255, 196, 0, 0.3); transition: 0.3s;}
+.btn:hover{background:var(--y2); box-shadow: 0 6px 20px rgba(255, 196, 0, 0.5); transform: translateY(-1px);}
+.btn:disabled{opacity:.5;cursor:not-allowed; box-shadow: none;}
+.btn.red{background:var(--red);color:#fff; box-shadow: 0 4px 15px rgba(229, 83, 75, 0.3);}
+.btn.red:hover{box-shadow: 0 6px 20px rgba(229, 83, 75, 0.5);}
+.btn.blue{background:var(--blue);color:#fff; box-shadow: 0 4px 15px rgba(59, 125, 221, 0.3);}
+.btn.blue:hover{box-shadow: 0 6px 20px rgba(59, 125, 221, 0.5);}
+.btn.gray{background:#1c1c1c;color:var(--text);border:1px solid var(--line); box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+.btn.gray:hover{background:#2a2a2a; border-color: #444;}
+.btn.big{font-size:1.1rem;padding:14px 26px; box-shadow: 0 6px 20px rgba(255, 196, 0, 0.4);}
 .hint{color:var(--muted);font-size:.85rem;margin-top:12px}
-.settings{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px;display:grid;gap:14px}
+.settings{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px;display:grid;gap:14px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 .row>b{font-size:.9rem}
 .seg{display:flex;gap:6px;flex-wrap:wrap}
-.seg button{border:1px solid var(--line);background:#1c1c1c;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;cursor:pointer;color:var(--text)}
-.seg button[aria-pressed=true]{background:var(--y);border-color:var(--y);color:#000}
+.seg button{border:1px solid var(--line);background:#1c1c1c;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;cursor:pointer;color:var(--text); transition: 0.2s;}
+.seg button:hover { border-color: #555; }
+.seg button[aria-pressed=true]{background:var(--y);border-color:var(--y);color:#000; box-shadow: 0 0 12px rgba(255, 196, 0, 0.4);}
 .seg button.locked{color:var(--muted);border-style:dashed}
-select{border:1px solid var(--line);border-radius:9px;padding:7px 10px;font:inherit;background:#1c1c1c;color:var(--text)}
+select{border:1px solid var(--line);border-radius:9px;padding:7px 10px;font:inherit;background:#1c1c1c;color:var(--text); outline: none;}
 input[type=range]{accent-color:var(--y);width:180px;max-width:100%}
 .small{font-size:.8rem;color:var(--muted)}
-.badge{background:var(--y);color:#000;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:99px;margin-left:6px}
+.badge{background:var(--y);color:#000;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:99px;margin-left:6px; box-shadow: 0 0 10px rgba(255,196,0,0.5);}
 .toolbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap;align-items:center}
 .toolbar .count{margin-left:auto;color:var(--muted);font-size:.85rem}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;display:flex;gap:14px}
-.thumb{width:84px;height:84px;border-radius:10px;object-fit:cover;flex:none;background:var(--chip)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;display:flex;flex-direction: column; gap:10px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transition: 0.3s;}
+@media(min-width: 500px) { .card { flex-direction: row; } }
+.card:hover{border-color: #444; transform: translateY(-2px);}
+.thumb{width:84px;height:84px;border-radius:10px;object-fit:cover;flex:none;background:var(--chip); box-shadow: 0 4px 10px rgba(0,0,0,0.6);}
 .info{flex:1;min-width:0}
-.track{height:8px;background:var(--chip);border-radius:6px;overflow:hidden}
-.fill{height:100%;width:0;background:var(--y);transition:width .2s}
-.fill.err{background:var(--red)}
+.track{height:8px;background:var(--chip);border-radius:6px;overflow:hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
+.fill{height:100%;width:0;background:var(--y);transition:width .2s; box-shadow: 0 0 10px var(--y);}
+.fill.err{background:var(--red); box-shadow: 0 0 10px var(--red);}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .chip{background:var(--chip);border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:.8rem;color:#c4c4c4;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip.ok{background:#1a2a14;border-color:#2f4a22;color:#8fd46b}
-.chip.err{background:#2a1413;border-color:#5a2724;color:#ff8a84}
-.acts{display:flex;gap:8px;flex-wrap:wrap}
+.chip.ok{background:#1a2a14;border-color:#2f4a22;color:#8fd46b; box-shadow: 0 0 8px rgba(143, 212, 107, 0.2);}
+.chip.err{background:#2a1413;border-color:#5a2724;color:#ff8a84; box-shadow: 0 0 8px rgba(255, 138, 132, 0.2);}
+.acts{display:flex;gap:8px;flex-wrap:wrap; margin-bottom: 8px;}
 .acts .btn{padding:8px 14px;font-size:.92rem}
-dialog{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0d0d0d;color:var(--text);width:min(94vw,900px);max-height:94vh}
-dialog.pay{width:min(94vw,440px);padding:20px;overflow:auto}
+
+/* SEO & DPI Box */
+.seo-box{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+.seo-box input{background:#1a1a1a;border:1px solid #333;color:#fff;padding:7px 10px;border-radius:8px;font-size:13px;outline:none;}
+.seo-box input:focus{border-color:var(--y); box-shadow: 0 0 8px rgba(255,196,0,0.2);}
+.dpi-row {display:flex; align-items:center; gap:10px;}
+.dpi-row input {width: 100px;}
+
+dialog{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0d0d0d;color:var(--text);width:min(98vw,900px);max-height:96vh; box-shadow: 0 20px 60px rgba(0,0,0,0.8); overflow-y: auto;}
+dialog.pay{width:min(94vw,440px);padding:20px;}
 dialog.pay h2{margin-bottom:4px}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
-.plans button{border:1px solid var(--line);background:#1c1c1c;color:var(--text);border-radius:10px;padding:10px 4px;font:inherit;font-weight:700;cursor:pointer}
+.plans button{border:1px solid var(--line);background:#1c1c1c;color:var(--text);border-radius:10px;padding:10px 4px;font:inherit;font-weight:700;cursor:pointer; transition: 0.2s;}
+.plans button:hover { border-color: #444; }
 .plans button small{display:block;color:var(--y);font-size:.95rem}
-.plans button[aria-pressed=true]{border-color:var(--y);background:#1a1500}
+.plans button[aria-pressed=true]{border-color:var(--y);background:#1a1500; box-shadow: 0 0 15px rgba(255,196,0,0.2);}
 .payinfo{background:#1a1500;border:1px solid #4a3a00;border-radius:10px;padding:10px 12px;font-size:.88rem;margin-bottom:12px}
 .payinfo b{color:var(--y)}
-.field{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;background:#1c1c1c;color:var(--text);margin-bottom:8px}
+.field{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;background:#1c1c1c;color:var(--text);margin-bottom:8px; outline: none;}
+.field:focus { border-color: var(--y); box-shadow: 0 0 10px rgba(255,196,0,0.2); }
 .pstat{margin-top:10px;font-size:.88rem}
 .pstat div{padding:6px 10px;border-radius:8px;background:var(--chip);margin-top:6px}
-dialog::backdrop{background:#000c}
-.cmp{position:relative;width:100%;border-radius:10px;overflow:hidden;user-select:none;touch-action:pan-y;background:#222;max-height:78vh;margin:0 auto}
+dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
+
+/* Compare & Edit Modal Styles */
+.cmp{position:relative;width:100%;border-radius:10px;overflow:hidden;user-select:none;touch-action:none;background:#222;max-height:60vh;margin:0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8);}
 .cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
 .cmp .b{clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0)}
-.cmp .line{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;box-shadow:0 0 0 1px #0005}
-.cmp .knob{position:absolute;top:50%;left:var(--pos,50%);width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:var(--y);color:#000;display:grid;place-items:center;font-weight:800;box-shadow:0 2px 8px #0007}
-.tag{position:absolute;top:8px;background:#000a;color:#fff;font-size:.75rem;padding:2px 9px;border-radius:99px}
+.cmp .line{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;box-shadow:0 0 10px #fff;}
+.cmp .knob{position:absolute;top:50%;left:var(--pos,50%);width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:var(--y);color:#000;display:grid;place-items:center;font-weight:800; box-shadow: 0 0 15px rgba(255,196,0,0.8); pointer-events:none;}
+.tag{position:absolute;top:8px;background:#000a;color:#fff;font-size:.75rem;padding:2px 9px;border-radius:99px; backdrop-filter: blur(4px);}
+.edit-panel { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+@media(min-width: 600px) { .edit-panel { grid-template-columns: 1fr 1fr; } }
+.edit-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+.edit-row input[type=range] { width: 100px; max-width: 150px; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -85,7 +110,7 @@ dialog::backdrop{background:#000c}
   </div>
 
   <div class="settings">
-    <div class="row"><b>Upscale</b>
+    <div class="row"><b>Upscale Ratio</b>
       <div class="seg" id="scale">
         <button type="button" data-v="2" aria-pressed="true">2×</button>
         <button type="button" data-v="4" aria-pressed="false">4×</button>
@@ -107,16 +132,16 @@ dialog::backdrop{background:#000c}
         <button type="button" data-v="100" data-pro="1" aria-pressed="false">🔒 100</button>
       </div>
     </div>
-    <div class="row"><b>Sharpness <span id="shOut" class="small">40</span></b><input type="range" id="sharp" min="0" max="100" value="40" aria-label="Sharpness"></div>
-    <div class="row"><b>Output</b>
+    <div class="row"><b>Output Format</b>
       <select id="fmt" aria-label="Output format">
-        <option value="image/jpeg">JPG</option>
-        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG (Smaller Size)</option>
+        <option value="image/png">PNG (Larger Size, Lossless)</option>
         <option value="image/webp">WebP</option>
       </select>
     </div>
     <p class="small" id="limitNote"></p>
     <p class="small" id="planNote" style="color:var(--y)"></p>
+    <p class="small" style="margin-top:4px; color:#8fd46b;">★ Contrast, Brightness, Quality & DPI options are now available on the image cards and inside "Compare & Edit".</p>
   </div>
 
   <div class="toolbar" id="toolbar" hidden>
@@ -128,135 +153,171 @@ dialog::backdrop{background:#000c}
 </div>
 
 <dialog id="dlg">
-  <div class="cmp" id="cmp"><img class="a" id="imA" alt="Upscaled"><img class="b" id="imB" alt="Original"><div class="line"></div><div class="knob">⇆</div><span class="tag" style="left:8px">Original</span><span class="tag" style="right:8px">Upscaled</span></div>
-  <div style="text-align:right;margin-top:10px"><button class="btn gray" id="closeDlg" type="button">Close</button></div>
+  <h3 style="margin-bottom:10px; font-size:16px;">Compare & Edit</h3>
+  <div class="cmp" id="cmp">
+    <img class="a" id="imA" alt="Upscaled & Edited">
+    <img class="b" id="imB" alt="Original">
+    <div class="line"></div><div class="knob">⇆</div>
+    <span class="tag" style="left:8px">Original</span>
+    <span class="tag" style="right:8px">Edited</span>
+  </div>
+  
+  <!-- Edit Panel Inside Dialog -->
+  <div class="edit-panel">
+    <div class="edit-row"><b>Quality <span id="qOut" class="small">100%</span></b><input type="range" id="quality" min="50" max="100" value="100"></div>
+    <div class="edit-row"><b>Sharpness <span id="shOut" class="small">0</span></b><input type="range" id="sharp" min="0" max="100" value="0"></div>
+    <div class="edit-row"><b>Contrast <span id="ctOut" class="small">0</span></b><input type="range" id="contrast" min="-100" max="100" value="0"></div>
+    <div class="edit-row"><b>Brightness <span id="brOut" class="small">0</span></b><input type="range" id="bright" min="-100" max="100" value="0"></div>
+    <div class="edit-row"><b>Shadows <span id="sdOut" class="small">0</span></b><input type="range" id="shadows" min="-100" max="100" value="0"></div>
+    <div class="edit-row"><b>Saturation <span id="satOut" class="small">100%</span></b><input type="range" id="sat" min="0" max="200" value="100"></div>
+    <div class="edit-row"><b>Noise Red. <span id="dnOut" class="small">0%</span></b><input type="range" id="denoise" min="0" max="100" value="0"></div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;flex-wrap:wrap;gap:10px;">
+    <div style="display:flex;gap:8px;">
+      <button class="btn gray" id="viewOrig" type="button" style="font-size:12px;padding:6px 12px;">🔍 View Original</button>
+    </div>
+    <div style="display:flex;gap:8px; width:100%; justify-content: flex-end;">
+      <button class="btn" id="updatePreview" type="button" style="flex:1;">🔄 Update Preview</button>
+      <button class="btn blue" id="saveClose" type="button" style="flex:1;">💾 Save & Close</button>
+    </div>
+  </div>
 </dialog>
 
 <dialog id="pay" class="pay">
   <h2>🔒 Go PRO – unlimited upscaling</h2>
   <p class="small">Unlocks 8×, 16×, AI engine, 50 / 100 images at once and removes the 15-images-per-day limit.</p>
+  
   <div class="plans" id="plans"></div>
   <div class="payinfo" id="payinfo"></div>
-  <div id="payLogin" hidden>
-    <p class="small" style="margin-bottom:10px">Please log in first to submit your payment.</p>
-    <a class="btn" href="login.html" style="text-decoration:none">Log in</a>
-  </div>
+  
   <div id="payForm">
     <select id="pMethod" class="field" aria-label="Payment method"></select>
-    <input id="pSender" class="field" inputmode="numeric" maxlength="11" placeholder="Your number you paid from (01XXXXXXXXX)">
+    <input id="pSender" class="field" type="email" placeholder="Your Email">
     <input id="pTrx" class="field" autocapitalize="characters" placeholder="Transaction ID (TrxID)">
-    <button class="btn" id="pSubmit" type="button" style="width:100%;justify-content:center">Submit payment</button>
-    <p class="small" id="pMsg" style="margin-top:8px"></p>
+    <button class="btn" id="pSubmit" type="button" style="width:100%;justify-content:center; margin-top: 10px;">✅ Submit & Unlock PRO</button>
+    <p class="small" id="pMsg" style="margin-top:8px; text-align:center;"></p>
   </div>
-  <div class="pstat" id="pStat"></div>
+  
   <div style="text-align:right;margin-top:12px"><button class="btn gray" id="closePay" type="button">Close</button></div>
 </dialog>
 
 <script>
+function copyEmail(email) {
+  navigator.clipboard.writeText(email).then(() => alert("✅ Email Copied: " + email)).catch(() => alert("❌ Failed to copy."));
+}
+
 (() => {
   const $ = id => document.getElementById(id);
 
-  /* ===== SETTINGS YOU MUST EDIT ===== */
-  const FIREBASE_CONFIG = {            // copy the same config you use in login.html
-    apiKey: "PASTE_API_KEY",
+  const FIREBASE_CONFIG = {            
+    apiKey: "PASTE_API_KEY", 
     authDomain: "creoverse-stock.firebaseapp.com",
     projectId: "creoverse-stock",
-    appId: "PASTE_APP_ID"
+    appId: "PASTE_APP_ID" 
   };
   const PLANS = [
-    { id: 'm1', name: '1 Month',  price: 199,  days: 30 },
-    { id: 'm3', name: '3 Months', price: 499,  days: 90 },
-    { id: 'y1', name: '1 Year',   price: 1499, days: 365 }
+    { id: 'm1', name: '1 Month',  price: 2,  days: 30 }, 
+    { id: 'm3', name: '3 Months', price: 5,  days: 90 },
+    { id: 'y1', name: '1 Year',   price: 15, days: 365 }
   ];
-  const PAY_NUMBERS = { bKash: '01XXXXXXXXX', Nagad: '01XXXXXXXXX', Rocket: '01XXXXXXXXXX' };
-  const WORKER_URL = 'https://YOUR-WORKER.YOUR-NAME.workers.dev';   // your Cloudflare Worker URL (see upscale-worker.js)
+  const PAY_ACCOUNTS = { Payoneer: 'bk5969736@gmail.com', Skrill: 'bk5969736@gmail.com' };
+  const WORKER_URL = 'https://YOUR-WORKER.YOUR-NAME.workers.dev';
   const DAY_FREE = 15;
 
-  /* ===== SUBSCRIPTION / PAYMENT ===== */
-  let user = null, proUntil = 0, myPays = [], planId = 'm1', db = null, auth = null;
+  let user = null, proUntil = 0, planId = 'm1', db = null, auth = null;
   function isPro() { return proUntil > Date.now(); }
   const fbOK = !String(FIREBASE_CONFIG.apiKey).startsWith('PASTE');
+  
   if (fbOK) {
     try {
       if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
       auth = firebase.auth(); db = firebase.firestore();
     } catch (e) { console.error(e); }
   }
+  
   const dayKey = () => 'minamiUse_' + new Date().toISOString().slice(0, 10);
   const used = () => { try { return +localStorage.getItem(dayKey()) || 0; } catch (e) { return 0; } };
   const addUsed = () => { try { localStorage.setItem(dayKey(), used() + 1); } catch (e) {} };
   const freeLeft = () => Math.max(0, DAY_FREE - used());
+  
   function updatePlan() {
     const pro = isPro();
     $('planBadge').textContent = pro ? 'PRO' : 'FREE';
-    $('planNote').textContent = pro
-      ? 'PRO active until ' + new Date(proUntil).toLocaleDateString() + ' · unlimited images'
-      : 'Free plan: ' + freeLeft() + ' of ' + DAY_FREE + ' images left today. Subscribe for unlimited.';
+    $('planNote').textContent = pro ? 'PRO active until ' + new Date(proUntil).toLocaleDateString() : 'Free plan: ' + freeLeft() + ' of ' + DAY_FREE + ' images left today.';
   }
+  
   function showPay() { if (!$('pay').open) { renderPay(); $('pay').showModal(); } }
   $('closePay').onclick = () => $('pay').close();
 
   function renderPay() {
-    $('plans').innerHTML = PLANS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id === planId}">${p.name}<small>৳${p.price}</small></button>`).join('');
+    $('plans').innerHTML = PLANS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id === planId}">${p.name}<small>$${p.price}</small></button>`).join('');
     $('plans').querySelectorAll('button').forEach(b => b.onclick = () => { planId = b.dataset.p; renderPay(); });
-    const m = $('pMethod'); const cur = m.value;
-    m.innerHTML = Object.keys(PAY_NUMBERS).map(k => `<option>${k}</option>`).join(''); if (cur) m.value = cur;
+    const m = $('pMethod'); m.innerHTML = Object.keys(PAY_ACCOUNTS).map(k => `<option>${k}</option>`).join(''); 
     const plan = PLANS.find(p => p.id === planId);
-    $('payinfo').innerHTML = `Send <b>৳${plan.price}</b> by <b>Send Money</b> to <b>${esc(PAY_NUMBERS[m.value])}</b> (${esc(m.value)}), then enter your number and the TrxID below. Unlock happens after we verify it.`;
+    const currentEmail = PAY_ACCOUNTS[m.value];
+    $('payinfo').innerHTML = `
+      <div style="margin-bottom:8px;">Send <b>$${plan.price}</b> via <b>${m.value}</b> to:</div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="background:#000; padding:8px 12px; border-radius:8px; border:1px solid #444; font-weight:bold; user-select:all;">${currentEmail}</span>
+        <button type="button" class="btn" onclick="copyEmail('${currentEmail}')" style="padding:8px 12px; font-size:12px;">📋 Copy</button>
+      </div>`;
     m.onchange = renderPay;
-    $('payLogin').hidden = !!user || !fbOK;
-    $('payForm').hidden = !user || !fbOK;
-    if (!fbOK) $('pMsg').textContent = 'Payment system is not configured yet.';
-    renderStatus();
   }
-  function renderStatus() {
-    const box = $('pStat'); if (!box) return;
-    const list = [...myPays].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).slice(0, 3);
-    const label = { pending: '⏳ Pending verification', approved: '✅ Approved', rejected: '❌ Rejected' };
-    box.innerHTML = list.map(p => `<div>${label[p.status] || p.status} · ${esc(p.trxId)} · ৳${p.amount}</div>`).join('');
-  }
+
   $('pSubmit').onclick = async () => {
     const msg = t => $('pMsg').textContent = t;
-    if (!user) return msg('Please log in first.');
-    const trx = $('pTrx').value.trim().toUpperCase(), sender = $('pSender').value.trim(), method = $('pMethod').value;
-    if (!/^01\d{9}$/.test(sender)) return msg('Enter a valid 11-digit number (01XXXXXXXXX).');
-    if (!/^[A-Z0-9]{6,20}$/.test(trx)) return msg('Enter a valid Transaction ID.');
-    const plan = PLANS.find(p => p.id === planId), btn = $('pSubmit'); btn.disabled = true; msg('Submitting…');
+    const trx = $('pTrx').value.trim().toUpperCase();
+    const senderEmail = $('pSender').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(senderEmail)) return msg('❌ Enter a valid Email.');
+    if (!/^[A-Z0-9]{6,30}$/.test(trx)) return msg('❌ Enter a valid TrxID.');
+
+    const plan = PLANS.find(p => p.id === planId), btn = $('pSubmit'); 
+    btn.disabled = true; msg('Verifying...');
+    
+    if (!fbOK) {
+      proUntil = Date.now() + (plan.days * 24 * 60 * 60 * 1000);
+      refreshLocks(); updateCount(); updatePlan();
+      msg('✅ PRO Unlocked (Demo Mode).');
+      setTimeout(() => $('pay').close(), 2000);
+      btn.disabled = false; return;
+    }
+    
     try {
       await db.collection('payments').doc(trx).set({
-        uid: user.uid, email: user.email || '', method, sender, trxId: trx, planId: plan.id, days: plan.days, amount: plan.price,
-        status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        uid: user.uid, email: user.email || '', method: $('pMethod').value, sender: senderEmail, trxId: trx, 
+        planId: plan.id, days: plan.days, amount: plan.price, status: 'approved', createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      $('pTrx').value = ''; msg('Submitted! We will verify it and unlock PRO soon.');
-    } catch (e) {
-      msg(e.code === 'permission-denied' ? 'This TrxID was already submitted.' : (e.message || 'Failed, try again.'));
-    }
+      const expiryTime = Date.now() + (plan.days * 24 * 60 * 60 * 1000);
+      await db.collection('subscriptions').doc(user.uid).set({ status: 'active', expiresAt: expiryTime, plan: plan.id, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      msg('✅ PRO unlocked.');
+      setTimeout(() => $('pay').close(), 1500);
+    } catch (e) { msg('❌ ' + (e.message || 'Failed.')); }
     btn.disabled = false;
   };
+
   if (auth) {
     let u1 = null, u2 = null;
     auth.onAuthStateChanged(u => {
-      user = u; u1 && u1(); u2 && u2(); proUntil = 0; myPays = [];
+      user = u; u1 && u1(); u2 && u2(); proUntil = 0;
       if (u) {
         u1 = db.collection('subscriptions').doc(u.uid).onSnapshot(sn => {
           const d = sn.exists ? sn.data() : null; proUntil = d && d.status === 'active' ? +d.expiresAt || 0 : 0;
           refreshLocks(); updateCount(); updatePlan();
         }, () => {});
-        u2 = db.collection('payments').where('uid', '==', u.uid).onSnapshot(q => { myPays = q.docs.map(x => x.data()); renderStatus(); }, () => {});
       }
-      refreshLocks(); updateCount(); updatePlan(); if ($('pay').open) renderPay();
+      refreshLocks(); updateCount(); updatePlan();
     });
   }
 
   const MAX_SIDE = 16000, MAX_PIXELS = 30e6, AI_MAX_INPUT = 1.5e6;
-
   const items = []; let uid = 0, scale = 2, engine = 'fast', maxCount = 15, running = false;
+  let activeItem = null;
   const tick = () => new Promise(r => setTimeout(r, 0));
   const fmtB = b => b > 1048576 ? (b / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
   const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
   const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-  /* ---------- settings ---------- */
   function refreshLocks() {
     const pro = isPro();
     document.querySelectorAll('button[data-pro]').forEach(b => {
@@ -272,17 +333,25 @@ dialog::backdrop{background:#000c}
   seg('scale', v => { scale = +v; });
   seg('engine', v => {
     engine = v;
-    $('engineNote').textContent = v === 'ai'
-      ? 'AI: server-side Real-ESRGAN that rebuilds real detail (Canva-style quality). Needs internet, takes a few seconds per image. Large images fall back to Fast.'
-      : 'Fast: smooth enlargement + edge sharpening. Works instantly on any phone.';
+    $('engineNote').textContent = v === 'ai' ? 'AI: server-side Real-ESRGAN. Requires internet.' : 'Fast: smooth enlargement + edge sharpening.';
   });
   seg('count', v => { maxCount = +v; updateCount(); });
-  $('sharp').oninput = e => $('shOut').textContent = e.target.value;
-  $('limitNote').textContent = `Browser limit: about ${(MAX_PIXELS / 1e6)} megapixels per result. Bigger factors are reduced automatically.`;
+
+  const bindEditSlider = (id, outId, suffix = '') => {
+    $(id).oninput = e => $(outId).textContent = e.target.value + suffix;
+  };
+  bindEditSlider('quality', 'qOut', '%');
+  bindEditSlider('sharp', 'shOut');
+  bindEditSlider('contrast', 'ctOut');
+  bindEditSlider('bright', 'brOut');
+  bindEditSlider('shadows', 'sdOut');
+  bindEditSlider('sat', 'satOut', '%');
+  bindEditSlider('denoise', 'dnOut', '%');
+
+  $('limitNote').textContent = `Browser limit: ${(MAX_PIXELS / 1e6)} MP. Auto-scales to fit.`;
   refreshLocks(); updatePlan();
   const updateCount = () => { $('countOut').textContent = items.length + ' / ' + (isPro() ? maxCount : 15) + ' images'; };
 
-  /* ---------- adding files ---------- */
   $('pick').onclick = () => $('file').click();
   $('file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
   const drop = $('drop');
@@ -296,14 +365,10 @@ dialog::backdrop{background:#000c}
     let files = [...list].filter(f => f.type.startsWith('image/'));
     const limit = isPro() ? maxCount : Math.min(maxCount, 15);
     const room = Math.max(0, limit - items.length - pending);
-    if (files.length > room) {
-      if (!isPro() && limit === 15) showPay();
-      else alert('Limit is ' + limit + ' images at once. Only ' + room + ' more can be added.');
-      files = files.slice(0, room);
-    }
+    if (files.length > room) { alert('Limit: ' + limit); files = files.slice(0, room); }
     files.forEach(f => {
       pending++;
-      const it = { id: ++uid, file: f, name: f.name || 'pasted-image.png', state: 'idle', pct: 0, msg: '', srcUrl: URL.createObjectURL(f) };
+      const it = { id: ++uid, file: f, name: f.name || 'pasted.png', state: 'idle', pct: 0, msg: '', srcUrl: URL.createObjectURL(f), baseCanvas: null, title: '', keywords: '', dpi: 72 };
       const im = new Image();
       im.onload = () => { pending--; it.img = im; it.w = im.naturalWidth; it.h = im.naturalHeight; items.push(it); renderAll(); };
       im.onerror = () => { pending--; URL.revokeObjectURL(it.srcUrl); };
@@ -311,20 +376,36 @@ dialog::backdrop{background:#000c}
     });
   }
 
-  /* ---------- rendering ---------- */
   function cardHTML(it) {
     const chips = [`<span class="chip">${it.w}×${it.h}px</span>`, `<span class="chip">${fmtB(it.file.size)}</span>`, `<span class="chip">${esc(it.name)}</span>`];
     if (it.state === 'done') chips.unshift(`<span class="chip ok">→ ${it.ow}×${it.oh}px · ${fmtB(it.blob.size)}</span>`);
     if (it.state === 'err') chips.unshift(`<span class="chip err">${esc(it.msg)}</span>`);
-    if (it.state === 'run' && it.msg) chips.unshift(`<span class="chip">${esc(it.msg)}</span>`);
-    if (it.state === 'wait') chips.unshift(`<span class="chip">Waiting…</span>`);
+    if (it.state === 'run') chips.unshift(`<span class="chip">${esc(it.msg)}</span>`);
     let acts = '';
     if (it.state === 'idle' || it.state === 'err') acts += `<button class="btn" data-a="start" data-id="${it.id}">▶ Start</button>`;
-    if (it.state === 'done') acts += `<button class="btn blue" data-a="dl" data-id="${it.id}">⬇ Download</button><button class="btn gray" data-a="cmp" data-id="${it.id}">⇆ Compare</button>`;
+    if (it.state === 'done') acts += `<button class="btn blue" data-a="dl" data-id="${it.id}">⬇ Download</button><button class="btn gray" data-a="cmp" data-id="${it.id}">✎ Compare & Edit</button>`;
     if (it.state !== 'run') acts += `<button class="btn red" data-a="del" data-id="${it.id}">🗑 Delete</button>`;
     const pct = it.state === 'done' ? 100 : it.pct;
-    return `<img class="thumb" src="${it.srcUrl}" alt=""><div class="info"><div class="track"><div class="fill ${it.state === 'err' ? 'err' : ''}" style="width:${pct}%"></div></div><div class="chips">${chips.join('')}</div><div class="acts">${acts}</div></div>`;
+    
+    return `
+      <img class="thumb" src="${it.srcUrl}" alt="">
+      <div class="info">
+        <div class="track"><div class="fill ${it.state === 'err' ? 'err' : ''}" style="width:${pct}%"></div></div>
+        <div class="chips">${chips.join('')}</div>
+        <div class="acts">${acts}</div>
+        
+        <!-- SEO & DPI Box -->
+        <div class="seo-box">
+          <input type="text" placeholder="Image Title (SEO / Filename)" value="${esc(it.title)}" data-id="${it.id}" data-p="title">
+          <input type="text" placeholder="Keywords (comma separated)" value="${esc(it.keywords)}" data-id="${it.id}" data-p="keywords">
+          <div class="dpi-row">
+             <span class="small">DPI (for print):</span>
+             <input type="number" placeholder="72" value="${it.dpi}" data-id="${it.id}" data-p="dpi">
+          </div>
+        </div>
+      </div>`;
   }
+  
   function renderAll() {
     $('toolbar').hidden = !items.length; updateCount();
     const list = $('list');
@@ -334,8 +415,39 @@ dialog::backdrop{background:#000c}
       el.innerHTML = cardHTML(it);
     });
   }
-  const draw = it => { const el = document.getElementById('c' + it.id); if (el) el.innerHTML = cardHTML(it); };
-  const setPct = (it, p) => { it.pct = Math.round(p); const f = document.querySelector('#c' + it.id + ' .fill'); if (f) f.style.width = it.pct + '%'; };
+  
+  // Only update specific parts when progress changes to avoid losing input focus
+  const draw = it => { 
+    const el = document.getElementById('c' + it.id); 
+    if (el) {
+      // Don't overwrite the whole innerHTML while typing in SEO box
+      const activeEl = document.activeElement;
+      const isTyping = activeEl && activeEl.closest('.seo-box') && activeEl.dataset.id == it.id;
+      if (!isTyping) {
+         el.innerHTML = cardHTML(it); 
+      } else {
+         // Just update the progress bar and buttons
+         const track = el.querySelector('.fill');
+         if (track) track.style.width = (it.state === 'done' ? 100 : it.pct) + '%';
+      }
+    }
+  };
+  
+  const setPct = (it, p) => { 
+    it.pct = Math.round(p); 
+    const f = document.querySelector('#c' + it.id + ' .fill'); 
+    if (f) f.style.width = it.pct + '%'; 
+  };
+
+  // Listen for SEO & DPI input changes
+  $('list').addEventListener('input', e => {
+    if (e.target.dataset.p) {
+      const it = items.find(i => i.id === +e.target.dataset.id);
+      if (it) {
+        it[e.target.dataset.p] = e.target.dataset.p === 'dpi' ? parseInt(e.target.value) || 72 : e.target.value;
+      }
+    }
+  });
 
   $('list').addEventListener('click', e => {
     const b = e.target.closest('button[data-a]'); if (!b) return;
@@ -346,8 +458,9 @@ dialog::backdrop{background:#000c}
     else if (a === 'dl') download(it);
     else if (a === 'cmp') openCmp(it);
   });
+  
   $('startAll').onclick = () => items.filter(i => i.state === 'idle' || i.state === 'err').slice(0, isPro() ? maxCount : 15).forEach(queue);
-  $('clearAll').onclick = () => { if (!running || confirm('Stop and remove all images?')) [...items].forEach(i => i.state !== 'run' && removeItem(i)); };
+  $('clearAll').onclick = () => { if (!running || confirm('Stop and remove all?')) [...items].forEach(i => i.state !== 'run' && removeItem(i)); };
 
   function removeItem(it) {
     URL.revokeObjectURL(it.srcUrl); if (it.url) URL.revokeObjectURL(it.url);
@@ -355,13 +468,51 @@ dialog::backdrop{background:#000c}
     const el = document.getElementById('c' + it.id); if (el) el.remove();
     $('toolbar').hidden = !items.length; updateCount();
   }
-  function download(it) {
-    const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[it.blob.type] || 'png';
-    const a = document.createElement('a'); a.href = it.url; a.download = it.name.replace(/\.[^.]+$/, '') + `-${it.factor}x.${ext}`;
-    document.body.appendChild(a); a.click(); a.remove();
+  
+  // ★★★ DPI Injector for JPEGs ★★★
+  async function injectDpi(blob, dpiVal) {
+    if (blob.type !== 'image/jpeg' || !dpiVal || dpiVal <= 0) return blob;
+    const dpi = Math.round(dpiVal);
+    try {
+      const buf = await blob.arrayBuffer();
+      const view = new DataView(buf);
+      // Look for JFIF APP0 marker (FF E0)
+      for (let i = 0; i < view.byteLength - 16; i++) {
+        if (view.getUint8(i) === 0xFF && view.getUint8(i + 1) === 0xE0) {
+          if (view.getUint32(i + 4) === 0x4A464946) { // 'JFIF'
+            view.setUint8(i + 11, 1); // Units: 1 = dots per inch
+            view.setUint16(i + 12, dpi); // X density
+            view.setUint16(i + 14, dpi); // Y density
+            return new Blob([buf], { type: 'image/jpeg' });
+          }
+        }
+      }
+    } catch (e) { console.warn("Could not inject DPI", e); }
+    return blob;
   }
 
-  /* ---------- queue ---------- */
+  async function download(it) {
+    let finalBlob = it.blob;
+    
+    // Apply DPI if JPEG
+    if (finalBlob.type === 'image/jpeg') {
+      finalBlob = await injectDpi(finalBlob, it.dpi);
+    }
+    
+    const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[finalBlob.type] || 'png';
+    let safeName = (it.title || it.name).replace(/\.[^.]+$/, '').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    if (!safeName) safeName = 'image';
+    
+    const url = URL.createObjectURL(finalBlob);
+    const a = document.createElement('a'); 
+    a.href = url; 
+    a.download = safeName + `-${it.factor}x.${ext}`;
+    document.body.appendChild(a); 
+    a.click(); 
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   function queue(it) { it.state = 'wait'; it.queued = true; it.pct = 0; draw(it); runQueue(); }
   async function runQueue() {
     if (running) return; running = true;
@@ -370,10 +521,9 @@ dialog::backdrop{background:#000c}
     running = false;
   }
 
-  /* ---------- engines ---------- */
   async function resizeSmooth(src, tw, th) {
     let cur = src, cw = src.naturalWidth || src.width, ch = src.naturalHeight || src.height;
-    while (cw * 2 < tw) {
+    while (cw * 2 < tw && ch * 2 < th) {
       cw *= 2; ch *= 2;
       const c = mk(cw, ch), x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high';
       x.drawImage(cur, 0, 0, cw, ch); cur = c; await tick();
@@ -381,6 +531,7 @@ dialog::backdrop{background:#000c}
     const out = mk(tw, th), ox = out.getContext('2d'); ox.imageSmoothingEnabled = true; ox.imageSmoothingQuality = 'high';
     ox.drawImage(cur, 0, 0, tw, th); return out;
   }
+  
   async function sharpen(src, a, onP) {
     const w = src.width, h = src.height, out = mk(w, h), sx = src.getContext('2d'), ox = out.getContext('2d'), band = Math.max(32, Math.floor(2e6 / w));
     for (let y0 = 0; y0 < h; y0 += band) {
@@ -399,11 +550,82 @@ dialog::backdrop{background:#000c}
     }
     return out;
   }
+
+  function colorAdjust(src, contrastVal, brightnessVal, shadowsVal, saturationVal) {
+    const w = src.width, h = src.height;
+    const out = mk(w, h);
+    const ox = out.getContext('2d', { willReadFrequently: true });
+    ox.drawImage(src, 0, 0);
+    const img = ox.getImageData(0, 0, w, h);
+    const d = img.data;
+    const cF = 1 + contrastVal / 100;
+    const bOff = brightnessVal * 1.28;
+    const sh = shadowsVal / 100;
+    const sF = saturationVal / 100;
+
+    for (let i = 0; i < d.length; i += 4) {
+      let r = d[i], g = d[i+1], b = d[i+2];
+      r = (r - 128) * cF + 128; g = (g - 128) * cF + 128; b = (b - 128) * cF + 128;
+      r += bOff; g += bOff; b += bOff;
+      if (sh !== 0) { const lift = sh * 128; r += lift * (1 - r / 255); g += lift * (1 - g / 255); b += lift * (1 - b / 255); }
+      const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+      r = lum + (r - lum) * sF; g = lum + (g - lum) * sF; b = lum + (b - lum) * sF;
+      d[i] = r < 0 ? 0 : r > 255 ? 255 : r;
+      d[i+1] = g < 0 ? 0 : g > 255 ? 255 : g;
+      d[i+2] = b < 0 ? 0 : b > 255 ? 255 : b;
+    }
+    ox.putImageData(img, 0, 0);
+    return out;
+  }
+
+  async function denoise(src, strength, onP) {
+    const w = src.width, h = src.height;
+    const out = mk(w, h);
+    const sx = src.getContext('2d', { willReadFrequently: true });
+    const ox = out.getContext('2d');
+    const s = strength / 100;
+    const threshold = 72;
+    const band = Math.max(32, Math.floor(2e6 / w));
+
+    for (let y0 = 0; y0 < h; y0 += band) {
+      const top = Math.max(0, y0 - 1);
+      const bot = Math.min(h, y0 + band + 1);
+      const bh = bot - top;
+      const orig = sx.getImageData(0, top, w, bh);
+      const sd = new Uint8ClampedArray(orig.data);
+      const d = orig.data;
+
+      for (let y = y0; y < Math.min(h, y0 + band); y++) {
+        const ly = y - top;
+        const yu = ly > 0 ? ly - 1 : ly;
+        const yd = ly < bh - 1 ? ly + 1 : ly;
+        for (let x = 0; x < w; x++) {
+          const xl = x > 0 ? x - 1 : x;
+          const xr = x < w - 1 ? x + 1 : x;
+          const i = (ly * w + x) * 4;
+          const cr = sd[i], cg = sd[i+1], cb = sd[i+2];
+          let sumR = cr, sumG = cg, sumB = cb, count = 1;
+          const nb = [ (yu*w+x)*4, (yd*w+x)*4, (ly*w+xl)*4, (ly*w+xr)*4, (yu*w+xl)*4, (yu*w+xr)*4, (yd*w+xl)*4, (yd*w+xr)*4 ];
+          for (let k = 0; k < nb.length; k++) {
+            const ni = nb[k];
+            const diff = Math.abs(sd[ni] - cr) + Math.abs(sd[ni+1] - cg) + Math.abs(sd[ni+2] - cb);
+            if (diff < threshold) { sumR += sd[ni]; sumG += sd[ni+1]; sumB += sd[ni+2]; count++; }
+          }
+          d[i] = cr + (sumR / count - cr) * s;
+          d[i+1] = cg + (sumG / count - cg) * s;
+          d[i+2] = cb + (sumB / count - cb) * s;
+        }
+      }
+      ox.putImageData(orig, 0, top, 0, y0 - top, w, Math.min(band, h - y0));
+      onP && onP(Math.min(1, (y0 + band) / h)); await tick();
+    }
+    return out;
+  }
+
   async function aiServer(it, aiScale) {
     if (!user) throw new Error('Please log in');
     if (WORKER_URL.includes('YOUR-WORKER')) throw new Error('AI server not set up');
     it.msg = 'AI enhancing…'; draw(it); setPct(it, 12);
-    // re-encode input (keeps request small)
     const src = mk(it.w, it.h), sx = src.getContext('2d');
     sx.fillStyle = '#fff'; sx.fillRect(0, 0, it.w, it.h); sx.drawImage(it.img, 0, 0);
     let q = 0.92, dataUrl = src.toDataURL('image/jpeg', q);
@@ -412,10 +634,8 @@ dialog::backdrop{background:#000c}
     const token = await user.getIdToken();
     let pct = 12; const timer = setInterval(() => { pct = Math.min(65, pct + 2); setPct(it, pct); }, 1000);
     let res;
-    try {
-      res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ image: dataUrl, scale: aiScale }) });
-    } finally { clearInterval(timer); }
-    if (!res.ok) { let m = 'AI server error'; try { m = (await res.json()).error || m; } catch (e) {} throw new Error(m); }
+    try { res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ image: dataUrl, scale: aiScale }) }); } finally { clearInterval(timer); }
+    if (!res.ok) { let m = 'AI error'; try { m = (await res.json()).error || m; } catch (e) {} throw new Error(m); }
     const blob = await res.blob(), url = URL.createObjectURL(blob);
     const im = new Image(); await new Promise((r, j) => { im.onload = r; im.onerror = () => j(new Error('Bad AI result')); im.src = url; });
     const c = mk(im.naturalWidth, im.naturalHeight); c.getContext('2d').drawImage(im, 0, 0); URL.revokeObjectURL(url); return c;
@@ -424,54 +644,163 @@ dialog::backdrop{background:#000c}
   async function process(it) {
     it.state = 'run'; it.msg = 'Preparing…'; setPct(it, 2); draw(it); await tick();
     try {
-      if (!isPro() && freeLeft() <= 0) { showPay(); throw new Error('Free limit reached (15 images per day). Subscribe for unlimited.'); }
+      if (!isPro() && freeLeft() <= 0) { showPay(); throw new Error('Free limit reached.'); }
       const pro = isPro();
-      let s = pro ? scale : Math.min(scale, 4); const w = it.w, h = it.h;
-      while (s > 1 && (w * s > MAX_SIDE || h * s > MAX_SIDE || w * h * s * s > MAX_PIXELS)) s--;
-      if (s < 2) throw new Error('Image is too large to enlarge here.');
-      const tw = w * s, th = h * s;
-      let canvas = null, usedAI = false;
+      
+      let targetScale = pro ? scale : Math.min(scale, 4); 
+      let tw = Math.round(it.w * targetScale);
+      let th = Math.round(it.h * targetScale);
 
-      if (engine === 'ai' && pro) {
-        if (w * h > AI_MAX_INPUT) it.msg = 'Too large for AI → using Fast';
-        else {
-          try { canvas = await aiServer(it, Math.min(s, 8)); usedAI = true; }
-          catch (e) { console.error(e); it.msg = 'AI: ' + (e.message || 'unavailable') + ' → using Fast'; }
-        }
+      if (tw > MAX_SIDE) { th = Math.round(th * (MAX_SIDE / tw)); tw = MAX_SIDE; }
+      if (th > MAX_SIDE) { tw = Math.round(tw * (MAX_SIDE / th)); th = MAX_SIDE; }
+      if (tw * th > MAX_PIXELS) {
+        const ratio = Math.sqrt(MAX_PIXELS / (tw * th));
+        tw = Math.round(tw * ratio);
+        th = Math.round(th * ratio);
+      }
+
+      let canvas = null, usedAI = false;
+      if (engine === 'ai' && pro && it.w * it.h <= AI_MAX_INPUT) {
+        try { canvas = await aiServer(it, Math.min(targetScale, 8)); usedAI = true; }
+        catch (e) { it.msg = 'AI failed, using Fast'; }
         draw(it);
       }
-      if (canvas) { if (canvas.width !== tw) canvas = await resizeSmooth(canvas, tw, th); }
-      else { it.msg = 'Enlarging…'; draw(it); setPct(it, 15); canvas = await resizeSmooth(it.img, tw, th); }
-      setPct(it, 70);
-
-      const amt = +$('sharp').value / 100 * (usedAI ? 0.3 : 0.6);
-      if (amt > 0) { it.msg = 'Sharpening…'; draw(it); canvas = await sharpen(canvas, amt, p => setPct(it, 70 + p * 22)); }
-
-      it.msg = 'Saving…'; setPct(it, 94); draw(it); await tick();
+      
+      if (canvas) { 
+        if (canvas.width !== tw) canvas = await resizeSmooth(canvas, tw, th); 
+      } else { 
+        it.msg = 'Enlarging…'; draw(it); setPct(it, 15); 
+        canvas = await resizeSmooth(it.img, tw, th); 
+      }
+      
+      it.baseCanvas = canvas; 
+      it.ow = tw; it.oh = th; it.factor = targetScale;
+      
       const type = $('fmt').value;
-      if (type === 'image/jpeg') { const f = mk(tw, th), fx = f.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, tw, th); fx.drawImage(canvas, 0, 0); canvas = f; }
-      const blob = await new Promise(r => canvas.toBlob(r, type, 0.92));
-      canvas.width = canvas.height = 1;
-      if (!blob) throw new Error('Browser could not save this size. Try a lower factor.');
+      // Default process at 100% quality. User can re-save with lower quality in Editor.
+      const qual = 1.0; 
+      
+      let outputCanvas = canvas;
+      if (type === 'image/jpeg') { 
+        outputCanvas = mk(tw, th); const fx = outputCanvas.getContext('2d'); 
+        fx.fillStyle = '#fff'; fx.fillRect(0, 0, tw, th); fx.drawImage(canvas, 0, 0); 
+      }
+      
+      const blob = await new Promise(r => outputCanvas.toBlob(r, type, qual));
+      if (!blob) throw new Error('Browser could not save this size.');
       if (it.url) URL.revokeObjectURL(it.url);
-      it.blob = blob; it.url = URL.createObjectURL(blob); it.ow = tw; it.oh = th; it.factor = s; it.msg = '';
-      it.state = 'done'; it.pct = 100; if (!isPro()) addUsed(); updatePlan();
+      
+      it.blob = blob; 
+      it.url = URL.createObjectURL(blob);
+      it.state = 'done'; it.pct = 100; 
+      if (!isPro()) addUsed(); updatePlan();
     } catch (e) { it.state = 'err'; it.msg = e.message || 'Failed'; }
     draw(it);
   }
 
-  /* ---------- compare popup ---------- */
+  // ★★★ Fixed Compare & Edit Slider Logic ★★★
   const cmp = $('cmp'), dlg = $('dlg');
   const setPos = p => cmp.style.setProperty('--pos', Math.min(100, Math.max(0, p)) + '%');
+  
+  let isDragging = false;
+  const moveSlider = (e) => {
+    const rect = cmp.getBoundingClientRect();
+    let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    let pos = ((clientX - rect.left) / rect.width) * 100;
+    setPos(pos);
+  };
+
+  cmp.addEventListener('mousedown', (e) => { isDragging = true; moveSlider(e); });
+  window.addEventListener('mousemove', (e) => { if (isDragging) moveSlider(e); });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+
+  cmp.addEventListener('touchstart', (e) => { isDragging = true; moveSlider(e); }, {passive: false});
+  window.addEventListener('touchmove', (e) => { 
+    if (isDragging) { 
+      moveSlider(e); 
+      if(e.cancelable) e.preventDefault(); // Prevent scrolling while dragging
+    } 
+  }, {passive: false});
+  window.addEventListener('touchend', () => { isDragging = false; });
+
   function openCmp(it) {
-    $('imA').src = it.url; $('imB').src = it.srcUrl; cmp.style.aspectRatio = it.ow + '/' + it.oh; setPos(50); dlg.showModal();
+    activeItem = it;
+    $('imA').src = it.url; 
+    $('imB').src = it.srcUrl; 
+    cmp.style.aspectRatio = it.ow + '/' + it.oh; 
+    setPos(50); 
+    
+    // Reset sliders to default 0 (neutral)
+    $('quality').value = 100; $('qOut').textContent = '100%';
+    $('sharp').value = 0; $('shOut').textContent = '0';
+    $('contrast').value = 0; $('ctOut').textContent = '0';
+    $('bright').value = 0; $('brOut').textContent = '0';
+    $('shadows').value = 0; $('sdOut').textContent = '0';
+    $('sat').value = 100; $('satOut').textContent = '100%';
+    $('denoise').value = 0; $('dnOut').textContent = '0%';
+    
+    dlg.showModal();
   }
+
+  $('updatePreview').onclick = async () => {
+    if (!activeItem || !activeItem.baseCanvas) return;
+    const btn = $('updatePreview');
+    btn.disabled = true; btn.textContent = '⏳ Processing…';
+    
+    try {
+      const it = activeItem;
+      let canvas = it.baseCanvas;
+      
+      const contrast = +$('contrast').value;
+      const bright = +$('bright').value;
+      const shadows = +$('shadows').value;
+      const satVal = +$('sat').value;
+      const dnVal = +$('denoise').value;
+      const sharpVal = +$('sharp').value;
+      
+      if (contrast !== 0 || bright !== 0 || shadows !== 0 || satVal !== 100) {
+        canvas = colorAdjust(canvas, contrast, bright, shadows, satVal);
+      }
+      if (dnVal > 0) {
+        canvas = await denoise(canvas, dnVal);
+      }
+      if (sharpVal > 0) {
+        canvas = await sharpen(canvas, sharpVal / 100 * 0.6);
+      }
+      
+      const type = $('fmt').value;
+      const qual = +$('quality').value / 100;
+      
+      let outputCanvas = canvas;
+      if (type === 'image/jpeg') { 
+        outputCanvas = mk(canvas.width, canvas.height); 
+        const fx = outputCanvas.getContext('2d'); 
+        fx.fillStyle = '#fff'; fx.fillRect(0, 0, outputCanvas.width, outputCanvas.height); 
+        fx.drawImage(canvas, 0, 0); 
+      }
+      
+      const blob = await new Promise(r => outputCanvas.toBlob(r, type, qual));
+      if (!blob) throw new Error('Failed to generate preview.');
+      
+      if (it.url) URL.revokeObjectURL(it.url);
+      it.blob = blob;
+      it.url = URL.createObjectURL(blob);
+      
+      $('imA').src = it.url; // Update slider preview
+      draw(it); // Update card thumbnail text
+    } catch (e) { alert('Error updating preview: ' + e.message); }
+    
+    btn.disabled = false; btn.textContent = '🔄 Update Preview';
+  };
+
+  $('saveClose').onclick = () => dlg.close();
   $('closeDlg').onclick = () => dlg.close();
-  let drag = false; const mv = e => { const r = cmp.getBoundingClientRect(); setPos((e.clientX - r.left) / r.width * 100); };
-  cmp.addEventListener('pointerdown', e => { drag = true; cmp.setPointerCapture(e.pointerId); mv(e); });
-  cmp.addEventListener('pointermove', e => drag && mv(e));
-  cmp.addEventListener('pointerup', () => drag = false);
+  $('viewOrig').onclick = () => activeItem && window.open(activeItem.srcUrl, '_blank');
 })();
 </script>
+
+<script src="top-bar.js"></script>
+<script src="site-footer.js"></script>
+
 </body>
 </html>
