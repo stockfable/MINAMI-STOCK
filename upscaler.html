@@ -2,635 +2,476 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AI Image Upscaler - MINAMI STOCK</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MINAMI Upscaler – Enlarge images up to 16×</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-html, body { max-width: 100%; overflow-x: hidden; }
-body {
-    background: #000000; /* Black Background */
-    color: #f8fafc;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* HERO SECTION */
-.hero-section { padding: 60px 6% 30px; max-width: 1200px; margin: 0 auto; text-align: center; flex: 1; }
-.hero-title {
-    font-size: 42px; font-weight: 800; color: #ffffff; line-height: 1.15;
-    margin-bottom: 18px; letter-spacing: -1px; word-wrap: break-word;
-}
-.hero-title .highlight {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-.hero-subtitle {
-    font-size: 16px; color: #94a3b8; margin-bottom: 30px;
-    max-width: 600px; margin-left: auto; margin-right: auto;
-}
-
-/* UPSCALE OPTIONS (2x / 4x) */
-.upscale-options {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-}
-.opt-btn {
-    padding: 10px 24px;
-    border-radius: 30px;
-    border: 1px solid #333;
-    background: #111;
-    color: #cbd5e1;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.opt-btn:hover { border-color: #fbbf24; color: #fbbf24; }
-.opt-btn.active {
-    background: #fbbf24;
-    color: #000;
-    border-color: #fbbf24;
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-}
-
-/* UPLOAD BOX */
-.upload-box-wrapper {
-    background: #111111;
-    border: 2px dashed #333;
-    border-radius: 20px; padding: 45px 25px; text-align: center;
-    transition: 0.3s; cursor: pointer; max-width: 700px;
-    margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.upload-box-wrapper:hover, .upload-box-wrapper.dragover {
-    border-color: #fbbf24; background: #1a1a1a;
-}
-.btn-upload-main {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: #0a1628; border: none;
-    padding: 16px 40px; border-radius: 12px;
-    font-size: 16px; font-weight: 700; cursor: pointer;
-    display: inline-flex; align-items: center; gap: 10px;
-    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
-    transition: 0.3s; margin-bottom: 18px;
-}
-.btn-upload-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(251, 191, 36, 0.5); }
-.upload-hint { font-size: 13px; color: #64748b; margin-bottom: 22px; line-height: 1.7; }
-
-/* SAMPLE IMAGES */
-.sample-section { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.sample-text { font-size: 12px; color: #64748b; font-weight: 500; }
-.sample-images { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.sample-images img {
-    width: 44px; height: 44px; border-radius: 10px; object-fit: cover;
-    cursor: pointer; border: 2px solid #333; transition: 0.2s;
-}
-.sample-images img:hover { border-color: #fbbf24; transform: scale(1.12); }
-
-/* PROCESSING SECTION */
-.processing-section { display: none; padding: 50px 6%; max-width: 900px; margin: 0 auto; text-align: center; flex: 1; }
-.processing-section.show { display: block; }
-.processing-box {
-    background: #111111; border: 1px solid #333;
-    border-radius: 20px; padding: 60px 30px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-}
-.ai-spinner { width: 80px; height: 80px; margin: 0 auto 25px; position: relative; }
-.ai-spinner::before, .ai-spinner::after { content: ''; position: absolute; border-radius: 50%; border: 4px solid transparent; }
-.ai-spinner::before { top: 0; left: 0; right: 0; bottom: 0; border-top-color: #fbbf24; border-right-color: #fbbf24; animation: spin 1.2s linear infinite; }
-.ai-spinner::after { top: 12px; left: 12px; right: 12px; bottom: 12px; border-bottom-color: #f59e0b; border-left-color: #f59e0b; animation: spin 1.5s linear infinite reverse; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.processing-title { font-size: 22px; font-weight: 700; color: #ffffff; margin-bottom: 10px; }
-.processing-status { font-size: 14px; color: #94a3b8; margin-bottom: 30px; min-height: 20px; }
-.progress-container { width: 100%; max-width: 450px; margin: 0 auto; background: #222; border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 15px; }
-.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 20px; transition: width 0.5s ease; box-shadow: 0 0 15px rgba(251, 191, 36, 0.6); }
-.progress-text { font-size: 13px; font-weight: 600; color: #fbbf24; }
-
-/* RESULT SECTION */
-.result-section { display: none; padding: 40px 6%; max-width: 1200px; margin: 0 auto; flex: 1; }
-.result-section.show { display: block; }
-.result-header { text-align: center; margin-bottom: 30px; }
-.result-header h2 { font-size: 26px; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
-.result-header h2 i { color: #fbbf24; margin-right: 8px; }
-.result-header p { font-size: 14px; color: #94a3b8; }
-
-.slider-wrapper { display: flex; justify-content: center; margin-bottom: 30px; }
-.slider-container {
-    position: relative; width: 100%; max-width: 900px; aspect-ratio: 16/10;
-    border-radius: 20px; overflow: hidden; background: #111;
-    border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    user-select: none; touch-action: none; cursor: ew-resize;
-}
-.slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #000; pointer-events: none; }
-/* ★★★ SLIDER FIX ★★★ */
-/* এখন ডান দিকের ছবিটা (img-after) ৫০% থেকে ১০০% পর্যন্ত দেখাবে */
-.img-after { clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
-
-.slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: #fbbf24; cursor: ew-resize; transform: translateX(-50%); z-index: 10; box-shadow: 0 0 15px rgba(251, 191, 36, 0.8); }
-.slider-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 46px; height: 46px; background: #fbbf24; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 3px solid #fff; }
-.slider-handle i { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #000; font-size: 18px; z-index: 11; pointer-events: none; }
-.slider-label { position: absolute; top: 15px; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; z-index: 5; box-shadow: 0 3px 10px rgba(0,0,0,0.5); pointer-events: none; }
-.slider-label-left { left: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid #333; }
-.slider-label-right { right: 15px; background: #fbbf24; color: #000; }
-
-.result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.btn-action { padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
-.btn-download { background: #fbbf24; color: #000; box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3); }
-.btn-download:hover { transform: translateY(-2px); background: #f59e0b; }
-.btn-new { background: #222; color: #cbd5e1; border: 1px solid #333; }
-.btn-new:hover { background: #333; color: #fbbf24; border-color: #fbbf24; }
-
-/* FEATURES SECTION */
-.features-section { padding: 70px 6%; max-width: 1200px; margin: 0 auto; background: #050505; }
-.section-header { text-align: center; margin-bottom: 55px; }
-.section-header h2 { font-size: 34px; font-weight: 800; color: #ffffff; margin-bottom: 12px; }
-.section-header h2 .highlight { background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.section-header p { font-size: 16px; color: #94a3b8; max-width: 600px; margin: 0 auto; }
-
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-.feature-card { background: #111; border-radius: 18px; overflow: hidden; border: 1px solid #222; transition: 0.3s; }
-.feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.4); }
-.feature-img-wrapper { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #000; }
-.feature-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-.feature-content { padding: 22px; }
-.feature-content h3 { font-size: 16px; font-weight: 700; color: #fbbf24; margin-bottom: 8px; }
-.feature-content p { font-size: 13px; color: #94a3b8; line-height: 1.65; }
-
-/* FOOTER CTA */
-.bottom-cta { text-align: center; padding: 70px 20px; background: #000; border-top: 1px solid #222; }
-.bottom-cta h2 { font-size: 30px; font-weight: 800; color: #ffffff; margin-bottom: 15px; }
-.bottom-cta h2 .highlight { background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.bottom-cta p { font-size: 15px; color: #94a3b8; max-width: 620px; margin: 0 auto; }
-
-@media (max-width: 900px) {
-    .features-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-    .hero-title { font-size: 28px; }
-    .features-grid { grid-template-columns: 1fr; }
-    .hero-section { padding: 40px 5% 20px; }
-    .features-section { padding: 45px 5%; }
-    .result-actions { flex-direction: column; }
-    .btn-action { justify-content: center; }
-    .slider-label { padding: 4px 10px; font-size: 10px; top: 10px; }
-    .slider-label-left { left: 10px; }
-    .slider-label-right { right: 10px; }
-    .upload-box-wrapper { padding: 30px 15px; }
-}
+:root{--y:#ffc400;--y2:#e6b000;--red:#e5534b;--blue:#3b7ddd;--text:#f2f2f2;--muted:#9a9a9a;--line:#2a2a2a;--bg:#000;--card:#111;--chip:#1c1c1c}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+nav{background:#0a0a0a;border-bottom:1px solid var(--line);padding:12px 18px;font-weight:800;font-size:1.2rem;position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center}
+nav span{color:var(--y)}
+nav a{color:var(--text);font-size:.9rem;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:8px}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 60px}
+h1{font-size:1.5rem;text-align:center;margin:10px 0 4px}
+.sub{text-align:center;color:var(--muted);margin-bottom:16px}
+.drop{background:var(--card);border:2px dashed var(--y);border-radius:16px;padding:28px 14px;text-align:center}
+.drop.over{background:#1a1500}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;color:#000;background:var(--y);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--y2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.red{background:var(--red);color:#fff}.btn.blue{background:var(--blue);color:#fff}.btn.gray{background:#1c1c1c;color:var(--text);border:1px solid var(--line)}
+.btn.big{font-size:1.1rem;padding:14px 26px}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.seg button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+.hint{color:var(--muted);font-size:.85rem;margin-top:12px}
+.settings{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px;display:grid;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.row>b{font-size:.9rem}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:#1c1c1c;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;cursor:pointer;color:var(--text)}
+.seg button[aria-pressed=true]{background:var(--y);border-color:var(--y);color:#000}
+.seg button.locked{color:var(--muted);border-style:dashed}
+select{border:1px solid var(--line);border-radius:9px;padding:7px 10px;font:inherit;background:#1c1c1c;color:var(--text)}
+input[type=range]{accent-color:var(--y);width:180px;max-width:100%}
+.small{font-size:.8rem;color:var(--muted)}
+.badge{background:var(--y);color:#000;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:99px;margin-left:6px}
+.toolbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap;align-items:center}
+.toolbar .count{margin-left:auto;color:var(--muted);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;display:flex;gap:14px}
+.thumb{width:84px;height:84px;border-radius:10px;object-fit:cover;flex:none;background:var(--chip)}
+.info{flex:1;min-width:0}
+.track{height:8px;background:var(--chip);border-radius:6px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--y);transition:width .2s}
+.fill.err{background:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:.8rem;color:#c4c4c4;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip.ok{background:#1a2a14;border-color:#2f4a22;color:#8fd46b}
+.chip.err{background:#2a1413;border-color:#5a2724;color:#ff8a84}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts .btn{padding:8px 14px;font-size:.92rem}
+dialog{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0d0d0d;color:var(--text);width:min(94vw,900px);max-height:94vh}
+dialog.pay{width:min(94vw,440px);padding:20px;overflow:auto}
+dialog.pay h2{margin-bottom:4px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.plans button{border:1px solid var(--line);background:#1c1c1c;color:var(--text);border-radius:10px;padding:10px 4px;font:inherit;font-weight:700;cursor:pointer}
+.plans button small{display:block;color:var(--y);font-size:.95rem}
+.plans button[aria-pressed=true]{border-color:var(--y);background:#1a1500}
+.payinfo{background:#1a1500;border:1px solid #4a3a00;border-radius:10px;padding:10px 12px;font-size:.88rem;margin-bottom:12px}
+.payinfo b{color:var(--y)}
+.field{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;background:#1c1c1c;color:var(--text);margin-bottom:8px}
+.pstat{margin-top:10px;font-size:.88rem}
+.pstat div{padding:6px 10px;border-radius:8px;background:var(--chip);margin-top:6px}
+dialog::backdrop{background:#000c}
+.cmp{position:relative;width:100%;border-radius:10px;overflow:hidden;user-select:none;touch-action:pan-y;background:#222;max-height:78vh;margin:0 auto}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.cmp .b{clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0)}
+.cmp .line{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;box-shadow:0 0 0 1px #0005}
+.cmp .knob{position:absolute;top:50%;left:var(--pos,50%);width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:var(--y);color:#000;display:grid;place-items:center;font-weight:800;box-shadow:0 2px 8px #0007}
+.tag{position:absolute;top:8px;background:#000a;color:#fff;font-size:.75rem;padding:2px 9px;border-radius:99px}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
+<nav><div><span>MINAMI</span> Upscaler</div><div><span class="badge" id="planBadge">FREE</span> <a href="index.html">Home</a></div></nav>
+<div class="wrap">
+  <h1>Enlarge images up to 16×</h1>
+  <p class="sub">Photos, artwork and anime. Runs in your browser — nothing is uploaded.</p>
 
-<!-- TOP BAR -->
-<div id="site-topbar"></div>
+  <div class="drop" id="drop">
+    <button class="btn big" id="pick" type="button">⊕ Select Images</button>
+    <input type="file" id="file" accept="image/*" multiple hidden>
+    <p class="hint">or drag &amp; drop · paste with Ctrl+V</p>
+  </div>
 
-<!-- MAIN TOOL -->
-<section class="hero-section" id="heroSection">
-    <h1 class="hero-title">Upscale Images by <span class="highlight">2x or 4x</span></h1>
-    <p class="hero-subtitle">Enlarge photos without losing detail. Our smart upscaling engine adds real pixel data to keep your image crisp and sharp.</p>
-    
-    <div class="upscale-options">
-        <button class="opt-btn active" data-scale="2">2x Upscale</button>
-        <button class="opt-btn" data-scale="4">4x Upscale</button>
+  <div class="settings">
+    <div class="row"><b>Upscale</b>
+      <div class="seg" id="scale">
+        <button type="button" data-v="2" aria-pressed="true">2×</button>
+        <button type="button" data-v="4" aria-pressed="false">4×</button>
+        <button type="button" data-v="8" data-pro="1" aria-pressed="false">🔒 8×</button>
+        <button type="button" data-v="16" data-pro="1" aria-pressed="false">🔒 16×</button>
+      </div>
     </div>
-
-    <div class="upload-box-wrapper" id="uploadBox">
-        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-        <button class="btn-upload-main" id="uploadBtn">
-            <i class="fas fa-cloud-upload-alt"></i> Choose Image
-        </button>
-        <p class="upload-hint">Drop an image anywhere here<br>or paste from clipboard with CTRL + V</p>
-        
-        <div class="sample-section">
-            <span class="sample-text">Try a sample:</span>
-            <div class="sample-images">
-                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop" alt="Sample 1" class="sample-img">
-                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&h=100&fit=crop" alt="Sample 2" class="sample-img">
-                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop" alt="Sample 3" class="sample-img">
-                <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop" alt="Sample 4" class="sample-img">
-            </div>
-        </div>
+    <div class="row"><b>Engine</b>
+      <div class="seg" id="engine">
+        <button type="button" data-v="fast" aria-pressed="true">Fast</button>
+        <button type="button" data-v="ai" data-pro="1" aria-pressed="false">🔒 AI (Canva-quality)</button>
+      </div>
     </div>
-</section>
-
-<!-- PROCESSING -->
-<section class="processing-section" id="processingSection">
-    <div class="processing-box">
-        <div class="ai-spinner"></div>
-        <div class="processing-title">Upscaling your image...</div>
-        <div class="processing-status" id="processingStatus">Initializing upscale engine...</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="progress-text" id="progressText">0%</div>
+    <p class="small" id="engineNote">Fast: smooth enlargement + edge sharpening. Works instantly on any phone.</p>
+    <div class="row"><b>Images at once</b>
+      <div class="seg" id="count">
+        <button type="button" data-v="15" aria-pressed="true">15</button>
+        <button type="button" data-v="50" data-pro="1" aria-pressed="false">🔒 50</button>
+        <button type="button" data-v="100" data-pro="1" aria-pressed="false">🔒 100</button>
+      </div>
     </div>
-</section>
-
-<!-- RESULT -->
-<section class="result-section" id="resultSection">
-    <div class="result-header">
-        <h2><i class="fas fa-check-circle"></i> Upscaling Complete!</h2>
-        <p>Drag the slider to compare the Original and Upscaled version.</p>
+    <div class="row"><b>Sharpness <span id="shOut" class="small">40</span></b><input type="range" id="sharp" min="0" max="100" value="40" aria-label="Sharpness"></div>
+    <div class="row"><b>Output</b>
+      <select id="fmt" aria-label="Output format">
+        <option value="image/jpeg">JPG</option>
+        <option value="image/png">PNG</option>
+        <option value="image/webp">WebP</option>
+      </select>
     </div>
+    <p class="small" id="limitNote"></p>
+    <p class="small" id="planNote" style="color:var(--y)"></p>
+  </div>
 
-    <div class="slider-wrapper">
-        <div class="slider-container" id="sliderContainer">
-            <!-- Original Image (Bottom Layer) -->
-            <img id="imgOriginal" class="slider-img" src="" alt="Original">
-            <!-- Upscaled Image (Top Layer) -->
-            <img id="imgEnhanced" class="slider-img img-after" src="" alt="Upscaled">
-            
-            <div class="slider-handle" id="sliderHandle">
-                <i class="fas fa-arrows-alt-h"></i>
-            </div>
-            <!-- Labels -->
-            <div class="slider-label slider-label-left">ORIGINAL</div>
-            <div class="slider-label slider-label-right">UPSCALED</div>
-        </div>
-    </div>
+  <div class="toolbar" id="toolbar" hidden>
+    <button class="btn" id="startAll" type="button">▶ Start all</button>
+    <button class="btn red" id="clearAll" type="button">🗑 Clear all</button>
+    <span class="count" id="countOut"></span>
+  </div>
+  <div id="list"></div>
+</div>
 
-    <div class="result-actions">
-        <button class="btn-action btn-download" onclick="downloadEnhanced()">
-            <i class="fas fa-download"></i> Download Upscaled Image
-        </button>
-        <button class="btn-action btn-new" onclick="resetEnhancer()">
-            <i class="fas fa-redo"></i> Try Another Image
-        </button>
-    </div>
-</section>
+<dialog id="dlg">
+  <div class="cmp" id="cmp"><img class="a" id="imA" alt="Upscaled"><img class="b" id="imB" alt="Original"><div class="line"></div><div class="knob">⇆</div><span class="tag" style="left:8px">Original</span><span class="tag" style="right:8px">Upscaled</span></div>
+  <div style="text-align:right;margin-top:10px"><button class="btn gray" id="closeDlg" type="button">Close</button></div>
+</dialog>
 
-<!-- FEATURES -->
-<section class="features-section">
-    <div class="section-header">
-        <h2>Powerful <span class="highlight">Upscaling Tools</span></h2>
-        <p>Everything you need to make your images bigger, sharper, and ready for anything.</p>
-    </div>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80" alt="2x Upscaling">
-            </div>
-            <div class="feature-content">
-                <h3>2x Upscaling</h3>
-                <p>Double the resolution of your photos instantly. Perfect for social media and web use.</p>
-            </div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="4x Upscaling">
-            </div>
-            <div class="feature-content">
-                <h3>4x Upscaling</h3>
-                <p>Enlarge images four times while preserving fine details. Ideal for printing.</p>
-            </div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80" alt="Detail Preserve">
-            </div>
-            <div class="feature-content">
-                <h3>Detail Preservation</h3>
-                <p>Our smart algorithm keeps edges sharp and textures natural — no blur, no artifacts.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<dialog id="pay" class="pay">
+  <h2>🔒 Go PRO – unlimited upscaling</h2>
+  <p class="small">Unlocks 8×, 16×, AI engine, 50 / 100 images at once and removes the 15-images-per-day limit.</p>
+  <div class="plans" id="plans"></div>
+  <div class="payinfo" id="payinfo"></div>
+  <div id="payLogin" hidden>
+    <p class="small" style="margin-bottom:10px">Please log in first to submit your payment.</p>
+    <a class="btn" href="login.html" style="text-decoration:none">Log in</a>
+  </div>
+  <div id="payForm">
+    <select id="pMethod" class="field" aria-label="Payment method"></select>
+    <input id="pSender" class="field" inputmode="numeric" maxlength="11" placeholder="Your number you paid from (01XXXXXXXXX)">
+    <input id="pTrx" class="field" autocapitalize="characters" placeholder="Transaction ID (TrxID)">
+    <button class="btn" id="pSubmit" type="button" style="width:100%;justify-content:center">Submit payment</button>
+    <p class="small" id="pMsg" style="margin-top:8px"></p>
+  </div>
+  <div class="pstat" id="pStat"></div>
+  <div style="text-align:right;margin-top:12px"><button class="btn gray" id="closePay" type="button">Close</button></div>
+</dialog>
 
-<!-- BOTTOM CTA -->
-<section class="bottom-cta">
-    <h2>Ready to <span class="highlight">Upscale</span> Your Photos?</h2>
-    <p>Make every image bigger, sharper, and stunning — in just one click.</p>
-</section>
-
-<!-- SITE FOOTER -->
-<div id="ms-footer"></div>
-
-<!-- SHARED SCRIPTS -->
-<script src="top-bar.js"></script>
-<script src="site-footer.js"></script>
-
-<!-- TOOL LOGIC -->
 <script>
-const uploadBox = document.getElementById('uploadBox');
-const fileInput = document.getElementById('fileInput');
-const uploadBtn = document.getElementById('uploadBtn');
-const heroSection = document.getElementById('heroSection');
-const processingSection = document.getElementById('processingSection');
-const resultSection = document.getElementById('resultSection');
-const imgOriginal = document.getElementById('imgOriginal');
-const imgEnhanced = document.getElementById('imgEnhanced');
-const progressBar = document.getElementById('progressBar');
-const progressText = document.getElementById('progressText');
-const processingStatus = document.getElementById('processingStatus');
-const sliderContainer = document.getElementById('sliderContainer');
-const sliderHandle = document.getElementById('sliderHandle');
+(() => {
+  const $ = id => document.getElementById(id);
 
-let enhancedImageData = null;
-let currentScale = 2; 
+  /* ===== SETTINGS YOU MUST EDIT ===== */
+  const FIREBASE_CONFIG = {            // copy the same config you use in login.html
+    apiKey: "PASTE_API_KEY",
+    authDomain: "creoverse-stock.firebaseapp.com",
+    projectId: "creoverse-stock",
+    appId: "PASTE_APP_ID"
+  };
+  const PLANS = [
+    { id: 'm1', name: '1 Month',  price: 199,  days: 30 },
+    { id: 'm3', name: '3 Months', price: 499,  days: 90 },
+    { id: 'y1', name: '1 Year',   price: 1499, days: 365 }
+  ];
+  const PAY_NUMBERS = { bKash: '01XXXXXXXXX', Nagad: '01XXXXXXXXX', Rocket: '01XXXXXXXXXX' };
+  const WORKER_URL = 'https://YOUR-WORKER.YOUR-NAME.workers.dev';   // your Cloudflare Worker URL (see upscale-worker.js)
+  const DAY_FREE = 15;
 
-document.querySelectorAll('.opt-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentScale = parseInt(btn.dataset.scale);
-    });
-});
-
-uploadBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    fileInput.click();
-});
-uploadBox.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) processImage(file);
-});
-
-uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('dragover'); });
-uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
-uploadBox.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadBox.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file) processImage(file);
-});
-
-document.querySelectorAll('.sample-img').forEach(img => {
-    img.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const highResUrl = img.src.replace('w=100', 'w=800').replace('h=100', 'h=600');
-        loadImageFromUrl(highResUrl);
-    });
-});
-
-document.addEventListener('paste', (e) => {
-    const items = e.clipboardData.items;
-    for (let item of items) {
-        if (item.type.indexOf('image') !== -1) {
-            const file = item.getAsFile();
-            if (file) processImage(file);
-            break;
-        }
-    }
-});
-
-function processImage(file) {
-    if (!file.type.startsWith('image/')) {
-        alert("Please upload a valid image file.");
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => loadImageFromUrl(e.target.result);
-    reader.readAsDataURL(file);
-}
-
-function loadImageFromUrl(url) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => startEnhancement(img, url);
-    img.onerror = () => alert("Could not load the image. Please try another one.");
-    img.src = url;
-}
-
-function startEnhancement(imgElement, originalUrl) {
-    heroSection.style.display = 'none';
-    resultSection.classList.remove('show');
-    processingSection.classList.add('show');
-    processingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    progressBar.style.width = '0%';
-    progressText.textContent = '0%';
-
-    const statusMessages = [
-        { progress: 0,   text: 'Initializing upscale engine...' },
-        { progress: 15,  text: 'Analyzing image structure...' },
-        { progress: 30,  text: 'Detecting fine details...' },
-        { progress: 50,  text: 'Adding new pixel data...' },
-        { progress: 70,  text: 'Enhancing edges and textures...' },
-        { progress: 85,  text: 'Preserving sharpness...' },
-        { progress: 95,  text: 'Finalizing the result...' },
-        { progress: 100, text: 'Upscaling complete!' }
-    ];
-
-    let enhancedResult = null;
+  /* ===== SUBSCRIPTION / PAYMENT ===== */
+  let user = null, proUntil = 0, myPays = [], planId = 'm1', db = null, auth = null;
+  function isPro() { return proUntil > Date.now(); }
+  const fbOK = !String(FIREBASE_CONFIG.apiKey).startsWith('PASTE');
+  if (fbOK) {
     try {
-        enhancedResult = upscaleImage(imgElement, currentScale); 
-    } catch (err) {
-        console.error('Upscale error:', err);
-        alert("Could not upscale this image. It might be too large.");
-        resetEnhancer();
-        return;
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      auth = firebase.auth(); db = firebase.firestore();
+    } catch (e) { console.error(e); }
+  }
+  const dayKey = () => 'minamiUse_' + new Date().toISOString().slice(0, 10);
+  const used = () => { try { return +localStorage.getItem(dayKey()) || 0; } catch (e) { return 0; } };
+  const addUsed = () => { try { localStorage.setItem(dayKey(), used() + 1); } catch (e) {} };
+  const freeLeft = () => Math.max(0, DAY_FREE - used());
+  function updatePlan() {
+    const pro = isPro();
+    $('planBadge').textContent = pro ? 'PRO' : 'FREE';
+    $('planNote').textContent = pro
+      ? 'PRO active until ' + new Date(proUntil).toLocaleDateString() + ' · unlimited images'
+      : 'Free plan: ' + freeLeft() + ' of ' + DAY_FREE + ' images left today. Subscribe for unlimited.';
+  }
+  function showPay() { if (!$('pay').open) { renderPay(); $('pay').showModal(); } }
+  $('closePay').onclick = () => $('pay').close();
+
+  function renderPay() {
+    $('plans').innerHTML = PLANS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id === planId}">${p.name}<small>৳${p.price}</small></button>`).join('');
+    $('plans').querySelectorAll('button').forEach(b => b.onclick = () => { planId = b.dataset.p; renderPay(); });
+    const m = $('pMethod'); const cur = m.value;
+    m.innerHTML = Object.keys(PAY_NUMBERS).map(k => `<option>${k}</option>`).join(''); if (cur) m.value = cur;
+    const plan = PLANS.find(p => p.id === planId);
+    $('payinfo').innerHTML = `Send <b>৳${plan.price}</b> by <b>Send Money</b> to <b>${esc(PAY_NUMBERS[m.value])}</b> (${esc(m.value)}), then enter your number and the TrxID below. Unlock happens after we verify it.`;
+    m.onchange = renderPay;
+    $('payLogin').hidden = !!user || !fbOK;
+    $('payForm').hidden = !user || !fbOK;
+    if (!fbOK) $('pMsg').textContent = 'Payment system is not configured yet.';
+    renderStatus();
+  }
+  function renderStatus() {
+    const box = $('pStat'); if (!box) return;
+    const list = [...myPays].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).slice(0, 3);
+    const label = { pending: '⏳ Pending verification', approved: '✅ Approved', rejected: '❌ Rejected' };
+    box.innerHTML = list.map(p => `<div>${label[p.status] || p.status} · ${esc(p.trxId)} · ৳${p.amount}</div>`).join('');
+  }
+  $('pSubmit').onclick = async () => {
+    const msg = t => $('pMsg').textContent = t;
+    if (!user) return msg('Please log in first.');
+    const trx = $('pTrx').value.trim().toUpperCase(), sender = $('pSender').value.trim(), method = $('pMethod').value;
+    if (!/^01\d{9}$/.test(sender)) return msg('Enter a valid 11-digit number (01XXXXXXXXX).');
+    if (!/^[A-Z0-9]{6,20}$/.test(trx)) return msg('Enter a valid Transaction ID.');
+    const plan = PLANS.find(p => p.id === planId), btn = $('pSubmit'); btn.disabled = true; msg('Submitting…');
+    try {
+      await db.collection('payments').doc(trx).set({
+        uid: user.uid, email: user.email || '', method, sender, trxId: trx, planId: plan.id, days: plan.days, amount: plan.price,
+        status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      $('pTrx').value = ''; msg('Submitted! We will verify it and unlock PRO soon.');
+    } catch (e) {
+      msg(e.code === 'permission-denied' ? 'This TrxID was already submitted.' : (e.message || 'Failed, try again.'));
     }
+    btn.disabled = false;
+  };
+  if (auth) {
+    let u1 = null, u2 = null;
+    auth.onAuthStateChanged(u => {
+      user = u; u1 && u1(); u2 && u2(); proUntil = 0; myPays = [];
+      if (u) {
+        u1 = db.collection('subscriptions').doc(u.uid).onSnapshot(sn => {
+          const d = sn.exists ? sn.data() : null; proUntil = d && d.status === 'active' ? +d.expiresAt || 0 : 0;
+          refreshLocks(); updateCount(); updatePlan();
+        }, () => {});
+        u2 = db.collection('payments').where('uid', '==', u.uid).onSnapshot(q => { myPays = q.docs.map(x => x.data()); renderStatus(); }, () => {});
+      }
+      refreshLocks(); updateCount(); updatePlan(); if ($('pay').open) renderPay();
+    });
+  }
 
-    if (!enhancedResult) {
-        alert("Upscaling failed. Please try a different image.");
-        resetEnhancer();
-        return;
+  const MAX_SIDE = 16000, MAX_PIXELS = 30e6, AI_MAX_INPUT = 1.5e6;
+
+  const items = []; let uid = 0, scale = 2, engine = 'fast', maxCount = 15, running = false;
+  const tick = () => new Promise(r => setTimeout(r, 0));
+  const fmtB = b => b > 1048576 ? (b / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+  const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* ---------- settings ---------- */
+  function refreshLocks() {
+    const pro = isPro();
+    document.querySelectorAll('button[data-pro]').forEach(b => {
+      const t = b.textContent.replace('🔒 ', '');
+      b.textContent = pro ? t : '🔒 ' + t;
+      b.classList.toggle('locked', !pro);
+    });
+  }
+  const seg = (id, cb) => document.querySelectorAll('#' + id + ' button').forEach(b => b.onclick = () => {
+    if (b.dataset.pro && !isPro()) { showPay(); return; }
+    document.querySelectorAll('#' + id + ' button').forEach(x => x.setAttribute('aria-pressed', x === b)); cb(b.dataset.v);
+  });
+  seg('scale', v => { scale = +v; });
+  seg('engine', v => {
+    engine = v;
+    $('engineNote').textContent = v === 'ai'
+      ? 'AI: server-side Real-ESRGAN that rebuilds real detail (Canva-style quality). Needs internet, takes a few seconds per image. Large images fall back to Fast.'
+      : 'Fast: smooth enlargement + edge sharpening. Works instantly on any phone.';
+  });
+  seg('count', v => { maxCount = +v; updateCount(); });
+  $('sharp').oninput = e => $('shOut').textContent = e.target.value;
+  $('limitNote').textContent = `Browser limit: about ${(MAX_PIXELS / 1e6)} megapixels per result. Bigger factors are reduced automatically.`;
+  refreshLocks(); updatePlan();
+  const updateCount = () => { $('countOut').textContent = items.length + ' / ' + (isPro() ? maxCount : 15) + ' images'; };
+
+  /* ---------- adding files ---------- */
+  $('pick').onclick = () => $('file').click();
+  $('file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+  const drop = $('drop');
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+  window.addEventListener('paste', e => addFiles([...(e.clipboardData?.files || [])]));
+
+  let pending = 0;
+  function addFiles(list) {
+    let files = [...list].filter(f => f.type.startsWith('image/'));
+    const limit = isPro() ? maxCount : Math.min(maxCount, 15);
+    const room = Math.max(0, limit - items.length - pending);
+    if (files.length > room) {
+      if (!isPro() && limit === 15) showPay();
+      else alert('Limit is ' + limit + ' images at once. Only ' + room + ' more can be added.');
+      files = files.slice(0, room);
     }
+    files.forEach(f => {
+      pending++;
+      const it = { id: ++uid, file: f, name: f.name || 'pasted-image.png', state: 'idle', pct: 0, msg: '', srcUrl: URL.createObjectURL(f) };
+      const im = new Image();
+      im.onload = () => { pending--; it.img = im; it.w = im.naturalWidth; it.h = im.naturalHeight; items.push(it); renderAll(); };
+      im.onerror = () => { pending--; URL.revokeObjectURL(it.srcUrl); };
+      im.src = it.srcUrl;
+    });
+  }
 
-    const totalDuration = 10000;
-    const stepInterval = totalDuration / 100;
-    let progress = 0;
+  /* ---------- rendering ---------- */
+  function cardHTML(it) {
+    const chips = [`<span class="chip">${it.w}×${it.h}px</span>`, `<span class="chip">${fmtB(it.file.size)}</span>`, `<span class="chip">${esc(it.name)}</span>`];
+    if (it.state === 'done') chips.unshift(`<span class="chip ok">→ ${it.ow}×${it.oh}px · ${fmtB(it.blob.size)}</span>`);
+    if (it.state === 'err') chips.unshift(`<span class="chip err">${esc(it.msg)}</span>`);
+    if (it.state === 'run' && it.msg) chips.unshift(`<span class="chip">${esc(it.msg)}</span>`);
+    if (it.state === 'wait') chips.unshift(`<span class="chip">Waiting…</span>`);
+    let acts = '';
+    if (it.state === 'idle' || it.state === 'err') acts += `<button class="btn" data-a="start" data-id="${it.id}">▶ Start</button>`;
+    if (it.state === 'done') acts += `<button class="btn blue" data-a="dl" data-id="${it.id}">⬇ Download</button><button class="btn gray" data-a="cmp" data-id="${it.id}">⇆ Compare</button>`;
+    if (it.state !== 'run') acts += `<button class="btn red" data-a="del" data-id="${it.id}">🗑 Delete</button>`;
+    const pct = it.state === 'done' ? 100 : it.pct;
+    return `<img class="thumb" src="${it.srcUrl}" alt=""><div class="info"><div class="track"><div class="fill ${it.state === 'err' ? 'err' : ''}" style="width:${pct}%"></div></div><div class="chips">${chips.join('')}</div><div class="acts">${acts}</div></div>`;
+  }
+  function renderAll() {
+    $('toolbar').hidden = !items.length; updateCount();
+    const list = $('list');
+    items.forEach(it => {
+      let el = document.getElementById('c' + it.id);
+      if (!el) { el = document.createElement('div'); el.className = 'card'; el.id = 'c' + it.id; list.appendChild(el); }
+      el.innerHTML = cardHTML(it);
+    });
+  }
+  const draw = it => { const el = document.getElementById('c' + it.id); if (el) el.innerHTML = cardHTML(it); };
+  const setPct = (it, p) => { it.pct = Math.round(p); const f = document.querySelector('#c' + it.id + ' .fill'); if (f) f.style.width = it.pct + '%'; };
 
-    const progressInterval = setInterval(() => {
-        progress += 1;
-        progressBar.style.width = progress + '%';
-        progressText.textContent = progress + '%';
+  $('list').addEventListener('click', e => {
+    const b = e.target.closest('button[data-a]'); if (!b) return;
+    const it = items.find(i => i.id === +b.dataset.id); if (!it) return;
+    const a = b.dataset.a;
+    if (a === 'start') queue(it);
+    else if (a === 'del') removeItem(it);
+    else if (a === 'dl') download(it);
+    else if (a === 'cmp') openCmp(it);
+  });
+  $('startAll').onclick = () => items.filter(i => i.state === 'idle' || i.state === 'err').slice(0, isPro() ? maxCount : 15).forEach(queue);
+  $('clearAll').onclick = () => { if (!running || confirm('Stop and remove all images?')) [...items].forEach(i => i.state !== 'run' && removeItem(i)); };
 
-        const currentStatus = statusMessages.filter(s => s.progress <= progress).pop();
-        if (currentStatus) processingStatus.textContent = currentStatus.text;
+  function removeItem(it) {
+    URL.revokeObjectURL(it.srcUrl); if (it.url) URL.revokeObjectURL(it.url);
+    items.splice(items.indexOf(it), 1);
+    const el = document.getElementById('c' + it.id); if (el) el.remove();
+    $('toolbar').hidden = !items.length; updateCount();
+  }
+  function download(it) {
+    const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[it.blob.type] || 'png';
+    const a = document.createElement('a'); a.href = it.url; a.download = it.name.replace(/\.[^.]+$/, '') + `-${it.factor}x.${ext}`;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
 
-        if (progress >= 100) {
-            clearInterval(progressInterval);
-            setTimeout(() => {
-                showResult(originalUrl, enhancedResult);
-            }, 400);
+  /* ---------- queue ---------- */
+  function queue(it) { it.state = 'wait'; it.queued = true; it.pct = 0; draw(it); runQueue(); }
+  async function runQueue() {
+    if (running) return; running = true;
+    let it;
+    while ((it = items.find(i => i.queued))) { it.queued = false; await process(it); }
+    running = false;
+  }
+
+  /* ---------- engines ---------- */
+  async function resizeSmooth(src, tw, th) {
+    let cur = src, cw = src.naturalWidth || src.width, ch = src.naturalHeight || src.height;
+    while (cw * 2 < tw) {
+      cw *= 2; ch *= 2;
+      const c = mk(cw, ch), x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high';
+      x.drawImage(cur, 0, 0, cw, ch); cur = c; await tick();
+    }
+    const out = mk(tw, th), ox = out.getContext('2d'); ox.imageSmoothingEnabled = true; ox.imageSmoothingQuality = 'high';
+    ox.drawImage(cur, 0, 0, tw, th); return out;
+  }
+  async function sharpen(src, a, onP) {
+    const w = src.width, h = src.height, out = mk(w, h), sx = src.getContext('2d'), ox = out.getContext('2d'), band = Math.max(32, Math.floor(2e6 / w));
+    for (let y0 = 0; y0 < h; y0 += band) {
+      const top = Math.max(0, y0 - 1), bot = Math.min(h, y0 + band + 1), bh = bot - top;
+      const s = sx.getImageData(0, top, w, bh), d = ox.createImageData(w, bh), sd = s.data, dd = d.data;
+      for (let y = 0; y < bh; y++) {
+        const yu = y > 0 ? y - 1 : y, yd = y < bh - 1 ? y + 1 : y;
+        for (let x = 0; x < w; x++) {
+          const xl = x > 0 ? x - 1 : x, xr = x < w - 1 ? x + 1 : x, i = (y * w + x) * 4, iu = (yu * w + x) * 4, id = (yd * w + x) * 4, il = (y * w + xl) * 4, ir = (y * w + xr) * 4;
+          for (let c = 0; c < 3; c++) { const v = sd[i + c] * (1 + 4 * a) - a * (sd[iu + c] + sd[id + c] + sd[il + c] + sd[ir + c]); dd[i + c] = v < 0 ? 0 : v > 255 ? 255 : v; }
+          dd[i + 3] = sd[i + 3];
         }
-    }, stepInterval);
-}
-
-function upscaleImage(imgElement, scale) {
-    const srcW = imgElement.naturalWidth || imgElement.width;
-    const srcH = imgElement.naturalHeight || imgElement.height;
-    
-    // Safety limit for browser memory
-    if (srcW * scale > 5000 || srcH * scale > 5000) {
-        throw new Error("Image too large to upscale safely in browser.");
+      }
+      ox.putImageData(d, 0, top, 0, y0 - top, w, Math.min(band, h - y0));
+      onP && onP(Math.min(1, (y0 + band) / h)); await tick();
     }
+    return out;
+  }
+  async function aiServer(it, aiScale) {
+    if (!user) throw new Error('Please log in');
+    if (WORKER_URL.includes('YOUR-WORKER')) throw new Error('AI server not set up');
+    it.msg = 'AI enhancing…'; draw(it); setPct(it, 12);
+    // re-encode input (keeps request small)
+    const src = mk(it.w, it.h), sx = src.getContext('2d');
+    sx.fillStyle = '#fff'; sx.fillRect(0, 0, it.w, it.h); sx.drawImage(it.img, 0, 0);
+    let q = 0.92, dataUrl = src.toDataURL('image/jpeg', q);
+    while (dataUrl.length > 1.3e6 && q > 0.5) { q -= 0.1; dataUrl = src.toDataURL('image/jpeg', q); }
+    src.width = src.height = 1;
+    const token = await user.getIdToken();
+    let pct = 12; const timer = setInterval(() => { pct = Math.min(65, pct + 2); setPct(it, pct); }, 1000);
+    let res;
+    try {
+      res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ image: dataUrl, scale: aiScale }) });
+    } finally { clearInterval(timer); }
+    if (!res.ok) { let m = 'AI server error'; try { m = (await res.json()).error || m; } catch (e) {} throw new Error(m); }
+    const blob = await res.blob(), url = URL.createObjectURL(blob);
+    const im = new Image(); await new Promise((r, j) => { im.onload = r; im.onerror = () => j(new Error('Bad AI result')); im.src = url; });
+    const c = mk(im.naturalWidth, im.naturalHeight); c.getContext('2d').drawImage(im, 0, 0); URL.revokeObjectURL(url); return c;
+  }
 
-    const newW = srcW * scale;
-    const newH = srcH * scale;
+  async function process(it) {
+    it.state = 'run'; it.msg = 'Preparing…'; setPct(it, 2); draw(it); await tick();
+    try {
+      if (!isPro() && freeLeft() <= 0) { showPay(); throw new Error('Free limit reached (15 images per day). Subscribe for unlimited.'); }
+      const pro = isPro();
+      let s = pro ? scale : Math.min(scale, 4); const w = it.w, h = it.h;
+      while (s > 1 && (w * s > MAX_SIDE || h * s > MAX_SIDE || w * h * s * s > MAX_PIXELS)) s--;
+      if (s < 2) throw new Error('Image is too large to enlarge here.');
+      const tw = w * s, th = h * s;
+      let canvas = null, usedAI = false;
 
-    const srcCanvas = document.createElement('canvas');
-    srcCanvas.width = srcW;
-    srcCanvas.height = srcH;
-    const srcCtx = srcCanvas.getContext('2d');
-    srcCtx.drawImage(imgElement, 0, 0);
-    const srcData = srcCtx.getImageData(0, 0, srcW, srcH);
-
-    const dstCanvas = document.createElement('canvas');
-    dstCanvas.width = newW;
-    dstCanvas.height = newH;
-    const dstCtx = dstCanvas.getContext('2d');
-
-    // Bilinear interpolation
-    const dstData = dstCtx.createImageData(newW, newH);
-    const src = srcData.data;
-    const dst = dstData.data;
-
-    for (let y = 0; y < newH; y++) {
-        for (let x = 0; x < newW; x++) {
-            const srcX = x / scale;
-            const srcY = y / scale;
-
-            const x0 = Math.floor(srcX);
-            const y0 = Math.floor(srcY);
-            const x1 = Math.min(x0 + 1, srcW - 1);
-            const y1 = Math.min(y0 + 1, srcH - 1);
-
-            const fx = srcX - x0;
-            const fy = srcY - y0;
-
-            const idx00 = (y0 * srcW + x0) * 4;
-            const idx10 = (y0 * srcW + x1) * 4;
-            const idx01 = (y1 * srcW + x0) * 4;
-            const idx11 = (y1 * srcW + x1) * 4;
-
-            const idxDst = (y * newW + x) * 4;
-
-            for (let c = 0; c < 3; c++) {
-                const top = src[idx00 + c] * (1 - fx) + src[idx10 + c] * fx;
-                const bottom = src[idx01 + c] * (1 - fx) + src[idx11 + c] * fx;
-                dst[idxDst + c] = top * (1 - fy) + bottom * fy;
-            }
-            dst[idxDst + 3] = 255;
+      if (engine === 'ai' && pro) {
+        if (w * h > AI_MAX_INPUT) it.msg = 'Too large for AI → using Fast';
+        else {
+          try { canvas = await aiServer(it, Math.min(s, 8)); usedAI = true; }
+          catch (e) { console.error(e); it.msg = 'AI: ' + (e.message || 'unavailable') + ' → using Fast'; }
         }
-    }
+        draw(it);
+      }
+      if (canvas) { if (canvas.width !== tw) canvas = await resizeSmooth(canvas, tw, th); }
+      else { it.msg = 'Enlarging…'; draw(it); setPct(it, 15); canvas = await resizeSmooth(it.img, tw, th); }
+      setPct(it, 70);
 
-    dstCtx.putImageData(dstData, 0, 0);
+      const amt = +$('sharp').value / 100 * (usedAI ? 0.3 : 0.6);
+      if (amt > 0) { it.msg = 'Sharpening…'; draw(it); canvas = await sharpen(canvas, amt, p => setPct(it, 70 + p * 22)); }
 
-    try { applySharpen(dstCtx, newW, newH); } catch (err) {}
-    try { applyColorBoost(dstCtx, newW, newH); } catch (err) {}
+      it.msg = 'Saving…'; setPct(it, 94); draw(it); await tick();
+      const type = $('fmt').value;
+      if (type === 'image/jpeg') { const f = mk(tw, th), fx = f.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, tw, th); fx.drawImage(canvas, 0, 0); canvas = f; }
+      const blob = await new Promise(r => canvas.toBlob(r, type, 0.92));
+      canvas.width = canvas.height = 1;
+      if (!blob) throw new Error('Browser could not save this size. Try a lower factor.');
+      if (it.url) URL.revokeObjectURL(it.url);
+      it.blob = blob; it.url = URL.createObjectURL(blob); it.ow = tw; it.oh = th; it.factor = s; it.msg = '';
+      it.state = 'done'; it.pct = 100; if (!isPro()) addUsed(); updatePlan();
+    } catch (e) { it.state = 'err'; it.msg = e.message || 'Failed'; }
+    draw(it);
+  }
 
-    return dstCanvas.toDataURL('image/png');
-}
-
-function applySharpen(ctx, width, height) {
-    const imageData = ctx.getImageData(0, 0, width, height);
-    const src = imageData.data;
-    const output = ctx.createImageData(width, height);
-    const dst = output.data;
-    const kernel = [ 0, -0.5, 0, -0.5, 3, -0.5, 0, -0.5, 0 ];
-    const side = 3;
-    const halfSide = 1;
-
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            let r = 0, g = 0, b = 0;
-            for (let cy = 0; cy < side; cy++) {
-                for (let cx = 0; cx < side; cx++) {
-                    const scy = Math.min(height - 1, Math.max(0, y + cy - halfSide));
-                    const scx = Math.min(width - 1, Math.max(0, x + cx - halfSide));
-                    const k = kernel[cy * side + cx];
-                    const srcIdx = (scy * width + scx) * 4;
-                    r += src[srcIdx] * k; g += src[srcIdx + 1] * k; b += src[srcIdx + 2] * k;
-                }
-            }
-            const idx = (y * width + x) * 4;
-            dst[idx] = Math.max(0, Math.min(255, r));
-            dst[idx + 1] = Math.max(0, Math.min(255, g));
-            dst[idx + 2] = Math.max(0, Math.min(255, b));
-            dst[idx + 3] = src[idx + 3];
-        }
-    }
-    ctx.putImageData(output, 0, 0);
-}
-
-function applyColorBoost(ctx, width, height) {
-    const imageData = ctx.getImageData(0, 0, width, height);
-    const data = imageData.data;
-    const brightness = 1.05, contrast = 1.10, saturation = 1.15;
-    for (let i = 0; i < data.length; i += 4) {
-        let r = data[i], g = data[i + 1], b = data[i + 2];
-        r *= brightness; g *= brightness; b *= brightness;
-        r = ((r - 128) * contrast) + 128; g = ((g - 128) * contrast) + 128; b = ((b - 128) * contrast) + 128;
-        const gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
-        r = gray + saturation * (r - gray); g = gray + saturation * (g - gray); b = gray + saturation * (b - gray);
-        data[i] = Math.max(0, Math.min(255, r)); data[i + 1] = Math.max(0, Math.min(255, g)); data[i + 2] = Math.max(0, Math.min(255, b));
-    }
-    ctx.putImageData(imageData, 0, 0);
-}
-
-function showResult(originalSrc, enhancedSrc) {
-    processingSection.classList.remove('show');
-    resultSection.classList.add('show');
-    imgOriginal.src = originalSrc;
-    imgEnhanced.src = enhancedSrc;
-    enhancedImageData = enhancedSrc;
-    
-    // Reset slider to 50% position (Right side showing enhanced image)
-    setTimeout(() => {
-        sliderHandle.style.left = '50%';
-        imgEnhanced.style.clipPath = 'polygon(50% 0, 100% 0, 100% 100%, 50% 100%)';
-    }, 100);
-    
-    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function downloadEnhanced() {
-    if (!enhancedImageData) return;
-    const link = document.createElement('a');
-    link.href = enhancedImageData;
-    link.download = 'MINAMI-Upscaled-' + Date.now() + '.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-function resetEnhancer() {
-    resultSection.classList.remove('show');
-    heroSection.style.display = 'block';
-    heroSection.scrollIntoView({ behavior: 'smooth' });
-    imgOriginal.src = ''; imgEnhanced.src = '';
-    enhancedImageData = null;
-    fileInput.value = '';
-}
-
-// Slider Drag Logic (Fixed Direction)
-let isDragging = false;
-function moveSlider(clientX) {
-    const rect = sliderContainer.getBoundingClientRect();
-    let x = clientX - rect.left;
-    if (x < 0) x = 0;
-    if (x > rect.width) x = rect.width;
-    
-    const percent = (x / rect.width) * 100;
-    sliderHandle.style.left = percent + '%';
-    
-    // ★★★ FIX: এখানে ০% থেকে ১০০% এর বদলে 'percent' থেকে ১০০% পর্যন্ত দেখানো হচ্ছে, যাতে ডান দিকের (Enhanced) ছবি ঠিকমতো কাটা পড়ে ★★★
-    imgEnhanced.style.clipPath = `polygon(${percent}% 0, 100% 0, 100% 100%, ${percent}% 100%)`;
-}
-
-sliderHandle.addEventListener('mousedown', (e) => { isDragging = true; e.preventDefault(); });
-sliderHandle.addEventListener('touchstart', (e) => { isDragging = true; e.preventDefault(); }, { passive: false });
-
-sliderContainer.addEventListener('mousedown', (e) => { isDragging = true; moveSlider(e.clientX); });
-sliderContainer.addEventListener('touchstart', (e) => { isDragging = true; moveSlider(e.touches[0].clientX); }, { passive: true });
-
-document.addEventListener('mouseup', () => { isDragging = false; });
-document.addEventListener('touchend', () => { isDragging = false; });
-
-document.addEventListener('mousemove', (e) => { if (isDragging) moveSlider(e.clientX); });
-document.addEventListener('touchmove', (e) => { if (isDragging) { moveSlider(e.touches[0].clientX); e.preventDefault(); } }, { passive: false });
+  /* ---------- compare popup ---------- */
+  const cmp = $('cmp'), dlg = $('dlg');
+  const setPos = p => cmp.style.setProperty('--pos', Math.min(100, Math.max(0, p)) + '%');
+  function openCmp(it) {
+    $('imA').src = it.url; $('imB').src = it.srcUrl; cmp.style.aspectRatio = it.ow + '/' + it.oh; setPos(50); dlg.showModal();
+  }
+  $('closeDlg').onclick = () => dlg.close();
+  let drag = false; const mv = e => { const r = cmp.getBoundingClientRect(); setPos((e.clientX - r.left) / r.width * 100); };
+  cmp.addEventListener('pointerdown', e => { drag = true; cmp.setPointerCapture(e.pointerId); mv(e); });
+  cmp.addEventListener('pointermove', e => drag && mv(e));
+  cmp.addEventListener('pointerup', () => drag = false);
+})();
 </script>
-
 </body>
 </html>
