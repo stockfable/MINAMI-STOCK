@@ -82,7 +82,7 @@ dialog.pay h2{margin-bottom:4px}
 dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
 
 /* Compare & Edit Modal Styles */
-.cmp{position:relative;width:100%;border-radius:10px;overflow:hidden;user-select:none;touch-action:none;background:#222;max-height:60vh;margin:0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8);}
+.cmp{position:relative;width:100%;min-height:200px;border-radius:10px;overflow:hidden;user-select:none;touch-action:none;background:#222;max-height:60vh;margin:0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8);}
 .cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
 .cmp .b{clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0)}
 .cmp .line{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;box-shadow:0 0 10px #fff;}
@@ -92,16 +92,52 @@ dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
 @media(min-width: 600px) { .edit-panel { grid-template-columns: 1fr 1fr; } }
 .edit-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
 .edit-row input[type=range] { width: 100px; max-width: 150px; }
+
+/* Info sections */
+.sec{margin-top:34px}
+.sec h2{font-size:1.2rem;margin-bottom:6px;color:var(--y)}
+.sec>p{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.demo{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.demo img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.demo div{padding:10px;display:grid;gap:8px}
+.demo .btn{padding:8px 10px;font-size:.88rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.step b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--y);color:#000;margin-bottom:8px}
+.step h3{font-size:1rem;margin-bottom:4px}
+.step p{color:var(--muted);font-size:.88rem}
+.cmp-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:.92rem}
+.cmp-table th,.cmp-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
+.cmp-table th{background:#181818}
+.cmp-table th:last-child,.cmp-table td:last-child{color:var(--y);font-weight:700}
+.cmp-table tr:last-child td{border-bottom:0}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.faq summary{cursor:pointer;font-weight:700}
+.faq p{color:var(--muted);font-size:.9rem;margin-top:8px}
+
+/* ===== Wide screens / desktop mode ===== */
+@media(min-width:900px){
+  html{font-size:18px}
+  .wrap{max-width:1120px;padding:26px 28px 80px}
+  h1{font-size:2.1rem;margin-top:14px}
+  .sub{font-size:1.05rem;margin-bottom:22px}
+  .drop{padding:44px 20px}
+  .settings{grid-template-columns:1fr 1fr;gap:16px 40px;padding:20px 24px}
+  .settings>.small,.settings>p{grid-column:1/-1}
+  #list{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+  #list .card{margin-top:0}
+  .demo-grid{grid-template-columns:repeat(3,1fr);gap:16px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
+}
+@media(min-width:1300px){ .wrap{max-width:1240px} #list{grid-template-columns:1fr 1fr 1fr} }
 </style>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <nav><div><span>MINAMI</span> Upscaler</div><div><span class="badge" id="planBadge">FREE</span> <a href="index.html">Home</a></div></nav>
 <div class="wrap">
   <h1>Enlarge images up to 16×</h1>
-  <p class="sub">Photos, artwork and anime. Runs in your browser — nothing is uploaded.</p>
+  <p class="sub">Photos, artwork and anime. Runs in your browser, so nothing is uploaded.</p>
 
   <div class="drop" id="drop">
     <button class="btn big" id="pick" type="button">⊕ Select Images</button>
@@ -118,16 +154,16 @@ dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
         <button type="button" data-v="16" data-pro="1" aria-pressed="false">🔒 16×</button>
       </div>
     </div>
-    <div class="row"><b>Engine</b>
+    <div class="row" style="display:none"><b>Engine</b>
       <div class="seg" id="engine">
         <button type="button" data-v="fast" aria-pressed="true">Fast</button>
         <button type="button" data-v="ai" data-pro="1" aria-pressed="false">🔒 AI (Canva-quality)</button>
       </div>
     </div>
-    <p class="small" id="engineNote">Fast: smooth enlargement + edge sharpening. Works instantly on any phone.</p>
+    <p class="small" id="engineNote" style="display:none">Fast: smooth enlargement + edge sharpening. Works instantly on any phone.</p>
     <div class="row"><b>Images at once</b>
       <div class="seg" id="count">
-        <button type="button" data-v="15" aria-pressed="true">15</button>
+        <button type="button" data-v="30" aria-pressed="true">30</button>
         <button type="button" data-v="50" data-pro="1" aria-pressed="false">🔒 50</button>
         <button type="button" data-v="100" data-pro="1" aria-pressed="false">🔒 100</button>
       </div>
@@ -146,10 +182,44 @@ dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
 
   <div class="toolbar" id="toolbar" hidden>
     <button class="btn" id="startAll" type="button">▶ Start all</button>
+    <button class="btn blue" id="dlAll" type="button" data-pro="1">🔒 ⬇ Download all</button>
     <button class="btn red" id="clearAll" type="button">🗑 Clear all</button>
     <span class="count" id="countOut"></span>
   </div>
   <div id="list"></div>
+
+  <section class="sec" id="demoSec">
+    <h2>Try a demo image</h2>
+    <p>No image handy? Pick a small, low-resolution sample and upscale it to see what the tool does.</p>
+    <div class="demo-grid" id="demoGrid"></div>
+  </section>
+
+  <section class="sec">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Add your images</h3><p>Select, drag &amp; drop or paste JPG, PNG or WebP files.</p></div>
+      <div class="step"><b>2</b><h3>Choose your ratio</h3><p>Pick 2× to 16× and the output format you need.</p></div>
+      <div class="step"><b>3</b><h3>Compare, edit &amp; download</h3><p>Check the result with the slider, fine-tune contrast, sharpness and DPI, then download.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Free vs PRO</h2>
+    <table class="cmp-table">
+      <tr><th>Feature</th><th>Free</th><th>PRO</th></tr>
+      <tr><td>Upscale ratio</td><td>2×, 4×</td><td>2×, 4×, 8×, 16×</td></tr>
+      <tr><td>Images at once</td><td>30</td><td>50 / 100</td></tr>
+      <tr><td>Daily limit</td><td id="freeLimitTxt">Limited</td><td>Unlimited</td></tr>
+      <tr><td>Download all (ZIP)</td><td>🔒</td><td>✔</td></tr>
+    </table>
+  </section>
+
+  <section class="sec faq">
+    <h2>Questions</h2>
+    <details><summary>Do I need an account?</summary><p>Yes. A free account is required to upscale. If you are not logged in you will be taken to the register page.</p></details>
+    <details><summary>Which formats can I save?</summary><p>JPG for smaller files, PNG for lossless quality, or WebP. For print, set the DPI on each image card (applied to JPG files).</p></details>
+    <details><summary>How do I get PRO?</summary><p>Tap any locked option, choose a plan, send the payment and submit your transaction ID. PRO unlocks 8×, 16×, bigger batches and Download all.</p></details>
+  </section>
 </div>
 
 <dialog id="dlg">
@@ -186,7 +256,7 @@ dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
 
 <dialog id="pay" class="pay">
   <h2>🔒 Go PRO – unlimited upscaling</h2>
-  <p class="small">Unlocks 8×, 16×, AI engine, 50 / 100 images at once and removes the 15-images-per-day limit.</p>
+  <p class="small">Unlocks 8×, 16×, 50 / 100 images at once, Download all and removes the limit.</p>
   
   <div class="plans" id="plans"></div>
   <div class="payinfo" id="payinfo"></div>
@@ -202,6 +272,12 @@ dialog::backdrop{background:#000c; backdrop-filter: blur(4px);}
   <div style="text-align:right;margin-top:12px"><button class="btn gray" id="closePay" type="button">Close</button></div>
 </dialog>
 
+<!-- স্ক্রিপ্টগুলো নিচে সরিয়ে নেওয়া হয়েছে পারফরম্যান্সের জন্য -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <script>
 function copyEmail(email) {
   navigator.clipboard.writeText(email).then(() => alert("✅ Email Copied: " + email)).catch(() => alert("❌ Failed to copy."));
@@ -211,10 +287,10 @@ function copyEmail(email) {
   const $ = id => document.getElementById(id);
 
   const FIREBASE_CONFIG = {            
-    apiKey: "PASTE_API_KEY", 
+    apiKey: "AIzaSyAzWwbk-Dh1Kzzp9CvNyqC28ToCWXw41Qs", 
     authDomain: "creoverse-stock.firebaseapp.com",
     projectId: "creoverse-stock",
-    appId: "PASTE_APP_ID" 
+    appId: "1:128072247505:web:47e58c3a140f4e858bbdf0" 
   };
   const PLANS = [
     { id: 'm1', name: '1 Month',  price: 2,  days: 30 }, 
@@ -223,9 +299,26 @@ function copyEmail(email) {
   ];
   const PAY_ACCOUNTS = { Payoneer: 'bk5969736@gmail.com', Skrill: 'bk5969736@gmail.com' };
   const WORKER_URL = 'https://YOUR-WORKER.YOUR-NAME.workers.dev';
-  const DAY_FREE = 15;
+  
+  const DAY_FREE = 30;       
+  const FREE_BATCH = 30;     
 
   let user = null, proUntil = 0, planId = 'm1', db = null, auth = null;
+  let authReadyResolve; const authReadyP = new Promise(r => { authReadyResolve = r; });
+  let redirecting = false;
+  async function requireLogin() {
+    if (redirecting) return false;
+    if (!auth) {                        
+      if (!window._noFbNote) { window._noFbNote = true; alert('Login system is not connected. Paste your Firebase apiKey and appId in upscaler.html (FIREBASE_CONFIG).'); setTimeout(() => { window._noFbNote = false; }, 3000); }
+      return false;
+    }
+    await authReadyP;
+    if (user) return true;
+    redirecting = true;
+    alert('Please create a free account (or log in) to upscale images.');
+    location.href = 'register.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'upscaler.html');
+    return false;
+  }
   function isPro() { return proUntil > Date.now(); }
   const fbOK = !String(FIREBASE_CONFIG.apiKey).startsWith('PASTE');
   
@@ -299,6 +392,7 @@ function copyEmail(email) {
   if (auth) {
     let u1 = null, u2 = null;
     auth.onAuthStateChanged(u => {
+      authReadyResolve();
       user = u; u1 && u1(); u2 && u2(); proUntil = 0;
       if (u) {
         u1 = db.collection('subscriptions').doc(u.uid).onSnapshot(sn => {
@@ -311,9 +405,12 @@ function copyEmail(email) {
   }
 
   const MAX_SIDE = 16000, MAX_PIXELS = 30e6, AI_MAX_INPUT = 1.5e6;
-  const items = []; let uid = 0, scale = 2, engine = 'fast', maxCount = 15, running = false;
+  const items = []; let uid = 0, scale = 2, engine = 'fast', maxCount = 30, running = false;
   let activeItem = null;
-  const tick = () => new Promise(r => setTimeout(r, 0));
+  
+  // Performance improvement: using requestAnimationFrame instead of setTimeout
+  const tick = () => new Promise(r => requestAnimationFrame(r)); 
+  
   const fmtB = b => b > 1048576 ? (b / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
   const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
   const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -350,7 +447,7 @@ function copyEmail(email) {
 
   $('limitNote').textContent = `Browser limit: ${(MAX_PIXELS / 1e6)} MP. Auto-scales to fit.`;
   refreshLocks(); updatePlan();
-  const updateCount = () => { $('countOut').textContent = items.length + ' / ' + (isPro() ? maxCount : 15) + ' images'; };
+  const updateCount = () => { $('countOut').textContent = items.length + ' / ' + (isPro() ? maxCount : FREE_BATCH) + ' images'; };
 
   $('pick').onclick = () => $('file').click();
   $('file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
@@ -363,7 +460,7 @@ function copyEmail(email) {
   let pending = 0;
   function addFiles(list) {
     let files = [...list].filter(f => f.type.startsWith('image/'));
-    const limit = isPro() ? maxCount : Math.min(maxCount, 15);
+    const limit = isPro() ? maxCount : Math.min(maxCount, FREE_BATCH);
     const room = Math.max(0, limit - items.length - pending);
     if (files.length > room) { alert('Limit: ' + limit); files = files.slice(0, room); }
     files.forEach(f => {
@@ -409,24 +506,24 @@ function copyEmail(email) {
   function renderAll() {
     $('toolbar').hidden = !items.length; updateCount();
     const list = $('list');
+    list.innerHTML = '';
     items.forEach(it => {
-      let el = document.getElementById('c' + it.id);
-      if (!el) { el = document.createElement('div'); el.className = 'card'; el.id = 'c' + it.id; list.appendChild(el); }
+      let el = document.createElement('div'); 
+      el.className = 'card'; 
+      el.id = 'c' + it.id; 
       el.innerHTML = cardHTML(it);
+      list.appendChild(el);
     });
   }
   
-  // Only update specific parts when progress changes to avoid losing input focus
   const draw = it => { 
     const el = document.getElementById('c' + it.id); 
     if (el) {
-      // Don't overwrite the whole innerHTML while typing in SEO box
       const activeEl = document.activeElement;
       const isTyping = activeEl && activeEl.closest('.seo-box') && activeEl.dataset.id == it.id;
       if (!isTyping) {
          el.innerHTML = cardHTML(it); 
       } else {
-         // Just update the progress bar and buttons
          const track = el.querySelector('.fill');
          if (track) track.style.width = (it.state === 'done' ? 100 : it.pct) + '%';
       }
@@ -439,7 +536,6 @@ function copyEmail(email) {
     if (f) f.style.width = it.pct + '%'; 
   };
 
-  // Listen for SEO & DPI input changes
   $('list').addEventListener('input', e => {
     if (e.target.dataset.p) {
       const it = items.find(i => i.id === +e.target.dataset.id);
@@ -459,7 +555,7 @@ function copyEmail(email) {
     else if (a === 'cmp') openCmp(it);
   });
   
-  $('startAll').onclick = () => items.filter(i => i.state === 'idle' || i.state === 'err').slice(0, isPro() ? maxCount : 15).forEach(queue);
+  $('startAll').onclick = () => items.filter(i => i.state === 'idle' || i.state === 'err').slice(0, isPro() ? maxCount : FREE_BATCH).forEach(queue);
   $('clearAll').onclick = () => { if (!running || confirm('Stop and remove all?')) [...items].forEach(i => i.state !== 'run' && removeItem(i)); };
 
   function removeItem(it) {
@@ -469,20 +565,18 @@ function copyEmail(email) {
     $('toolbar').hidden = !items.length; updateCount();
   }
   
-  // ★★★ DPI Injector for JPEGs ★★★
   async function injectDpi(blob, dpiVal) {
     if (blob.type !== 'image/jpeg' || !dpiVal || dpiVal <= 0) return blob;
     const dpi = Math.round(dpiVal);
     try {
       const buf = await blob.arrayBuffer();
       const view = new DataView(buf);
-      // Look for JFIF APP0 marker (FF E0)
       for (let i = 0; i < view.byteLength - 16; i++) {
         if (view.getUint8(i) === 0xFF && view.getUint8(i + 1) === 0xE0) {
-          if (view.getUint32(i + 4) === 0x4A464946) { // 'JFIF'
-            view.setUint8(i + 11, 1); // Units: 1 = dots per inch
-            view.setUint16(i + 12, dpi); // X density
-            view.setUint16(i + 14, dpi); // Y density
+          if (view.getUint32(i + 4) === 0x4A464946) {
+            view.setUint8(i + 11, 1);
+            view.setUint16(i + 12, dpi);
+            view.setUint16(i + 14, dpi);
             return new Blob([buf], { type: 'image/jpeg' });
           }
         }
@@ -493,12 +587,9 @@ function copyEmail(email) {
 
   async function download(it) {
     let finalBlob = it.blob;
-    
-    // Apply DPI if JPEG
     if (finalBlob.type === 'image/jpeg') {
       finalBlob = await injectDpi(finalBlob, it.dpi);
     }
-    
     const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[finalBlob.type] || 'png';
     let safeName = (it.title || it.name).replace(/\.[^.]+$/, '').replace(/[^a-z0-9]/gi, '-').toLowerCase();
     if (!safeName) safeName = 'image';
@@ -513,7 +604,11 @@ function copyEmail(email) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function queue(it) { it.state = 'wait'; it.queued = true; it.pct = 0; draw(it); runQueue(); }
+  async function queue(it) {
+    if (!(await requireLogin())) return;
+    it.state = 'wait'; it.queued = true; it.pct = 0; draw(it); runQueue();
+  }
+
   async function runQueue() {
     if (running) return; running = true;
     let it;
@@ -677,7 +772,6 @@ function copyEmail(email) {
       it.ow = tw; it.oh = th; it.factor = targetScale;
       
       const type = $('fmt').value;
-      // Default process at 100% quality. User can re-save with lower quality in Editor.
       const qual = 1.0; 
       
       let outputCanvas = canvas;
@@ -693,12 +787,74 @@ function copyEmail(email) {
       it.blob = blob; 
       it.url = URL.createObjectURL(blob);
       it.state = 'done'; it.pct = 100; 
-      if (!isPro()) addUsed(); updatePlan();
-    } catch (e) { it.state = 'err'; it.msg = e.message || 'Failed'; }
-    draw(it);
+
+      const idx = items.indexOf(it);
+      if (idx > -1) {
+        items.splice(idx, 1);
+        items.unshift(it);
+      }
+      renderAll();
+
+      if (!isPro()) addUsed(); 
+      updatePlan();
+    } catch (e) { it.state = 'err'; it.msg = e.message || 'Failed'; draw(it); }
   }
 
-  // ★★★ Fixed Compare & Edit Slider Logic ★★★
+
+  /* ---------- free limit text ---------- */
+  $('freeLimitTxt').textContent = DAY_FREE + ' images / day';
+
+  /* ---------- demo images (হালকা URL ব্যবহার করা হয়েছে) ---------- */
+  const DEMOS = [
+    { name: "Sunset mountains", file: "demo-sunset.jpg", url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop" },
+    { name: "City at night", file: "demo-city.jpg", url: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400&h=300&fit=crop" },
+    { name: "Flower illustration", file: "demo-flower.jpg", url: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=300&fit=crop" }
+  ];
+
+  $('demoGrid').innerHTML = DEMOS.map((d, i) => `<div class="demo"><img src="${d.url}" alt="${d.name}" loading="lazy"><div><b>${d.name}</b><span class="small">400×300px sample</span><button class="btn gray" type="button" data-demo="${i}">＋ Use this image</button></div></div>`).join('');
+  
+  $('demoGrid').addEventListener('click', async e => {
+    const b = e.target.closest('button[data-demo]'); if (!b) return;
+    const d = DEMOS[+b.dataset.demo];
+    const blob = await (await fetch(d.url)).blob();
+    addFiles([new File([blob], d.file, { type: blob.type || 'image/jpeg' })]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------- download all (PRO) ---------- */
+  async function exportBlob(it) {
+    return it.blob.type === 'image/jpeg' ? await injectDpi(it.blob, it.dpi) : it.blob;
+  }
+  function fileNameFor(it, blob, used) {
+    const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[blob.type] || 'png';
+    let base = (it.title || it.name).replace(/\.[^.]+$/, '').replace(/[^a-z0-9]/gi, '-').toLowerCase() || 'image';
+    let n = base + '-' + it.factor + 'x.' + ext, k = 2;
+    while (used.has(n)) n = base + '-' + it.factor + 'x-' + (k++) + '.' + ext;
+    used.add(n); return n;
+  }
+  
+  $('dlAll').onclick = async () => {
+    if (!isPro()) { showPay(); return; }
+    if (!(await requireLogin())) return;
+    const done = items.filter(i => i.state === 'done' && i.blob);
+    if (!done.length) { alert('Nothing to download yet. Upscale some images first.'); return; }
+    const btn = $('dlAll'), label = btn.textContent; btn.disabled = true; btn.textContent = '⏳ Preparing…';
+    try {
+      const used = new Set();
+      if (window.JSZip) {
+        const zip = new JSZip();
+        for (const it of done) { const bl = await exportBlob(it); zip.file(fileNameFor(it, bl, used), bl); }
+        const out = await zip.generateAsync({ type: 'blob', compression: 'STORE' });
+        const url = URL.createObjectURL(out), a = document.createElement('a');
+        a.href = url; a.download = 'minami-upscaled.zip'; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } else {
+        for (const it of done) { await download(it); await new Promise(r => setTimeout(r, 400)); }
+      }
+    } catch (e) { alert('Download failed: ' + (e.message || e)); }
+    btn.disabled = false; btn.textContent = label;
+  };
+
   const cmp = $('cmp'), dlg = $('dlg');
   const setPos = p => cmp.style.setProperty('--pos', Math.min(100, Math.max(0, p)) + '%');
   
@@ -718,7 +874,7 @@ function copyEmail(email) {
   window.addEventListener('touchmove', (e) => { 
     if (isDragging) { 
       moveSlider(e); 
-      if(e.cancelable) e.preventDefault(); // Prevent scrolling while dragging
+      if(e.cancelable) e.preventDefault();
     } 
   }, {passive: false});
   window.addEventListener('touchend', () => { isDragging = false; });
@@ -730,7 +886,6 @@ function copyEmail(email) {
     cmp.style.aspectRatio = it.ow + '/' + it.oh; 
     setPos(50); 
     
-    // Reset sliders to default 0 (neutral)
     $('quality').value = 100; $('qOut').textContent = '100%';
     $('sharp').value = 0; $('shOut').textContent = '0';
     $('contrast').value = 0; $('ctOut').textContent = '0';
@@ -786,15 +941,14 @@ function copyEmail(email) {
       it.blob = blob;
       it.url = URL.createObjectURL(blob);
       
-      $('imA').src = it.url; // Update slider preview
-      draw(it); // Update card thumbnail text
+      $('imA').src = it.url;
+      draw(it);
     } catch (e) { alert('Error updating preview: ' + e.message); }
     
     btn.disabled = false; btn.textContent = '🔄 Update Preview';
   };
 
   $('saveClose').onclick = () => dlg.close();
-  $('closeDlg').onclick = () => dlg.close();
   $('viewOrig').onclick = () => activeItem && window.open(activeItem.srcUrl, '_blank');
 })();
 </script>

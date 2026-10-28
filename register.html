@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - CREOVERSE STOCK</title>
+    <title>Register - MINAMI STOCK</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -175,20 +175,25 @@
         .btn-back:hover { border-color: #fbbf24; color: #b45309; }
 
         .hidden { display: none !important; }
+
+        /* Desktop mode / wide screens: scale the page up so it is not a tiny narrow column */
+        @media (min-width: 900px) {
+            .logo-bar, .main-wrapper { zoom: 1.35; }
+        }
     </style>
 </head>
 <body>
 
     <div class="logo-bar">
         <a href="index.html" title="Home">
-            <img src="https://i.ibb.co.com/xK8nP7KD/1000031217-removebg-preview.png" alt="CREOVERSE STOCK Logo" class="site-logo"
+            <img src="https://i.ibb.co.com/xK8nP7KD/1000031217-removebg-preview.png" alt="MINAMI STOCK Logo" class="site-logo"
                  onerror="this.onerror=null; this.src='logo.png'">
         </a>
     </div>
 
     <div class="main-wrapper">
         <h1 class="page-title">Create Account</h1>
-        <p class="page-sub">Join CREOVERSE STOCK today — it's free</p>
+        <p class="page-sub">Join MINAMI STOCK today — it's free</p>
 
         <div class="card">
             <div class="form-group">
@@ -244,7 +249,7 @@
                 <i class="fas fa-check"></i>
             </div>
             <h2>Registration Successful!</h2>
-            <p>Welcome to CREOVERSE STOCK, <br>Redirecting to home...</p>
+            <p>Welcome to MINAMI STOCK, <br>Redirecting...</p>
         </div>
     </div>
 
@@ -274,6 +279,11 @@
 
         const $ = (id) => document.getElementById(id);
         let redirecting = false;
+
+        // after login/register go back to the page the user came from (e.g. upscaler.html); only same-site .html names allowed
+        const nextRaw = new URLSearchParams(location.search).get('next') || '';
+        const NEXT = /^[a-z0-9_-]+\.html$/i.test(nextRaw) ? nextRaw : 'index.html';
+
 
         function showMsg(text, type) {
             const el = $('msg');
@@ -314,7 +324,7 @@
             modal.classList.add('show');
             setTimeout(() => {
                 redirecting = true;
-                window.location.href = 'index.html';
+                window.location.href = NEXT;
             }, 2000);
         }
 
@@ -356,6 +366,8 @@
             }
         }
 
+        if (nextRaw && NEXT === nextRaw) { const l = document.querySelector('a[href="login.html"]'); if (l) l.href = 'login.html?next=' + encodeURIComponent(NEXT); }
+
         $('registerBtn').addEventListener('click', doRegister);
         $('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') doRegister(); });
         $('email').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('password').focus(); });
@@ -389,10 +401,12 @@
         // ===== ALREADY LOGGED IN → INDEX =====
         onAuthStateChanged(auth, (user) => {
             if (user && !redirecting) {
-                window.location.href = 'index.html';
+                window.location.href = NEXT;
             }
         });
     </script>
+
+    
 
 </body>
 </html>

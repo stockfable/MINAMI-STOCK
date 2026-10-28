@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CREOVERSE STOCK</title>
+    <title>Login - MINAMI STOCK</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -149,20 +149,25 @@
             background: #fffbeb;
             transform: translateY(-1px);
         }
+
+        /* Desktop mode / wide screens: scale the page up so it is not a tiny narrow column */
+        @media (min-width: 900px) {
+            .logo-bar, .main-wrapper { zoom: 1.35; }
+        }
     </style>
 </head>
 <body>
 
     <div class="logo-bar">
         <a href="index.html" title="Home">
-            <img src="https://i.ibb.co.com/xK8nP7KD/1000031217-removebg-preview.png" alt="CREOVERSE STOCK Logo" class="site-logo"
+            <img src="https://i.ibb.co.com/xK8nP7KD/1000031217-removebg-preview.png" alt="MINAMI STOCK Logo" class="site-logo"
                  onerror="this.onerror=null; this.src='logo.png'">
         </a>
     </div>
 
     <div class="main-wrapper">
         <h1 class="page-title">Welcome Back</h1>
-        <p class="page-sub">Login to your CREOVERSE STOCK account</p>
+        <p class="page-sub">Login to your MINAMI STOCK account</p>
 
         <div class="card">
             <div class="form-group">
@@ -234,6 +239,11 @@
         const $ = (id) => document.getElementById(id);
         let redirecting = false;
 
+        // after login/register go back to the page the user came from (e.g. upscaler.html); only same-site .html names allowed
+        const nextRaw = new URLSearchParams(location.search).get('next') || '';
+        const NEXT = /^[a-z0-9_-]+\.html$/i.test(nextRaw) ? nextRaw : 'index.html';
+
+
         function showMsg(text, type) {
             const el = $('msg');
             el.textContent = text;
@@ -273,7 +283,7 @@
 
         function goHome() {
             redirecting = true;
-            window.location.href = 'index.html';
+            window.location.href = NEXT;
         }
 
         async function doLogin() {
@@ -300,6 +310,8 @@
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
         }
+
+        if (nextRaw && NEXT === nextRaw) { const r = document.querySelector('a[href="register.html"]'); if (r) r.href = 'register.html?next=' + encodeURIComponent(NEXT); }
 
         $('loginBtn').addEventListener('click', doLogin);
         $('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
@@ -346,6 +358,9 @@
             if (user && !redirecting) goHome();
         });
     </script>
+
+    <script src="top-bar.js"></script>
+    <script src="site-footer.js"></script>
 
 </body>
 </html>
