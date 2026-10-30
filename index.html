@@ -12,13 +12,21 @@
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* ★ মেইন ব্যাকগ্রাউন্ড কালো ★ */
-        html, body { 
-            background-color: #000000 !important; 
-            background: #000000 !important;
-            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif; 
-            color: #e2e8f0; 
+
+        /* ★ মেইন ব্যাকগ্রাউন্ড: কালো + 123RF স্টাইল গ্লো ★ */
+        html { background: #000 !important; }
+        body {
+            background-color: #000 !important;
+            background-image:
+                radial-gradient(520px 460px at 92% 260px,  rgba(139,61,255,.55), transparent 70%),
+                radial-gradient(560px 520px at 2% 1250px,  rgba(255,106,0,.55),  transparent 70%),
+                radial-gradient(520px 480px at 100% 950px, rgba(255,214,10,.50), transparent 70%),
+                radial-gradient(520px 480px at 70% 1750px, rgba(236,72,153,.40), transparent 70%),
+                radial-gradient(560px 480px at 5% 2150px,  rgba(37,99,235,.40),  transparent 70%) !important;
+            background-size: 100% 2400px !important;
+            background-repeat: repeat-y !important;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+            color: #e2e8f0;
         }
 
         /* ★ ৩-ডট মেনুর পাশের ওই দুটি ৪-ডট মেনু হাইড ★ */
@@ -38,8 +46,15 @@
         .search-wrapper button { background: #fbbf24; color: #0a1628; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 700; cursor: pointer; }
 
         /* Generate Section */
-        .app-switcher-bar { position: relative; min-height: 90px; background: #0a1a3a; border-radius: 14px; border: 1px solid #1e293b; margin: 16px 0 24px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .app-switcher-bar::before { content: ""; position: absolute; top: -60%; bottom: -60%; left: -10%; right: -10%; background: radial-gradient(circle at 15% 30%, rgba(255,220,100,0.45) 0%, transparent 45%), radial-gradient(circle at 85% 70%, rgba(255,200,50,0.5) 0%, transparent 45%), radial-gradient(circle at 50% 50%, rgba(255,230,120,0.25) 0%, transparent 55%), radial-gradient(circle at 30% 75%, rgba(30,80,180,0.6) 0%, transparent 45%); filter: blur(22px); z-index: 0; }
+        /* ★ বড় হিরো ব্যানার (ভ্লগের মতো সাইজ) ★ */
+        .smx-hero { position: relative; width: 100%; aspect-ratio: 21 / 9; max-height: 550px; margin: 16px 0 24px; background: #0a1a3a; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .smx-track { position: absolute; top: 0; bottom: 0; left: 0; display: flex; gap: 4px; width: max-content; animation: heroScroll 60s linear infinite; }
+        .smx-track img { height: 100%; aspect-ratio: 3 / 4; width: auto; object-fit: cover; flex: none; filter: none; }
+        @keyframes heroScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .smx-hero-card { position: relative; z-index: 2; width: 92%; max-width: 620px; text-align: center; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.18); border-radius: 16px; padding: 16px 14px; }
+        .smx-hero-card h2 { color: #fff; font-size: clamp(16px, 3vw, 26px); font-weight: 800; margin-bottom: 12px; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
+        .smx-hero-card .search-wrapper { margin: 0 auto; }
+        @media (max-width: 640px) { .smx-hero { aspect-ratio: 16 / 9; max-height: none; } }
         .generate-section { position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 12px 15px; gap: 6px; }
         .generate-title { color: #fff; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         .generate-title i { color: #fbbf24; }
@@ -76,9 +91,13 @@
         .home-shop-header .view-all-link { color: #fbbf24; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
         .home-shop-header .view-all-link:hover { text-decoration: underline; }
 
-        /* Stock Photos Grid */
+        /* Stock Photos Grid (Adjusted for specific 5-image layout) */
         .home-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        .home-photo-card { position: relative; display: block; border-radius: 12px; overflow: hidden; background: #1e293b; aspect-ratio: 16 / 10; text-decoration: none; }
+        .home-photo-card { position: relative; display: block; border-radius: 12px; overflow: hidden; background: #1e293b; text-decoration: none; }
+        .home-photo-card.portrait { aspect-ratio: 5 / 7; } /* 5000x7000 ratio */
+        .home-photo-card.landscape { aspect-ratio: 5 / 4; } /* 5000x4000 ratio */
+        .home-photo-card.span-full { grid-column: span 2; } /* 5th image full width */
+        
         .home-photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
         .home-photo-card:hover img { transform: scale(1.06); }
         .home-photo-card .hp-info { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,0.75)); color: #fff; opacity: 0; transition: opacity 0.25s; }
@@ -116,18 +135,146 @@
         .home-more-btn[hidden] { display: none; }
         .home-shop-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #64748b; font-size: 14px; background: #0a0a0a; border-radius: 12px; border: 1px dashed #334155; }
 
-        /* Collections */
-        .collections-section { margin-top: 40px; margin-bottom: 30px; }
-        .collections-header h2 { color: #fff; font-size: 22px; margin-bottom: 6px; }
-        .collections-header p { color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
-        .collections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .collection-card { background: #0f172a; border-radius: 12px; overflow: hidden; text-decoration: none; transition: 0.3s; border: 1px solid #1e293b; display: block; }
-        .collection-card:hover { transform: translateY(-5px); border-color: #fbbf24; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .collection-img { height: 160px; overflow: hidden; background: #1e293b; display: grid; place-items: center; }
-        .collection-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-        .collection-card:hover .collection-img img { transform: scale(1.05); }
-        .collection-card h4 { color: #fff; font-size: 16px; margin: 12px 15px 5px; }
-        .collection-card p { color: #94a3b8; font-size: 12px; margin: 0 15px 15px; line-height: 1.4; }
+        /* New Colorful One Stop Shop Banner */
+        .one-stop-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #3b0764 100%);
+            background-size: 200% 200%;
+            animation: bannerGradient 10s ease infinite;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px 40px;
+            gap: 40px;
+            margin: 40px 0 30px;
+            border: 1px solid rgba(139, 61, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background Glow Effects */
+        .one-stop-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .one-stop-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            right: -10%;
+            width: 50%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes bannerGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .osb-text {
+            flex: 1;
+            max-width: 45%;
+            position: relative;
+            z-index: 2;
+        }
+        .osb-text h2 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .osb-text p {
+            color: #e2e8f0;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .osb-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .osb-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+        }
+        .osb-media {
+            flex: 1;
+            max-width: 55%;
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #1e293b;
+            aspect-ratio: 7000 / 5000;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            z-index: 2;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .osb-media img, .osb-media video, .osb-media iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .osb-play-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .osb-play-btn:hover {
+            background: rgba(0,0,0,0.8);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .one-stop-banner {
+                flex-direction: column;
+                padding: 30px 20px;
+                text-align: center;
+                gap: 30px;
+            }
+            .osb-text { max-width: 100%; }
+            .osb-media { max-width: 100%; width: 100%; }
+            .osb-text h2 { font-size: 26px; }
+        }
 
         /* Categories */
         .category-section { margin-top: 30px; margin-bottom: 40px; }
@@ -137,6 +284,12 @@
         .category-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.65; transition: 0.3s; }
         .category-card:hover img { opacity: 0.85; transform: scale(1.05); }
         .category-card span { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 10px 10px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; font-size: 13px; font-weight: 700; text-align: center; }
+
+        /* Keywords chips (stock photo data) */
+        .smx-chips{display:flex;flex-wrap:wrap;gap:10px}
+        .smx-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:5px 14px 5px 5px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;transition:.2s}
+        .smx-chip img{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#1e293b}
+        .smx-chip:hover{border-color:#fbbf24;color:#fbbf24}
 
         /* FAQ */
         .faq-section { margin-top: 50px; }
@@ -180,62 +333,85 @@
         @media (max-width: 640px) {
             .home-photo-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .home-shop-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .collections-grid { grid-template-columns: 1fr; }
             .category-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
             .nav-row-sub{ padding-bottom: 14px !important; scroll-snap-type: x proximity; }
             .nav-row-sub .sub-link{ scroll-snap-align: start; }
         }
 
-        /* ===== BANNER VIDEO ===== */
-        .mvb { position: relative; width: 100%; margin: 20px 0 0; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 5; min-height: 170px; background: linear-gradient(120deg, #1e1b4b, #7c2d12, #0c4a6e, #1e1b4b); background-size: 300% 300%; animation: mvbBg 14s ease infinite; border: 1px solid rgba(255,255,255,0.08); }
-        @keyframes mvbBg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .mvb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-        .mvb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.65), rgba(0,0,0,.15) 70%); pointer-events: none; }
-        .mvb-text { position: absolute; z-index: 2; left: 5%; top: 50%; transform: translateY(-50%); max-width: 80%; color: #fff; }
-        .mvb-text h2 { font-size: clamp(18px, 3.6vw, 34px); font-weight: 800; line-height: 1.15; margin-bottom: 8px; }
-        .mvb-text p { font-size: clamp(12px, 1.6vw, 15px); color: #e2e8f0; margin-bottom: 14px; }
-        .mvb-btn { display: inline-flex; align-items: center; gap: 8px; background: #fbbf24; color: #0a1628; font-weight: 800; font-size: 13px; padding: 9px 18px; border-radius: 22px; text-decoration: none; }
-        .mvb-btn:hover { background: #f59e0b; }
-        @media (max-width: 640px) { .mvb { aspect-ratio: auto; min-height: 170px; margin-top: 16px; } .mvb-text { max-width: 90%; } }
-
-        /* ===== 8K VLOG (সিনেমাটিক ওয়াইড ফ্রেম) ===== */
-        .v8k-badge { font-size: 11px; font-weight: 800; color: #0a1628; background: #fbbf24; border-radius: 6px; padding: 2px 8px; letter-spacing: .5px; }
-        
-        .v8k-box { 
+        /* ===== BANNER SPLIT LAYOUT & GOLDEN COLOR ===== */
+        .mvb { 
             position: relative; 
             width: 100%; 
-            aspect-ratio: 21 / 9; /* ★ ছবির মতো ওয়াইড স্ক্রিন ★ */
-            max-height: 550px; /* ★ ডেস্কটপে বেশি লম্বা হবে না ★ */
-            border-radius: 14px; 
+            margin: 20px 0 0; 
+            border-radius: 16px; 
             overflow: hidden; 
-            background: #000; 
+            display: flex;
+            flex-wrap: wrap;
+            background: #0f172a; /* Dark background for left */
             border: 1px solid rgba(255,255,255,0.08); 
+            min-height: 280px;
+            aspect-ratio: 21 / 9;
         }
 
-        .v8k-box video, .v8k-box iframe { 
-            position: absolute; 
-            inset: 0; 
-            width: 100%; 
-            height: 100%; 
-            border: 0; 
-            display: block; 
-            background: #000; 
-            object-fit: cover; /* cover = no black bars, fills the whole box */
+        /* Left Side Text Content */
+        .mvb-text { 
+            flex: 1 1 55%;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        }
+        .mvb-text h2 { font-size: clamp(22px, 3.8vw, 42px); font-weight: 800; line-height: 1.15; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); color: #fff; }
+        .mvb-text p { font-size: clamp(14px, 1.8vw, 18px); color: #e2e8f0; margin-bottom: 20px; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+        .mvb-btn { display: inline-flex; align-items: center; gap: 8px; background: #fbbf24; color: #0a1628; font-weight: 800; font-size: 14px; padding: 12px 24px; border-radius: 25px; text-decoration: none; transition: 0.2s; width: fit-content; }
+        .mvb-btn:hover { background: #f59e0b; transform: translateY(-2px); }
+
+        /* Right Side Image + Golden Background */
+        .mvb-right-side {
+            flex: 1 1 45%;
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); /* Golden Color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
         }
 
+        .mvb-image-box {
+            width: 100%;
+            height: 100%;
+            max-height: 350px;
+            border-radius: 12px;
+            /* এখানে আপনার দেওয়া নতুন ইমেজ লিঙ্কটি বসানো হয়েছে */
+            background: url('https://i.ibb.co.com/93S0VcH8/IMG-20261030-103923.png') center/cover no-repeat;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid rgba(255,255,255,0.2);
+            animation: none; /* কোনো অ্যানিমেশন নেই */
+        }
+
+        /* মোবাইলের জন্য লেখা ও ছবি অ্যাডজাস্ট */
+        @media (max-width: 768px) {
+            .mvb { aspect-ratio: auto; flex-direction: column; }
+            .mvb-text { padding: 30px 20px; text-align: center; align-items: center; }
+            .mvb-text h2 { font-size: 22px; }
+            .mvb-text p { font-size: 13px; }
+            .mvb-right-side { padding: 20px; min-height: 250px; }
+            .mvb-image-box { max-height: 200px; }
+        }
+
+        /* ===== 8K VLOG ===== */
+        .v8k-badge { font-size: 11px; font-weight: 800; color: #0a1628; background: #fbbf24; border-radius: 6px; padding: 2px 8px; letter-spacing: .5px; }
+        .v8k-box { position: relative; width: 100%; aspect-ratio: 21 / 9; max-height: 550px; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,0.08); }
+        .v8k-box video, .v8k-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #000; object-fit: cover; }
         .v8k-play { position: absolute; inset: 0; width: 100%; border: 0; cursor: pointer; background: #000 center / cover no-repeat; display: grid; place-items: center; }
         .v8k-play span { width: 68px; height: 68px; border-radius: 50%; background: rgba(251,191,36,.95); color: #0a1628; display: grid; place-items: center; font-size: 24px; padding-left: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.5); }
         .v8k-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #94a3b8; font-size: 14px; padding: 20px; background: linear-gradient(135deg, #0f172a, #111827); }
         .v8k-empty i { display: block; font-size: 34px; color: #fbbf24; margin-bottom: 10px; }
         .v8k-cap { margin-top: 8px; color: #94a3b8; font-size: 13px; }
         .v8k-cap:empty { display: none; }
-
-        @media (max-width: 640px) {
-            .v8k-box { 
-                aspect-ratio: 16 / 9; /* মোবাইলে ১৬:৯ */
-                max-height: none; 
-            }
-        }
+        @media (max-width: 640px) { .v8k-box { aspect-ratio: 16 / 9; max-height: none; } }
     </style>
 </head>
 <body>
@@ -245,25 +421,15 @@
     <div class="main-wrapper">
         <main class="center-content">
 
-            <!-- Search Bar -->
-            <div class="search-section">
-                <div class="search-wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="globalSearchInput" placeholder="Search stock photos by keyword...">
-                    <button onclick="performGlobalSearch()">Search</button>
-                </div>
-            </div>
-
-            <!-- Generate Section -->
-            <div class="app-switcher-bar">
-                <div class="generate-section">
-                    <div class="generate-title"><i class="fas fa-wand-magic-sparkles"></i> AI Magic: Create. Edit. Inspire.</div>
-                    <div class="generate-input-wrapper">
+            <!-- Hero Banner + Search -->
+            <div class="smx-hero">
+                <div class="smx-track" id="heroTrack"></div>
+                <div class="smx-hero-card">
+                    <h2>Find stunning stock photos</h2>
+                    <div class="search-wrapper">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="generatePrompt" placeholder="Describe what you want to generate...">
-                        <select class="gen-select"><option>Image</option><option>Video</option></select>
-                        <select class="gen-select"><option>Auto</option><option>1:1</option><option>16:9</option><option>9:16</option></select>
-                        <button class="generate-go-btn" onclick="goToGenerator()"><i class="fas fa-arrow-right"></i></button>
+                        <input type="text" id="globalSearchInput" placeholder="Search stock photos by keyword...">
+                        <button onclick="performGlobalSearch()">Search</button>
                     </div>
                 </div>
             </div>
@@ -284,13 +450,18 @@
                 <button type="button" class="home-more-btn" onclick="location.href='tools.html'">All Tools</button>
             </div>
 
-            <!-- Banner Video -->
+            <!-- ★ SPLIT BANNER WITH CUSTOM IMAGE & GOLDEN BG ★ -->
             <section class="mvb" id="mvb">
-                <video id="mvbVideo" muted loop playsinline preload="auto" aria-hidden="true"></video>
+                <!-- Left Side Text Content -->
                 <div class="mvb-text">
                     <h2>Millions of stock assets.<br>Create. Edit. Inspire.</h2>
                     <p>Free photos, mockups and creative tools in one place.</p>
                     <a class="mvb-btn" href="stock-photo.html"><i class="fas fa-images"></i> Explore Stock Photos</a>
+                </div>
+
+                <!-- Right Side Image with Golden Background -->
+                <div class="mvb-right-side">
+                    <div class="mvb-image-box"></div>
                 </div>
             </section>
 
@@ -308,16 +479,29 @@
                 <p class="v8k-cap" id="v8kCap"></p>
             </section>
 
-            <!-- Stock Photos -->
+            <!-- Stock Photos (Exactly 5 Images) -->
             <section class="home-shop-section">
                 <div class="home-shop-header">
                     <h2><i class="fas fa-images"></i> Stock Photos</h2>
                     <a href="stock-photo.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
+                <!-- Grid layout is now fixed for 5 images -->
                 <div class="home-photo-grid" id="homePhotoGrid">
                     <p class="home-shop-empty">Loading photos...</p>
                 </div>
-                <button type="button" class="home-more-btn" id="homePhotoMore" hidden>Show more</button>
+            </section>
+
+            <!-- ★ NEW COLORFUL ONE STOP SHOP BANNER ★ -->
+            <section class="one-stop-banner">
+                <div class="osb-text">
+                    <h2>Unlock Unlimited Creative Potential</h2>
+                    <p>Dive into our massive library of premium stock photos, videos, and AI-powered editing tools. Whether you're a creator, marketer, or designer, get everything you need in one seamless subscription. Fresh assets are added daily to keep your content ahead of the curve.</p>
+                    <a href="plans.html" class="osb-btn">Discover Pro Plans</a>
+                </div>
+                <div class="osb-media" id="osbMediaContainer">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" alt="One stop shop" id="osbImage">
+                    <button class="osb-play-btn" id="osbToggleBtn" style="display: none;"><i class="fas fa-pause"></i></button>
+                </div>
             </section>
 
             <!-- Featured Products -->
@@ -332,26 +516,18 @@
                 <button type="button" class="home-more-btn" id="homeShopMore" hidden>Show more</button>
             </section>
 
-            <!-- Collections -->
-            <section class="collections-section">
-                <div class="collections-header">
-                    <h2>Hand-curated collections based on popular search keywords</h2>
-                    <p>Explore unique collections of in-demand stock categories</p>
-                </div>
-                <div class="collections-grid" id="collectionsGrid">
-                    <p class="home-shop-empty"><i class="fas fa-spinner fa-spin"></i> Loading collections...</p>
-                </div>
-            </section>
-
-            <!-- Categories -->
-            <section class="category-section">
+            <!-- ★ Keywords & Categories (stock photo data, Firebase) ★ -->
+            <section class="home-shop-section" id="smxKeyCat">
                 <div class="home-shop-header">
-                    <h2><i class="fas fa-th-large"></i> Explore popular stock categories</h2>
+                    <h2><i class="fas fa-layer-group"></i> Categories</h2>
                     <a href="stock-photo.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="category-grid" id="categoryGrid">
-                    <p class="home-shop-empty"><i class="fas fa-spinner fa-spin"></i> Loading categories...</p>
+                <div class="category-grid" id="smxCats"><p class="home-shop-empty"><i class="fas fa-spinner fa-spin"></i> Loading...</p></div>
+
+                <div class="home-shop-header" style="margin-top:34px">
+                    <h2><i class="fas fa-hashtag"></i> Popular Keywords</h2>
                 </div>
+                <div class="smx-chips" id="smxKws"></div>
             </section>
 
             <!-- FAQ -->
@@ -475,176 +651,241 @@
             return 'data:' + mime + ';base64,' + s;
         }
 
-        // VLOG LOADER (Auto-play added here)
+        // VLOG LOADER (Main 8K Section)
         async function loadLatestVlog() {
             const box = document.getElementById('v8kBox');
             const cap = document.getElementById('v8kCap');
             if (!box) return;
-
             try {
-                const q = query(collection(db, "vlogs"), orderBy("createdAt", "desc"), limit(1));
+                const q = query(collection(db, "vlogs"), limit(20));
                 const snap = await getDocs(q);
-                
                 if (snap.empty) {
                     box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-film"></i>No Vlogs Yet. <a href="vlog-video.html" style="color:#fbbf24; text-decoration:underline;">Publish one!</a></div></div>';
                     return;
                 }
-
-                const data = snap.docs[0].data();
+                
+                let vlogs = [];
+                snap.forEach(d => vlogs.push(d.data()));
+                vlogs.sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt || 0);
+                    const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt || 0);
+                    return timeB - timeA;
+                });
+                
+                const data = vlogs[0];
                 const videoUrl = data.videoUrl || '';
                 if (!videoUrl) { box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-film"></i>No video link found.</div></div>'; return; }
-                const posterUrl = data.thumb || ""; // ★ ফিক্স করা হয়েছে: thumb ব্যবহার করা হলো ★
+                const posterUrl = data.thumb || "";
                 cap.textContent = data.title || "";
-
-                box.innerHTML = ''; // Clear loader
+                box.innerHTML = '';
 
                 const yt = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
                 if (yt) {
-                    // ★ YouTube Auto-play (Direct iframe injection without click) ★
                     box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + yt[1] + '?autoplay=1&mute=1&loop=1&playlist=' + yt[1] + '&rel=0&vq=hd2160" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vlog" style="width:100%; height:100%; border:0;"></iframe>';
                 } else {
-                    // ★ Direct Video (Cloudinary MP4) Auto-play & Auto-click ★
                     const v = document.createElement("video");
-                    v.controls = true; 
-                    v.preload = "auto"; // দ্রুত লোড হওয়ার জন্য
+                    v.controls = true;
+                    v.preload = "auto";
                     v.playsInline = true;
-                    v.autoplay = true; 
-                    v.muted = true; 
+                    v.autoplay = true;
+                    v.muted = true;
                     v.loop = true;
                     if (posterUrl) v.poster = posterUrl;
                     v.src = videoUrl;
                     v.onerror = function () { box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-triangle-exclamation"></i>Video could not be loaded</div></div>'; };
                     box.appendChild(v);
-
-                    // অটো প্লে জোরপূর্বক চালু করার জন্য (Auto-click simulation)
                     setTimeout(() => {
                         v.play().catch(e => console.log("Autoplay blocked by browser:", e));
                     }, 100);
                 }
-
             } catch (e) {
                 console.error("Vlog Load Error:", e);
                 box.innerHTML = '<div class="v8k-empty"><div><i class="fas fa-triangle-exclamation"></i>Failed to load video.</div></div>';
             }
         }
 
-        // COLLECTIONS
-        async function loadCollections() {
-            const grid = document.getElementById('collectionsGrid');
-            if (!grid) return;
-            try {
-                const snap = await getDocs(query(collection(db, "collections"), limit(12)));
-                if (snap.empty) {
-                    grid.innerHTML = '<p class="home-shop-empty">📁 No collections yet. Add data to <b>collections</b> collection in Firebase.</p>';
-                    return;
-                }
-                let html = '';
-                snap.forEach(d => {
-                    const data = d.data();
-                    const name = pickName(data);
-                    const desc = pickDesc(data);
-                    const img = normalizeImageUrl(pickImg(data));
-                    const cat = data.category || name;
-                    if (!name) return;
-                    html += `<a href="stock-photo.html?cat=${encodeURIComponent(cat)}" class="collection-card">
-                        <div class="collection-img">${img ? `<img src="${escHtml(img)}" alt="${escHtml(name)}" loading="lazy" onerror="this.style.display='none'">` : ''}</div>
-                        <h4>${escHtml(name)}</h4>
-                        <p>${escHtml(desc)}</p>
-                    </a>`;
-                });
-                grid.innerHTML = html;
-            } catch (err) {
-                console.error("Collections error:", err);
-                grid.innerHTML = '<p class="home-shop-empty">⚠️ Error: ' + escHtml(err.message) + '</p>';
-            }
-        }
-
-        // CATEGORIES
-        async function loadCategories() {
-            const grid = document.getElementById('categoryGrid');
-            if (!grid) return;
-            try {
-                const snap = await getDocs(query(collection(db, "categories"), limit(24)));
-                if (snap.empty) {
-                    grid.innerHTML = '<p class="home-shop-empty">📁 No categories yet. Add data to <b>categories</b> collection in Firebase.</p>';
-                    return;
-                }
-                let html = '';
-                snap.forEach(d => {
-                    const data = d.data();
-                    const name = pickName(data);
-                    const img = normalizeImageUrl(pickImg(data));
-                    if (!name) return;
-                    html += `<div class="category-card" onclick="window.location.href='stock-photo.html?cat=${encodeURIComponent(name)}'">
-                        ${img ? `<img src="${escHtml(img)}" alt="${escHtml(name)}" loading="lazy" onerror="this.style.display='none'">` : ''}
-                        <span>${escHtml(name)}</span>
-                    </div>`;
-                });
-                grid.innerHTML = html;
-            } catch (err) {
-                console.error("Categories error:", err);
-                grid.innerHTML = '<p class="home-shop-empty">⚠️ Error: ' + escHtml(err.message) + '</p>';
-            }
-        }
-
-        // STOCK PHOTOS
-        let homePhotoList = [], homePhotoShown = 0;
-        const HOME_PHOTO_STEP = 4; 
-
-        function photoCardHtml(p) {
-            return '<a class="home-photo-card" href="stock-photo.html#photo=' + encodeURIComponent(p.id) + '">' +
-                '<img loading="lazy" src="' + escHtml(p.url) + '" alt="' + escHtml(p.title || 'Stock photo') + '" onerror="this.parentElement.style.display=\'none\'">' +
-                '<div class="hp-info"><b>' + escHtml(p.title || 'Untitled') + '</b><small>' + escHtml(p.author || '') + '</small></div>' +
-                '</a>';
-        }
-
-        async function showMorePhotos() {
-            const grid = document.getElementById('homePhotoGrid');
-            const next = homePhotoList.slice(homePhotoShown, homePhotoShown + HOME_PHOTO_STEP);
+        // ONE STOP SHOP BANNER VLOG LOADER (Loading 2nd latest video)
+        async function loadBannerVlog() {
+            const container = document.getElementById('osbMediaContainer');
+            if (!container) return;
             
-            await Promise.all(next.map(async function(p) {
-                if (p.url && (p.url.startsWith('http') || p.url.startsWith('data:') || p.url.startsWith('blob:'))) return;
-                try {
-                    const imgId = p.imageId || p.image_id || p.photoId || p.photo_id;
-                    if (!imgId) { p.url = p.url ? normalizeImageUrl(p.url) : ''; return; }
-                    const dd = await getDoc(doc(db, "photoData", imgId));
-                    if (!dd.exists()) { p.url = ''; return; }
-                    const pd = dd.data();
-                    p.url = normalizeImageUrl(pd.data || pd.url || pd.image || '');
-                } catch (e) { p.url = ''; }
-            }));
-
-            const validNext = next.filter(p => p.url);
-            grid.insertAdjacentHTML('beforeend', validNext.map(photoCardHtml).join(''));
-            homePhotoShown += next.length;
+            try {
+                const q = query(collection(db, "vlogs"), limit(20));
+                const snap = await getDocs(q);
+                
+                if (!snap.empty) {
+                    let vlogs = [];
+                    snap.forEach(d => vlogs.push(d.data()));
+                    
+                    vlogs.sort((a, b) => {
+                        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt || 0);
+                        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt || 0);
+                        return timeB - timeA;
+                    });
+                    
+                    const targetVlog = vlogs.length > 1 ? vlogs[1] : vlogs[0];
+                    const videoUrl = targetVlog.videoUrl || '';
+                    
+                    if (videoUrl) {
+                        const yt = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+                        
+                        if (yt) {
+                            container.innerHTML = `
+                                <iframe id="osbIframe" src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&mute=1&loop=1&playlist=${yt[1]}&rel=0&controls=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:0; object-fit:cover; pointer-events:none;"></iframe>
+                                <button class="osb-play-btn" id="osbToggleBtn"><i class="fas fa-pause"></i></button>
+                            `;
+                            document.getElementById('osbToggleBtn').addEventListener('click', function() {
+                                const iframe = document.getElementById('osbIframe');
+                                const icon = this.querySelector('i');
+                                if (icon.classList.contains('fa-pause')) {
+                                    icon.classList.replace('fa-pause', 'fa-play');
+                                    iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0');
+                                } else {
+                                    icon.classList.replace('fa-play', 'fa-pause');
+                                    iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+                                }
+                            });
+                        } else {
+                            container.innerHTML = `
+                                <video id="osbVideo" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"><source src="${videoUrl}" type="video/mp4"></video>
+                                <button class="osb-play-btn" id="osbToggleBtn"><i class="fas fa-pause"></i></button>
+                            `;
+                            const videoEl = document.getElementById('osbVideo');
+                            document.getElementById('osbToggleBtn').addEventListener('click', function() {
+                                const icon = this.querySelector('i');
+                                if (videoEl.paused) {
+                                    videoEl.play();
+                                    icon.classList.replace('fa-play', 'fa-pause');
+                                } else {
+                                    videoEl.pause();
+                                    icon.classList.replace('fa-pause', 'fa-play');
+                                }
+                            });
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Banner vlog error", e);
+            }
         }
 
+        // CATEGORIES (smxKeyCat)
+        const smxCache = {};
+        async function smxResolve(p) {
+            if (p.url && /^(http|data:|blob:|\/\/)/.test(p.url)) return p.url;
+            const id = p.imageId || p.image_id || p.photoId || p.photo_id;
+            if (!id) return p.url ? normalizeImageUrl(p.url) : '';
+            if (smxCache[id] !== undefined) return smxCache[id];
+            try {
+                const dd = await getDoc(doc(db, "photoData", id));
+                const pd = dd.exists() ? dd.data() : {};
+                smxCache[id] = normalizeImageUrl(pd.data || pd.url || pd.image || '');
+            } catch (e) { smxCache[id] = ''; }
+            return smxCache[id];
+        }
+        function smxList(v) { if (!v) return []; return Array.isArray(v) ? v : String(v).split(/[,;،]/); }
+
+        async function loadKeyCat() {
+            const catBox = document.getElementById('smxCats');
+            const kwBox = document.getElementById('smxKws');
+            if (!catBox || !kwBox) return;
+            try {
+                const snap = await getDocs(query(collection(db, "stockphoto"), limit(300)));
+                const cats = {}, kws = {};
+                snap.forEach(d => {
+                    const p = d.data(); p.id = d.id;
+                    smxList(p.category || p.categories).forEach(c => {
+                        c = String(c).trim(); if (!c) return;
+                        const o = cats[c] || (cats[c] = { n: 0, p: null });
+                        o.n++; if (!o.p) o.p = p;
+                    });
+                    smxList(p.keywords || p.tags || p.keyword).forEach(k => {
+                        k = String(k).trim().toLowerCase(); if (k.length < 2) return;
+                        const o = kws[k] || (kws[k] = { n: 0, p: null });
+                        o.n++; if (!o.p) o.p = p;
+                    });
+                });
+                const top = (o, n) => Object.entries(o).sort((a, b) => b[1].n - a[1].n).slice(0, n);
+                const topCats = top(cats, 12), topKws = top(kws, 24);
+
+                if (!topCats.length) catBox.innerHTML = '<p class="home-shop-empty">No categories found in photos yet.</p>';
+                else {
+                    const urls = await Promise.all(topCats.map(([, o]) => smxResolve(o.p)));
+                    catBox.innerHTML = topCats.map(([name], i) =>
+                        `<div class="category-card" onclick="location.href='stock-photo.html?cat=${encodeURIComponent(name)}'">
+                            ${urls[i] ? `<img src="${escHtml(urls[i])}" alt="${escHtml(name)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                            <span>${escHtml(name)}</span></div>`).join('');
+                }
+
+                if (!topKws.length) kwBox.innerHTML = '<p class="home-shop-empty" style="width:100%">No keywords found in photos yet.</p>';
+                else {
+                    const urls = await Promise.all(topKws.map(([, o]) => smxResolve(o.p)));
+                    kwBox.innerHTML = topKws.map(([k], i) =>
+                        `<a class="smx-chip" href="stock-photo.html?q=${encodeURIComponent(k)}">
+                            ${urls[i] ? `<img src="${escHtml(urls[i])}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+                            <span>${escHtml(k)}</span></a>`).join('');
+                }
+            } catch (err) {
+                console.error('KeyCat error:', err);
+                catBox.innerHTML = '<p class="home-shop-empty">⚠️ ' + escHtml(err.message) + '</p>';
+            }
+        }
+
+        // STOCK PHOTOS (Exactly 5 images: 2 Portrait, 3 Landscape)
         async function loadHomePhotos() {
             const grid = document.getElementById('homePhotoGrid');
             if (!grid) return;
             try {
-                const snap = await getDocs(query(collection(db, "stockphoto"), limit(50))); 
+                // Fetch exactly 5 photos from database
+                const snap = await getDocs(query(collection(db, "stockphoto"), limit(5)));
                 let list = [];
                 snap.forEach(function(d) {
                     const p = d.data();
                     p.id = d.id;
                     if (p.url || p.imageId || p.image_id || p.photoId) list.push(p);
                 });
-                
+
                 if (!list.length) {
                     grid.innerHTML = '<p class="home-shop-empty">📷 No photos yet. <a href="upload.html" style="color:#fbbf24;">Upload the first one!</a></p>';
                     return;
                 }
-                
-                const ms = function(p) { return p.createdAt && p.createdAt.toMillis ? p.createdAt.toMillis() : 0; };
-                list.sort(function(a, b) { return ms(b) - ms(a); });
-                
-                homePhotoList = list.slice(0, 4);
-                homePhotoShown = 0;
+
+                // Fetch actual image data if it's stored as base64 or separate doc
+                await Promise.all(list.map(async function(p) {
+                    if (p.url && (p.url.startsWith('http') || p.url.startsWith('data:') || p.url.startsWith('blob:'))) return;
+                    try {
+                        const imgId = p.imageId || p.image_id || p.photoId || p.photo_id;
+                        if (!imgId) { p.url = p.url ? normalizeImageUrl(p.url) : ''; return; }
+                        const dd = await getDoc(doc(db, "photoData", imgId));
+                        if (!dd.exists()) { p.url = ''; return; }
+                        const pd = dd.data();
+                        p.url = normalizeImageUrl(pd.data || pd.url || pd.image || '');
+                    } catch (e) { p.url = ''; }
+                }));
+
+                const validList = list.filter(p => p.url);
                 grid.innerHTML = '';
                 
-                await showMorePhotos();
-                
+                // Render 5 images with requested aspect ratios
+                validList.slice(0, 5).forEach((p, i) => {
+                    let cls = 'home-photo-card ';
+                    
+                    if (i < 2) {
+                        // First 2 images: 5000x7000 (Portrait 5:7)
+                        cls += 'portrait';
+                    } else {
+                        // Next 3 images: 5000x4000 (Landscape 5:4)
+                        cls += 'landscape';
+                        // If it's the 5th image (index 4), make it span full width
+                        if (i === 4) cls += ' span-full';
+                    }
+                    
+                    const cardHtml = `<a class="${cls}" href="stock-photo.html#photo=${encodeURIComponent(p.id)}">
+                        <img loading="lazy" src="${escHtml(p.url)}" alt="${escHtml(p.title || 'Stock photo')}" onerror="this.parentElement.style.display='none'">
+                        <div class="hp-info"><b>${escHtml(p.title || 'Untitled')}</b><small>${escHtml(p.author || '')}</small></div>
+                    </a>`;
+                    grid.insertAdjacentHTML('beforeend', cardHtml);
+                });
             } catch (error) {
                 console.error("Photos error:", error);
                 grid.innerHTML = '<p class="home-shop-empty">⚠️ Failed to load photos.</p>';
@@ -655,6 +896,7 @@
         let homeProductList = [], homeProductShown = 0;
         const HOME_PRODUCT_STEP = 6;
         const NO_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="100%" height="100%" fill="#1e293b"/><text x="50%" y="50%" fill="#64748b" font-family="Arial" font-size="18" text-anchor="middle" dominant-baseline="middle">No Image</text></svg>');
+        window.NO_IMG = NO_IMG;
 
         function productCardHtml(p) {
             let discountBadge = '';
@@ -668,7 +910,7 @@
                         <div class="img-wrap">
                             ${discountBadge}
                             <span class="hot-badge">Hot Deal</span>
-                            <img src="${escHtml(normalizeImageUrl(p.imageUrl || p.image || ''))}" alt="${escHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src=NO_IMG">
+                            <img src="${escHtml(normalizeImageUrl(p.imageUrl || p.image || ''))}" alt="${escHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src=window.NO_IMG">
                         </div>
                     </a>
                     <div class="card-body">
@@ -732,12 +974,41 @@
             btn.textContent = open ? 'Show less' : 'Show more';
         });
 
+
+        // ★ HERO BANNER: stock photos scrolling (clear, no overlay) ★
+        async function loadHeroBanner() {
+            const track = document.getElementById('heroTrack');
+            if (!track) return;
+            try {
+                const snap = await getDocs(query(collection(db, "stockphoto"), limit(30)));
+                let list = [];
+                snap.forEach(d => { const p = d.data(); if (p.url || p.imageId || p.image_id || p.photoId || p.photo_id) list.push(p); });
+                list = list.slice(0, 14);
+                const urls = await Promise.all(list.map(async p => {
+                    if (p.url && /^(http|data:|blob:|\/\/)/.test(p.url)) return p.url;
+                    const id = p.imageId || p.image_id || p.photoId || p.photo_id;
+                    if (!id) return p.url ? normalizeImageUrl(p.url) : '';
+                    try {
+                        const dd = await getDoc(doc(db, "photoData", id));
+                        const pd = dd.exists() ? dd.data() : {};
+                        return normalizeImageUrl(pd.data || pd.url || pd.image || '');
+                    } catch (e) { return ''; }
+                }));
+                const ok = urls.filter(Boolean);
+                if (!ok.length) return;
+                const one = ok.map(u => '<img src="' + escHtml(u) + '" alt="" onerror="this.remove()">').join('');
+                track.innerHTML = one + one;
+                track.style.animationDuration = Math.max(25, ok.length * 5) + 's';
+            } catch (e) { console.error('Hero banner error:', e); }
+        }
+
         window.addEventListener('load', () => {
-            loadLatestVlog(); 
+            loadHeroBanner();
+            loadLatestVlog();
+            loadBannerVlog();
             loadHomePhotos();
             loadHomeShop();
-            loadCollections();
-            loadCategories();
+            loadKeyCat();
         });
     </script>
 
@@ -747,27 +1018,26 @@
         var BANNER_VIDEO = "banner.mp4";
         var BANNER_POSTER = "";
         var v = document.getElementById("mvbVideo");
-        
+
         if (!v) return;
-        
+
         if (BANNER_POSTER) v.poster = BANNER_POSTER;
-        v.muted = true; // অটো প্লের জন্য অবশ্যই মিউট থাকতে হবে
+        v.muted = true;
         v.autoplay = true;
         v.loop = true;
         v.src = BANNER_VIDEO;
-        
+
         v.addEventListener("error", function () { v.style.display = "none"; }, true);
         v.addEventListener("loadeddata", function () { v.style.display = "block"; });
-        
-        // পেজ লোড হওয়া মাত্রই প্লে করার চেষ্টা করবে
+
         v.play().catch(function (error) {
             console.log("Banner autoplay blocked:", error);
         });
     })();
     </script>
-    
+
     <script src="top-bar.js"></script>
     <script src="site-footer.js"></script>
-    
+
 </body>
 </html>
